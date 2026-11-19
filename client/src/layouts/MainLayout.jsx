@@ -9,7 +9,7 @@ export default function MainLayout() {
     <div className="min-h-screen w-full">
       <Header />
 
-      <main className="mt-[clamp(35px,5vw,90px)]">
+      <main>
         <Navbar />
         <Outlet />
       </main>

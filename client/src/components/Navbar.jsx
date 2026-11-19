@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
@@ -12,9 +13,8 @@ function Navbar() {
   // STATE
   // ============================================================
 
-  const [openMenu, setOpenMenu] = useState(false);
-  const [openAbout, setOpenAbout] = useState(false);
   const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [openDesktopSearch, setOpenDesktopSearch] = useState(false);
   const [openMobileSearch, setOpenMobileSearch] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,26 +26,18 @@ function Navbar() {
   const linkClass = ({ isActive }) =>
     [
       "relative rounded-full px-8 my-auto",
-      "text-[clamp(0.5rem,0.75vw,2.25rem)] font-black uppercase tracking-[1.5px]",
+      "text-[clamp(0.5rem,0.6vw,1.15rem)] font-black uppercase tracking-[1.5px]",
       "transition-all duration-200",
-      "font-zhoro",
-      isActive
-        ? "text-marigold shadow-lg"
-        : "text-white hover:text-marigold",
+      "font-visby",
+      isActive ? "text-marigold shadow-lg" : "text-white hover:text-marigold",
     ].join(" ");
-
-  const mobileLinkClass =
-    "py-4 text-xl text-white transition-colors hover:text-marigold";
 
   // ============================================================
   // USER DISPLAY
   // ============================================================
 
   const displayName =
-    user?.fullName ||
-    user?.username ||
-    user?.email ||
-    "User";
+    user?.fullName || user?.username || user?.email || "User";
 
   const userInitial = (displayName?.[0] || "U").toUpperCase();
 
@@ -58,14 +50,11 @@ function Navbar() {
 
     const query = searchQuery.trim();
 
-    if (!query) {
-      return;
-    }
+    if (!query) return;
 
-    setOpenMobileSearch(false);
-    setOpenMenu(false);
-    setOpenAbout(false);
     setOpenUserMenu(false);
+    setOpenDesktopSearch(false);
+    setOpenMobileSearch(false);
 
     navigate(`/search?q=${encodeURIComponent(query)}`);
   };
@@ -83,8 +72,7 @@ function Navbar() {
       await logout();
     } finally {
       setOpenUserMenu(false);
-      setOpenMenu(false);
-      setOpenAbout(false);
+      setOpenDesktopSearch(false);
       setOpenMobileSearch(false);
 
       navigate("/", {
@@ -94,27 +82,22 @@ function Navbar() {
   };
 
   // ============================================================
-  // CLOSE MOBILE MENU
-  // ============================================================
-
-  const closeMobileMenu = () => {
-    setOpenMenu(false);
-    setOpenAbout(false);
-    setOpenUserMenu(false);
-    setOpenMobileSearch(false);
-  };
-
-  // ============================================================
   // TOGGLE USER MENU
   // ============================================================
 
   const toggleUserMenu = () => {
     setOpenUserMenu((previous) => !previous);
-    setOpenAbout(false);
+    setOpenDesktopSearch(false);
+    setOpenMobileSearch(false);
   };
+
+  // ============================================================
+  // RENDER
+  // ============================================================
 
   return (
     <div>
+
       {/* ========================================================
           NAVBAR
       ======================================================== */}
@@ -122,78 +105,119 @@ function Navbar() {
       <nav
         className="
           fixed
+          inset-x-0
           top-0
-          left-0
           z-1110
-          h-14
+          h-20
           w-full
-          border-b
-          border-white/10
-          backdrop-blur-[25px]
-          md:h-[clamp(3.5rem,5vw,9rem)]
         "
       >
+
         {/* ======================================================
             DESKTOP NAVBAR
         ====================================================== */}
 
+        {/* MAIN NAVBAR WRAPPER */}
+
         <div
           className="
             mx-auto
+            mt-3
             hidden
-            h-full
-            w-full
-            grid-cols-3
-            md:grid
+            h-30
+            w-[calc(100%-3.5rem)]
+            max-w-500
+            items-center
+            gap-10
+            md:flex
           "
         >
+
           {/* ====================================================
               LOGO
           ==================================================== */}
 
-          <div className="flex my-auto">
-            <img
-              src={Impact}
-              alt="Impact"
-              className="
-                mx-[clamp(1.25rem,2vw,3.5rem)]
-                h-[clamp(2.5rem,4vw,6.5rem)]
-                w-auto
-              "
-            />
+          {/* LOGO CAPSULE */}
+
+          <div
+            className="
+              flex
+              h-22.5
+              w-70
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-white/10
+              bg-black/25
+              backdrop-blur-sm
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-marigold/30
+              hover:bg-white/10
+              xl:flex
+            "
+          >
+            <NavLink
+              to="/"
+              className={linkClass}
+              aria-label="Impervious Generation Home"
+            >
+              <img
+                src={Impact}
+                alt="Impervious Generation"
+                className="h-full w-full object-contain"
+              />
+            </NavLink>
           </div>
 
           {/* ====================================================
               MENU
           ==================================================== */}
 
-          <div
-            className="
-              flex
-              w-full
-              items-center
-              justify-center
-              gap-[clamp(0.5rem,1.5vw,7.5rem)]
-              p-1.5
-            "
-          >
-            {/* HOME */}
+          <div className="min-w-0 flex-1">
 
-            <NavLink to="/" className={linkClass}>
-              Home
-            </NavLink>
+            {/* MAIN NAVBAR PILL */}
 
-            {/* ABOUT */}
+            <div
+              className="
+                flex
+                h-22.5
+                w-full
+                min-w-0
+                items-center
+                justify-center
+                gap-35
+                rounded-full
+                border
+                border-white/20
+                bg-black/25
+                px-6
+                shadow-[0_8px_35px_rgba(0,0,0,0.3)]
+                backdrop-blur-sm
+              "
+            >
 
-            <NavLink to="/about" className={linkClass}>
-              About
-            </NavLink>
+              {/* HOME */}
 
-            {/* MEMORIES */}
+              <NavLink to="/" className={linkClass}>
+                Home
+              </NavLink>
 
-            <NavLink to="/memories" className={linkClass}>
-              Memories
-            </NavLink>
+              {/* ABOUT */}
+
+              <NavLink to="/about" className={linkClass}>
+                About
+              </NavLink>
+
+              {/* GALLERY */}
+
+              <NavLink to="/gallery" className={linkClass}>
+                gallery
+              </NavLink>
+
+            </div>
           </div>
 
           {/* ====================================================
@@ -202,65 +226,57 @@ function Navbar() {
 
           <div
             className="
-              mx-[clamp(1.25rem,2vw,3.5rem)]
+              ml-3
               flex
+              shrink-0
               items-center
               justify-end
-              gap-[clamp(1rem,1.5vw,2.5rem)]
+              gap-10
             "
           >
+
             {/* ==================================================
                 SEARCH
             ================================================== */}
 
-            <form
-              onSubmit={handleSearch}
-              className="
-                group
-                flex
-                h-[clamp(2.5rem,3vw,4rem)]
-                w-[clamp(13rem,19vw,28rem)]
-                items-center
-                rounded-full
-                border
-                border-white/10
-                bg-white/5
-                backdrop-blur-xl
-                transition-all
-                duration-300
-                focus-within:w-[clamp(15rem,22vw,32rem)]
-                focus-within:border-marigold/40
-                focus-within:bg-white/10
-                focus-within:shadow-[0_0_30px_rgba(227,164,25,0.08)]
-              "
-            >
-              {/* SEARCH BUTTON */}
+            <div className="relative">
+
+              {/* SEARCH ICON */}
 
               <button
-                type="submit"
-                aria-label="Search"
+                type="button"
+                onClick={() => {
+                  setOpenDesktopSearch((previous) => !previous);
+                  setOpenUserMenu(false);
+                }}
+                aria-label="Open search"
+                aria-expanded={openDesktopSearch}
                 className="
                   flex
-                  h-full
-                  w-11
-                  shrink-0
+                  h-22.5
+                  w-22.5
                   items-center
                   justify-center
-                  text-white/50
-                  transition-colors
-                  group-focus-within:text-marigold
+                  rounded-full
+                  border
+                  border-white/20
+                  bg-black/25
+                  text-white/75
+                  shadow-[0_5px_20px_rgba(0,0,0,0.2)]
+                  backdrop-blur-sm
+                  transition-all
+                  duration-300
+                  hover:border-marigold/50
+                  hover:bg-white/10
                   hover:text-marigold
+                  hover:shadow-[0_0_20px_rgba(227,164,25,0.12)]
                 "
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                >
+                <svg viewBox="0 0 28 28" className="h-15 w-15" fill="none">
                   <circle
-                    cx="11"
-                    cy="11"
-                    r="6.5"
+                    cx="12"
+                    cy="12"
+                    r="4.5"
                     stroke="currentColor"
                     strokeWidth="1.7"
                   />
@@ -274,96 +290,174 @@ function Navbar() {
                 </svg>
               </button>
 
-              {/* SEARCH INPUT */}
+              {/* FLOATING SEARCH PANEL */}
 
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search anything..."
-                aria-label="Search anything"
-                className="
-                  min-w-0
-                  flex-1
-                  bg-transparent
-                  px-1
-                  text-sm
-                  font-medium
-                  text-white
-                  outline-none
-                  placeholder:text-white/35
-                "
-              />
-
-              {/* CLEAR SEARCH */}
-
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={clearSearch}
-                  aria-label="Clear search"
+              {openDesktopSearch && (
+                <form
+                  onSubmit={handleSearch}
                   className="
-                    mr-2
+                    absolute
+                    right-0
+                    top-[calc(100%+0.75rem)]
+                    z-1300
                     flex
-                    h-7
-                    w-7
-                    shrink-0
+                    h-12
+                    w-70
                     items-center
-                    justify-center
                     rounded-full
-                    text-white/40
-                    transition-all
-                    hover:bg-white/10
-                    hover:text-white
+                    border
+                    border-white/20
+                    bg-[#242321]/95
+                    px-2
+                    shadow-[0_12px_40px_rgba(0,0,0,0.4)]
+                    backdrop-blur-2xl
+                    animate-in
+                    fade-in
+                    slide-in-from-top-2
+                    duration-200
+                    focus-within:border-marigold/50
                   "
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                  >
-                    <path
-                      d="M6 6L18 18"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
 
-                    <path
-                      d="M18 6L6 18"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
+                  {/* SEARCH BUTTON */}
+
+                  <button
+                    type="submit"
+                    aria-label="Search"
+                    className="
+                      flex
+                      h-9
+                      w-9
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-full
+                      text-marigold
+                      transition-colors
+                      hover:bg-white/10
+                    "
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-4.5 w-4.5"
+                      fill="none"
+                    >
+                      <circle
+                        cx="10.5"
+                        cy="10.5"
+                        r="6.5"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+
+                      <path
+                        d="M15.3 15.3L20.5 20.5"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* SEARCH INPUT */}
+
+                  <input
+                    autoFocus={openDesktopSearch}
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder="Search anything..."
+                    aria-label="Search anything"
+                    className="
+                      min-w-0
+                      flex-1
+                      bg-transparent
+                      px-2
+                      text-sm
+                      font-medium
+                      text-white
+                      outline-none
+                      placeholder:text-white/35
+                    "
+                  />
+
+                  {/* CLEAR SEARCH */}
+
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={clearSearch}
+                      aria-label="Clear search"
+                      className="
+                        flex
+                        h-8
+                        w-8
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-full
+                        text-white/40
+                        transition-colors
+                        hover:bg-white/10
+                        hover:text-white
+                      "
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-4 w-4"
+                        fill="none"
+                      >
+                        <path
+                          d="M6 6L18 18"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+
+                        <path
+                          d="M18 6L6 18"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  )}
+
+                </form>
               )}
-            </form>
+            </div>
 
             {/* ==================================================
                 AUTH
             ================================================== */}
 
             {!user ? (
-              <div className="flex items-center gap-2">
+
+              <div className="flex items-center gap-10">
+
                 {/* REGISTER */}
 
                 <Link
                   to="/register"
                   className="
                     hidden
-                    h-[clamp(2.75rem,3vw,4rem)]
+                    h-22.5
+                    w-42.5
                     items-center
                     justify-center
                     rounded-full
                     border
                     border-white/10
-                    bg-white/5
+                    bg-black/25
                     px-5
-                    text-sm
-                    font-semibold
+                    text-[clamp(0.5rem,0.6vw,1.15rem)]
+                    font-black
+                    font-visby
+                    uppercase
+                    tracking-[1.5px]
                     text-white
-                    backdrop-blur-xl
+                    backdrop-blur-sm
                     transition-all
                     duration-300
                     hover:-translate-y-0.5
@@ -382,24 +476,29 @@ function Navbar() {
                   to="/login"
                   className="
                     group
-                    flex
-                    h-[clamp(2.75rem,3vw,4rem)]
-                    w-[clamp(7rem,7vw,10rem)]
+                    h-22.5
+                    w-42.5
                     items-center
                     justify-center
-                    gap-2
                     rounded-full
-                    bg-linear-to-br
-                    from-[rgb(227,164,25)]
-                    to-[rgba(227,164,25,0.78)]
-                    text-sm
+                    border
+                    border-white/10
+                    bg-black/25
+                    px-5
+                    text-[clamp(0.5rem,0.6vw,1.15rem)]
                     font-black
-                    text-black
-                    shadow-[0_8px_30px_rgba(227,164,25,0.18)]
+                    font-visby
+                    uppercase
+                    tracking-[1.5px]
+                    text-white
+                    backdrop-blur-sm
                     transition-all
                     duration-300
                     hover:-translate-y-0.5
-                    hover:shadow-[0_12px_35px_rgba(227,164,25,0.3)]
+                    hover:border-marigold/30
+                    hover:bg-white/10
+                    hover:text-marigold
+                    xl:flex
                   "
                 >
                   <span>Login</span>
@@ -431,12 +530,14 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
+
               </div>
+
             ) : (
+
               <div className="relative">
-                {/* ==================================================
-                    USER BUTTON
-                ================================================== */}
+
+                {/* USER BUTTON */}
 
                 <button
                   type="button"
@@ -451,7 +552,7 @@ function Navbar() {
                     rounded-full
                     border
                     border-white/10
-                    bg-white/5
+                    bg-black/25
                     px-2
                     py-2
                     text-left
@@ -462,6 +563,7 @@ function Navbar() {
                     hover:bg-white/10
                   "
                 >
+
                   {/* AVATAR */}
 
                   <div
@@ -536,11 +638,10 @@ function Navbar() {
                       strokeLinejoin="round"
                     />
                   </svg>
+
                 </button>
 
-                {/* ==================================================
-                    USER DROPDOWN
-                ================================================== */}
+                {/* USER DROPDOWN */}
 
                 {openUserMenu && (
                   <div
@@ -560,10 +661,13 @@ function Navbar() {
                       backdrop-blur-xl
                     "
                   >
+
                     {/* ACCOUNT */}
 
                     <div className="px-3 py-3">
+
                       <div className="mb-3 flex items-center gap-3">
+
                         <div
                           className="
                             flex
@@ -583,6 +687,7 @@ function Navbar() {
                         </div>
 
                         <div className="min-w-0">
+
                           <p
                             className="
                               truncate
@@ -603,7 +708,9 @@ function Navbar() {
                           >
                             {user?.email}
                           </p>
+
                         </div>
+
                       </div>
 
                       {user?.role && (
@@ -624,6 +731,7 @@ function Navbar() {
                           {user.role}
                         </span>
                       )}
+
                     </div>
 
                     <div className="my-1 border-t border-white/10" />
@@ -644,7 +752,7 @@ function Navbar() {
                         font-medium
                         text-white/80
                         transition-all
-                        hover:bg-white/5
+                        hover:bg-black/25
                         hover:text-marigold
                       "
                     >
@@ -668,7 +776,7 @@ function Navbar() {
                           font-medium
                           text-white/80
                           transition-all
-                          hover:bg-white/5
+                          hover:bg-black/25
                           hover:text-marigold
                         "
                       >
@@ -701,42 +809,94 @@ function Navbar() {
                     >
                       Logout
                     </button>
+
                   </div>
                 )}
+
               </div>
             )}
+
           </div>
         </div>
 
+
         {/* ======================================================
-            MOBILE / TABLET NAVBAR
+            MOBILE TOP NAVBAR
         ====================================================== */}
 
         <div
           className="
+            absolute
+            left-3
+            right-3
+            top-3
+            z-[1115]
             flex
-            h-full
-            w-full
+            h-[54px]
             items-center
             justify-between
-            px-4
+            rounded-[17px]
+            border
+            border-white/15
+            bg-black/90
+            px-3
+            shadow-[0_8px_30px_rgba(0,0,0,0.4)]
+            backdrop-blur-2xl
             md:hidden
           "
         >
-          {/* LOGO */}
 
-          <div className="flex items-center">
-            <img
-              src={Impact}
-              alt="Impact"
-              className="h-10 w-auto"
-            />
-          </div>
+          {/* BRAND / SHIELD */}
 
-          {/* RIGHT */}
+          <Link
+            to="/"
+            aria-label="Home"
+            className="
+              flex
+              h-9
+              w-9
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-marigold/20
+              bg-[#38280d]
+              text-marigold
+              transition-all
+              duration-300
+              hover:border-marigold/50
+              hover:bg-[#59431b]
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[19px] w-[19px]"
+              fill="none"
+            >
+              <path
+                d="M12 2.8L19 5.7V11.1C19 15.5 16.1 19.2 12 21.2C7.9 19.2 5 15.5 5 11.1V5.7L12 2.8Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinejoin="round"
+              />
 
-          <div className="flex items-center gap-2">
-            {/* MOBILE SEARCH */}
+              <path
+                d="M9 11.8L11 13.8L15.5 9"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+
+
+          {/* RIGHT ACTIONS */}
+
+          <div className="flex items-center gap-4">
+
+            {/* SEARCH */}
 
             <button
               type="button"
@@ -745,34 +905,34 @@ function Navbar() {
                 setOpenUserMenu(false);
               }}
               aria-label="Open search"
+              aria-expanded={openMobileSearch}
               className="
                 flex
-                h-10
-                w-10
+                h-9
+                w-8
                 items-center
                 justify-center
-                rounded-full
-                text-white
+                text-white/75
                 transition-all
-                hover:bg-white/10
+                duration-200
                 hover:text-marigold
               "
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-6 w-6"
+                className="h-[19px] w-[19px]"
                 fill="none"
               >
                 <circle
-                  cx="11"
-                  cy="11"
+                  cx="10.5"
+                  cy="10.5"
                   r="6.5"
                   stroke="currentColor"
                   strokeWidth="1.7"
                 />
 
                 <path
-                  d="M16 16L21 21"
+                  d="M15.3 15.3L20.5 20.5"
                   stroke="currentColor"
                   strokeWidth="1.7"
                   strokeLinecap="round"
@@ -780,92 +940,425 @@ function Navbar() {
               </svg>
             </button>
 
-            {/* HAMBURGER */}
+
+            {!user ? (
+              <>
+
+                {/* LOGIN */}
+
+                <Link
+                  to="/login"
+                  aria-label="Login"
+                  className="
+                    flex
+                    h-9
+                    w-8
+                    items-center
+                    justify-center
+                    text-white/75
+                    transition-all
+                    duration-200
+                    hover:text-marigold
+                  "
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[19px] w-[19px]"
+                    fill="none"
+                  >
+                    <path
+                      d="M10 17L15 12L10 7"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    <path
+                      d="M15 12H3"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
+
+
+                {/* REGISTER */}
+
+                <Link
+                  to="/register"
+                  aria-label="Register"
+                  className="
+                    flex
+                    h-9
+                    w-8
+                    items-center
+                    justify-center
+                    text-white/75
+                    transition-all
+                    duration-200
+                    hover:text-marigold
+                  "
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[19px] w-[19px]"
+                    fill="none"
+                  >
+                    <circle
+                      cx="9"
+                      cy="8"
+                      r="3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                    />
+
+                    <path
+                      d="M3 20C3 16.7 5.7 14 9 14C12.3 14 15 16.7 15 20"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M19 8V14M16 11H22"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </Link>
+
+              </>
+            ) : (
+              <>
+
+                {/* PROFILE */}
+
+                <Link
+                  to="/profile"
+                  aria-label="Profile"
+                  className="
+                    flex
+                    h-9
+                    w-8
+                    items-center
+                    justify-center
+                    text-white/75
+                    transition-all
+                    duration-200
+                    hover:text-marigold
+                  "
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[19px] w-[19px]"
+                    fill="none"
+                  >
+                    <circle
+                      cx="12"
+                      cy="8"
+                      r="3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                    />
+
+                    <path
+                      d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </Link>
+
+
+                {/* LOGOUT */}
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  aria-label="Logout"
+                  className="
+                    flex
+                    h-9
+                    w-8
+                    items-center
+                    justify-center
+                    text-white/75
+                    transition-all
+                    duration-200
+                    hover:text-red-400
+                  "
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[19px] w-[19px]"
+                    fill="none"
+                  >
+                    <path
+                      d="M10 17L15 12L10 7"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    <path
+                      d="M15 12H3"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+
+              </>
+            )}
+
+          </div>
+        </div>
+
+
+        {/* ======================================================
+            MOBILE FLOATING SEARCH
+        ====================================================== */}
+
+        {openMobileSearch && (
+          <form
+            onSubmit={handleSearch}
+            className="
+              fixed
+              left-3
+              right-3
+              top-[4.75rem]
+              z-[1120]
+              flex
+              h-12
+              items-center
+              rounded-[15px]
+              border
+              border-white/15
+              bg-black/95
+              px-3
+              shadow-[0_10px_35px_rgba(0,0,0,0.45)]
+              backdrop-blur-2xl
+              md:hidden
+            "
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[18px] w-[18px] shrink-0 text-marigold"
+              fill="none"
+            >
+              <circle
+                cx="10.5"
+                cy="10.5"
+                r="6.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+
+              <path
+                d="M15.3 15.3L20.5 20.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            <input
+              autoFocus
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Cari penampilan..."
+              aria-label="Cari penampilan"
+              className="
+                min-w-0
+                flex-1
+                bg-transparent
+                px-3
+                text-sm
+                text-white
+                outline-none
+                placeholder:text-white/35
+              "
+            />
+
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                aria-label="Clear search"
+                className="
+                  flex
+                  h-8
+                  w-8
+                  items-center
+                  justify-center
+                  rounded-full
+                  text-white/45
+                  hover:bg-white/10
+                  hover:text-white
+                "
+              >
+                ×
+              </button>
+            )}
 
             <button
               type="button"
-              onClick={() => {
-                setOpenMenu(true);
-                setOpenMobileSearch(false);
-              }}
-              aria-label="Open menu"
+              onClick={() => setOpenMobileSearch(false)}
+              aria-label="Close search"
               className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                transition
-                hover:bg-white/10
+                ml-2
+                text-xs
+                font-medium
+                text-white/50
+                hover:text-marigold
               "
             >
-              <div className="flex flex-col gap-1.5">
-                <span className="h-0.5 w-5 bg-white" />
-                <span className="h-0.5 w-5 bg-white" />
-                <span className="h-0.5 w-5 bg-white" />
-              </div>
+              Close
             </button>
-          </div>
-        </div>
-      </nav>
+          </form>
+        )}
 
-      {/* ========================================================
-          MOBILE SEARCH PANEL
-      ======================================================== */}
 
-      <div
-        className={`
-          fixed
-          left-0
-          right-0
-          top-14
-          z-1090
-          border-b
-          border-white/10
-          bg-black/95
-          px-4
-          py-3
-          backdrop-blur-xl
-          transition-all
-          duration-300
-          md:hidden
-          ${
-            openMobileSearch
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-full pointer-events-none opacity-0"
-          }
-        `}
-      >
-        <form
-          onSubmit={handleSearch}
+        {/* ======================================================
+            MOBILE BOTTOM NAVIGATION
+        ====================================================== */}
+
+        <div
           className="
+            fixed
+            bottom-3
+            left-3
+            right-3
+            z-[1115]
             flex
-            h-12
-            w-full
+            h-[68px]
             items-center
-            overflow-hidden
-            rounded-2xl
+            justify-around
+            gap-2
+            rounded-full
             border
-            border-white/10
-            bg-white/5
-            focus-within:border-marigold/40
+            border-white/20
+            bg-[#171512]/90
+            px-2
+            shadow-[0_8px_35px_rgba(0,0,0,0.5)]
+            backdrop-blur-2xl
+            md:hidden
           "
         >
-          <button
-            type="submit"
-            aria-label="Search"
-            className="
-              flex
-              h-full
-              w-12
-              shrink-0
-              items-center
-              justify-center
-              text-white/50
-              transition-colors
-              hover:text-marigold
-            "
+
+          {/* HOME */}
+
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `
+                flex
+                h-[52px]
+                flex-1
+                flex-col
+                items-center
+                justify-center
+                gap-1
+                rounded-full
+                border
+                transition-all
+                duration-300
+                ${
+                  isActive
+                    ? "border-marigold/40 bg-[#6c563b]/60 text-[#ffe4a0] shadow-[0_0_18px_rgba(227,164,25,0.12)]"
+                    : "border-transparent bg-transparent text-white/65 hover:bg-white/5 hover:text-white"
+                }
+              `
+            }
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+            >
+              <path
+                d="M3.5 10.5L12 3.5L20.5 10.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              <path
+                d="M5.5 9.5V20H18.5V9.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinejoin="round"
+              />
+
+              <path
+                d="M9.5 20V14H14.5V20"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            <span
+              className="
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[1.2px]
+              "
+            >
+              Home
+            </span>
+          </NavLink>
+
+
+          {/* ABOUT */}
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `
+                flex
+                h-[52px]
+                flex-1
+                flex-col
+                items-center
+                justify-center
+                gap-1
+                rounded-full
+                border
+                transition-all
+                duration-300
+                ${
+                  isActive
+                    ? "border-marigold/40 bg-[#6c563b]/60 text-[#ffe4a0] shadow-[0_0_18px_rgba(227,164,25,0.12)]"
+                    : "border-transparent bg-transparent text-white/65 hover:bg-white/5 hover:text-white"
+                }
+              `
+            }
           >
             <svg
               viewBox="0 0 24 24"
@@ -873,628 +1366,113 @@ function Navbar() {
               fill="none"
             >
               <circle
-                cx="11"
-                cy="11"
-                r="6.5"
+                cx="12"
+                cy="12"
+                r="9"
                 stroke="currentColor"
                 strokeWidth="1.7"
               />
 
               <path
-                d="M16 16L21 21"
+                d="M12 10.5V16"
                 stroke="currentColor"
                 strokeWidth="1.7"
                 strokeLinecap="round"
               />
+
+              <circle
+                cx="12"
+                cy="7.5"
+                r="0.8"
+                fill="currentColor"
+              />
             </svg>
-          </button>
 
-          <input
-            autoFocus={openMobileSearch}
-            type="search"
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search anything..."
-            aria-label="Search anything"
-            className="
-              min-w-0
-              flex-1
-              bg-transparent
-              px-1
-              text-sm
-              text-white
-              outline-none
-              placeholder:text-white/35
-            "
-          />
-
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={clearSearch}
-              aria-label="Clear search"
+            <span
               className="
-                mr-2
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-full
-                text-white/40
-                transition
-                hover:bg-white/10
-                hover:text-white
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[1.2px]
               "
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="none"
-              >
-                <path
-                  d="M6 6L18 18"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-
-                <path
-                  d="M18 6L6 18"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          )}
-        </form>
-      </div>
-
-      {/* ========================================================
-          MOBILE OVERLAY
-      ======================================================== */}
-
-      <div
-        onClick={closeMobileMenu}
-        className={`
-          fixed
-          inset-0
-          z-1100
-          bg-black/50
-          backdrop-blur-[2px]
-          transition-opacity
-          duration-500
-          md:hidden
-          ${
-            openMenu
-              ? "pointer-events-auto opacity-100"
-              : "pointer-events-none opacity-0"
-          }
-        `}
-      />
-
-      {/* ========================================================
-          MOBILE DRAWER
-      ======================================================== */}
-
-      <div
-        className={`
-          fixed
-          top-0
-          right-0
-          z-1200
-          h-screen
-          w-[50%]
-          max-w-sm
-          border-l
-          border-white/10
-          backdrop-blur-xl
-          transition-transform
-          duration-300
-          ease-out
-          ${
-            openMenu
-              ? "translate-x-0"
-              : "translate-x-full"
-          }
-        `}
-      >
-        {/* CLOSE */}
-
-        <div className="flex justify-end p-5">
-          <button
-            type="button"
-            onClick={closeMobileMenu}
-            aria-label="Close menu"
-            className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-full
-              bg-white/5
-              text-white
-              transition
-              hover:bg-white/10
-              hover:text-marigold
-            "
-          >
-            X
-          </button>
-        </div>
-
-        {/* MOBILE MENU */}
-
-        <div className="flex flex-col px-6">
-          {/* HOME */}
-
-          <NavLink
-            to="/"
-            onClick={closeMobileMenu}
-            className={mobileLinkClass}
-          >
-            Home
+              About
+            </span>
           </NavLink>
 
-          {/* ABOUT */}
 
-          <div className="flex flex-col">
-            <button
-              type="button"
-              onClick={() =>
-                setOpenAbout((previous) => !previous)
-              }
-              className="
+          {/* GALLERY */}
+
+          <NavLink
+            to="/gallery"
+            className={({ isActive }) =>
+              `
                 flex
-                w-full
+                h-[52px]
+                flex-1
+                flex-col
                 items-center
-                justify-between
-                py-4
-                text-left
-                text-xl
-                text-white
-              "
-            >
-              <span>About</span>
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`
-                  h-5
-                  w-5
-                  transition-transform
-                  duration-300
-                  ${
-                    openAbout
-                      ? "rotate-90"
-                      : "rotate-0"
-                  }
-                `}
-              >
-                <path
-                  d="M9 6L15 12L9 18"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-
-            <div
-              className={`
-                ml-4
-                overflow-hidden
-                border-l
-                border-white/10
-                pl-4
+                justify-center
+                gap-1
+                rounded-full
+                border
                 transition-all
                 duration-300
                 ${
-                  openAbout
-                    ? "max-h-64 opacity-100"
-                    : "max-h-0 opacity-0"
+                  isActive
+                    ? "border-marigold/40 bg-[#6c563b]/60 text-[#ffe4a0] shadow-[0_0_18px_rgba(227,164,25,0.12)]"
+                    : "border-transparent bg-transparent text-white/65 hover:bg-white/5 hover:text-white"
                 }
-              `}
+              `
+            }
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
             >
-              <Link
-                to="/our-generation"
-                onClick={closeMobileMenu}
-                className="
-                  block
-                  py-2.5
-                  text-sm
-                  text-white/70
-                  transition-colors
-                  hover:text-marigold
-                "
-              >
-                Our Generation
-              </Link>
+              <rect
+                x="3.5"
+                y="3.5"
+                width="17"
+                height="17"
+                rx="2.5"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
 
-              <Link
-                to="/history"
-                onClick={closeMobileMenu}
-                className="
-                  block
-                  py-2.5
-                  text-sm
-                  text-white/70
-                  transition-colors
-                  hover:text-marigold
-                "
-              >
-                History
-              </Link>
+              <circle
+                cx="8.5"
+                cy="8.5"
+                r="1.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
 
-              <Link
-                to="/committee"
-                onClick={closeMobileMenu}
-                className="
-                  block
-                  py-2.5
-                  text-sm
-                  text-white/70
-                  transition-colors
-                  hover:text-marigold
-                "
-              >
-                Committee
-              </Link>
+              <path
+                d="M4.5 17L9.5 12L13 15L16 12L20 16"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
-              <Link
-                to="/agenda"
-                onClick={closeMobileMenu}
-                className="
-                  block
-                  py-2.5
-                  text-sm
-                  text-white/70
-                  transition-colors
-                  hover:text-marigold
-                "
-              >
-                Agenda
-              </Link>
-
-              <Link
-                to="/memories"
-                onClick={closeMobileMenu}
-                className="
-                  block
-                  py-2.5
-                  text-sm
-                  text-white/70
-                  transition-colors
-                  hover:text-marigold
-                "
-              >
-                Memories
-              </Link>
-            </div>
-          </div>
-
-          {/* FORUM */}
-
-          <NavLink
-            to="/forum"
-            onClick={closeMobileMenu}
-            className={mobileLinkClass}
-          >
-            Forum
+            <span
+              className="
+                text-[9px]
+                font-bold
+                uppercase
+                tracking-[1.2px]
+              "
+            >
+              Gallery
+            </span>
           </NavLink>
 
-          {/* CONTACT */}
-
-          <NavLink
-            to="/contact"
-            onClick={closeMobileMenu}
-            className={mobileLinkClass}
-          >
-            Contact
-          </NavLink>
-
-          {/* ==================================================
-              MOBILE AUTH
-          ================================================== */}
-
-          {!user ? (
-            <div className="mt-5 flex flex-col gap-3">
-              {/* LOGIN */}
-
-              <Link
-                to="/login"
-                onClick={closeMobileMenu}
-                className="
-                  flex
-                  h-12
-                  items-center
-                  justify-center
-                  gap-2
-                  rounded-2xl
-                  bg-linear-to-br
-                  from-[rgb(227,164,25)]
-                  to-[rgba(227,164,25,0.78)]
-                  px-4
-                  text-sm
-                  font-black
-                  text-black
-                  shadow-[0_8px_30px_rgba(227,164,25,0.16)]
-                  transition-all
-                  duration-300
-                  hover:-translate-y-0.5
-                "
-              >
-                Login
-
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  fill="none"
-                >
-                  <path
-                    d="M5 12H19"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-
-                  <path
-                    d="M13 6L19 12L13 18"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-
-              {/* REGISTER */}
-
-              <Link
-                to="/register"
-                onClick={closeMobileMenu}
-                className="
-                  flex
-                  h-12
-                  items-center
-                  justify-center
-                  rounded-2xl
-                  border
-                  border-white/10
-                  bg-white/5
-                  px-4
-                  text-sm
-                  font-semibold
-                  text-white
-                  backdrop-blur-xl
-                  transition-all
-                  hover:border-white/20
-                  hover:bg-white/10
-                  hover:text-marigold
-                "
-              >
-                Create Account
-              </Link>
-            </div>
-          ) : (
-            <div className="mt-5">
-              {/* MOBILE USER */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  setOpenUserMenu((previous) => !previous)
-                }
-                className="
-                  flex
-                  w-full
-                  items-center
-                  justify-between
-                  rounded-2xl
-                  border
-                  border-white/10
-                  bg-white/5
-                  px-4
-                  py-3
-                  text-left
-                  transition
-                  hover:bg-white/10
-                "
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <div
-                    className="
-                      flex
-                      h-10
-                      w-10
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-marigold
-                      text-sm
-                      font-black
-                      text-black
-                    "
-                  >
-                    {userInitial}
-                  </div>
-
-                  <div className="flex min-w-0 flex-col">
-                    <span
-                      className="
-                        max-w-40
-                        truncate
-                        text-sm
-                        font-semibold
-                        text-white
-                      "
-                    >
-                      {displayName}
-                    </span>
-
-                    <span
-                      className="
-                        text-xs
-                        uppercase
-                        text-white/55
-                      "
-                    >
-                      {user?.role || "USER"}
-                    </span>
-                  </div>
-                </div>
-
-                <span
-                  className={`
-                    text-white/60
-                    transition-transform
-                    duration-300
-                    ${
-                      openUserMenu
-                        ? "rotate-180"
-                        : "rotate-0"
-                    }
-                  `}
-                >
-                  ⌄
-                </span>
-              </button>
-
-              {/* MOBILE USER MENU */}
-
-              {openUserMenu && (
-                <div
-                  className="
-                    mt-3
-                    overflow-hidden
-                    rounded-2xl
-                    border
-                    border-white/10
-                    bg-black/90
-                    p-2
-                    shadow-xl
-                    backdrop-blur-md
-                  "
-                >
-                  {/* ACCOUNT */}
-
-                  <div className="px-3 py-3">
-                    <p
-                      className="
-                        truncate
-                        text-sm
-                        font-semibold
-                        text-white
-                      "
-                    >
-                      {displayName}
-                    </p>
-
-                    <p
-                      className="
-                        truncate
-                        text-xs
-                        text-white/55
-                      "
-                    >
-                      {user?.email}
-                    </p>
-
-                    {user?.role && (
-                      <p
-                        className="
-                          mt-1
-                          text-[10px]
-                          font-bold
-                          uppercase
-                          tracking-wider
-                          text-marigold
-                        "
-                      >
-                        {user.role}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="my-1 border-t border-white/10" />
-
-                  {/* PROFILE */}
-
-                  <Link
-                    to="/profile"
-                    onClick={closeMobileMenu}
-                    className="
-                      block
-                      rounded-xl
-                      px-4
-                      py-2.5
-                      text-sm
-                      text-white
-                      transition-colors
-                      hover:bg-white/5
-                      hover:text-marigold
-                    "
-                  >
-                    Profile
-                  </Link>
-
-                  {/* ADMIN */}
-
-                  {["ADMIN", "SUPER_ADMIN"].includes(
-                    user?.role
-                  ) && (
-                    <Link
-                      to="/admin"
-                      onClick={closeMobileMenu}
-                      className="
-                        block
-                        rounded-xl
-                        px-4
-                        py-2.5
-                        text-sm
-                        text-white
-                        transition-colors
-                        hover:bg-white/5
-                        hover:text-marigold
-                      "
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-
-                  <div className="my-1 border-t border-white/10" />
-
-                  {/* LOGOUT */}
-
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="
-                      w-full
-                      rounded-xl
-                      px-4
-                      py-2.5
-                      text-left
-                      text-sm
-                      text-white
-                      transition-colors
-                      hover:bg-red-500/10
-                      hover:text-red-400
-                    "
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
-      </div>
+
+      </nav>
     </div>
   );
 }
