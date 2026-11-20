@@ -10,34 +10,102 @@ import { secondScrollbar } from "../data/Nusantara Legacy";
 import { rootSlides } from "../data/RootSlide";
 import { thirdScrollbar } from "../data/Imperial Ascendancy";
 
-function Home() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+// ==========================================
+// INFINITE CAROUSEL HOOK
+// ==========================================
 
-  // Next
+function useInfiniteCarousel(slides, autoPlayMs = 0) {
+  const totalSlides = slides.length;
+
+  const [currentIndex, setCurrentIndex] = useState(totalSlides > 1 ? 1 : 0);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+
+  // NEXT SLIDE
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % mainSlides.length);
+    if (totalSlides <= 1) return;
+
+    setCurrentIndex((prev) => prev + 1);
   };
 
-  // Previous
+  // PREVIOUS SLIDE
   const prevSlide = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + mainSlides.length) % mainSlides.length,
-    );
+    if (totalSlides <= 1) return;
+
+    setCurrentIndex((prev) => prev - 1);
   };
 
-  // Dot Indicator
+  // DOT INDICATOR
   const goToSlide = (index) => {
-    setCurrentIndex(index);
+    if (totalSlides <= 1) return;
+
+    setCurrentIndex(index + 1);
   };
 
-  // Auto Slide
-  useEffect(() => {
-    if (!mainSlides.length) return;
+  // INFINITE LOOP
+  const handleTransitionEnd = (e) => {
+    if (e.target !== e.currentTarget || totalSlides <= 1) return;
 
-    const interval = setInterval(nextSlide, 5000);
+    // Kembali ke slide pertama
+    if (currentIndex >= totalSlides + 1) {
+      setTransitionEnabled(false);
+      setCurrentIndex(1);
+    }
+
+    // Kembali ke slide terakhir
+    if (currentIndex <= 0) {
+      setTransitionEnabled(false);
+      setCurrentIndex(totalSlides);
+    }
+  };
+
+  // RESET POSITION WITHOUT ANIMATION
+  useEffect(() => {
+    if (transitionEnabled) return;
+
+    const frame = requestAnimationFrame(() => {
+      setTransitionEnabled(true);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [transitionEnabled]);
+
+  // AUTO PLAY
+  useEffect(() => {
+    if (autoPlayMs <= 0 || totalSlides <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, autoPlayMs);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [autoPlayMs, totalSlides]);
+
+  // DUPLICATE FIRST AND LAST SLIDES
+  const renderedSlides =
+    totalSlides > 1 ? [slides[totalSlides - 1], ...slides, slides[0]] : slides;
+
+  // ACTIVE DOT INDEX
+  const activeIndex =
+    totalSlides > 1 ? (currentIndex - 1 + totalSlides) % totalSlides : 0;
+
+  return {
+    currentIndex,
+    activeIndex,
+    renderedSlides,
+    transitionEnabled,
+    nextSlide,
+    prevSlide,
+    goToSlide,
+    handleTransitionEnd,
+  };
+}
+
+function Home() {
+  // MAIN SLIDER
+  const mainCarousel = useInfiniteCarousel(mainSlides, 5000);
+
+  // ROOT SLIDER
+  const rootCarousel = useInfiniteCarousel(rootSlides, 5000);
 
   // Glow Effect
   const handleMove = (e) => {
@@ -57,13 +125,23 @@ function Home() {
 
   return (
     <div id="view-beranda" className="view-pane active">
+      {/* ========================================== */}
       {/* MAIN SLIDER */}
+      {/* ========================================== */}
+
       <section className="relative w-full overflow-hidden">
         <div
-          className="flex w-full transition-transform duration-700 ease-in-out will-change-transform"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          onTransitionEnd={mainCarousel.handleTransitionEnd}
+          className={`flex w-full will-change-transform ${
+            mainCarousel.transitionEnabled
+              ? "transition-transform duration-700 ease-in-out"
+              : ""
+          }`}
+          style={{
+            transform: `translateX(-${mainCarousel.currentIndex * 100}%)`,
+          }}
         >
-          {mainSlides.map((slide, index) => (
+          {mainCarousel.renderedSlides.map((slide, index) => (
             <article
               key={index}
               className="
@@ -80,6 +158,7 @@ function Home() {
               />
 
               <div className="absolute inset-0 bg-black/55" />
+
               <div className="absolute inset-0 bg-linear-to-t from-bg-main via-transparent to-transparent" />
 
               <div
@@ -167,11 +246,12 @@ function Home() {
 
         {/* PREVIOUS BUTTON */}
         <button
-          onClick={prevSlide}
+          onClick={mainCarousel.prevSlide}
           aria-label="Previous slide"
           className="
             absolute left-2 top-1/2 z-20
-            flex size-11 -translate-y-1/2 items-center justify-center
+            flex size-11 -translate-y-1/2
+            items-center justify-center
             rounded-full bg-black/40 text-white
             backdrop-blur-md transition
             hover:bg-black/60
@@ -186,11 +266,12 @@ function Home() {
 
         {/* NEXT BUTTON */}
         <button
-          onClick={nextSlide}
+          onClick={mainCarousel.nextSlide}
           aria-label="Next slide"
           className="
             absolute right-2 top-1/2 z-20
-            flex size-11 -translate-y-1/2 items-center justify-center
+            flex size-11 -translate-y-1/2
+            items-center justify-center
             rounded-full bg-black/40 text-white
             backdrop-blur-md transition
             hover:bg-black/60
@@ -215,10 +296,10 @@ function Home() {
           {mainSlides.map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
+              onClick={() => mainCarousel.goToSlide(index)}
               aria-label={`Go to slide ${index + 1}`}
               className={`h-2.5 rounded-full transition-all duration-300 ${
-                currentIndex === index
+                mainCarousel.activeIndex === index
                   ? "w-8 bg-white"
                   : "w-2.5 bg-white/40 hover:bg-white/70"
               }`}
@@ -227,16 +308,17 @@ function Home() {
         </div>
       </section>
 
+      {/* ========================================== */}
       {/* AURORA VANGUARD */}
+      {/* ========================================== */}
+
       <div
         className="
-          relative z-10 mx-auto
-          mb-16 w-full max-w-[2000px]
-          px-4
-          sm:mb-20 sm:px-6
-          lg:mb-28 lg:px-8
-          2xl:px-10
-        "
+        relative z-10 mx-auto
+        my-[clamp(4.5rem,7.5vw,15rem)]
+        w-full max-w-500
+        px-5 sm:px-8
+      "
       >
         <div className="mx-auto my-8 w-full sm:my-10 lg:my-12">
           <h3
@@ -274,109 +356,172 @@ function Home() {
                   onMouseMove={handleMove}
                   onMouseLeave={handleLeave}
                   className="
-                    glow-card isolate shrink-0
-                    snap-start
+    glow-card
+    relative isolate shrink-0
+    snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+    w-[clamp(15rem,30vw,30rem)]
+    aspect-[4/5]
 
-                    overflow-hidden
-                    rounded-3xl
-                    border border-white/10
-                    bg-choco
+    overflow-hidden
+    rounded-3xl
+    border border-white/10
+    bg-choco
 
-                    transition-all duration-300
+    transition-all duration-300
 
-                    hover:z-10
-                    hover:-translate-y-2
-                    hover:shadow-2xl
-                    sm:hover:-translate-y-4
-                  "
+    hover:z-10
+    hover:-translate-y-2
+    hover:shadow-2xl
+    sm:hover:-translate-y-4
+  "
                 >
                   {/* IMAGE */}
                   <div className="absolute inset-0 h-[70%] w-full">
                     <img
                       src={hero}
                       alt={item.title}
-                      className="block h-full w-full select-none object-cover"
+                      className="
+        block h-full w-full
+        select-none object-cover object-center
+      "
                     />
 
                     <div
                       className="
-                        absolute inset-0
-                        h-full w-full translate-y-px
-                        bg-linear-to-t from-choco to-choco/25
-                      "
+        absolute inset-0
+        h-full w-full
+        translate-y-px
+        bg-linear-to-t
+        from-choco
+        to-choco/25
+      "
                     />
                   </div>
 
                   {/* OVERLAY */}
                   <div
                     className="
-                      absolute inset-0
-                      bg-linear-to-t
-                      from-choco
-                      via-choco/35
-                      to-transparent
-                    "
+      absolute inset-0
+      bg-linear-to-t
+      from-choco
+      via-choco/35
+      to-transparent
+    "
                   />
 
-                  {/* CONTENT */}
+                  {/* BADGES - FLEX COLUMN */}
                   <div
                     className="
-                      absolute inset-0 z-10
-                      flex flex-col justify-end
-                      p-4
-                      text-white
-                      sm:p-5
-                      lg:p-6
-                    "
+    absolute inset-x-4 bottom-[10.5rem] z-20
+    flex flex-col gap-2
+
+    sm:inset-x-5 sm:bottom-[10.75rem]
+    lg:inset-x-6 lg:bottom-[11rem]
+  "
                   >
-                    {/* TIME */}
+                    {/* BADGE 1 - EVENT TIME */}
                     <span
                       className="
-                        mb-2
-                        inline-flex w-fit
-                        items-center justify-center
-                        rounded-xl
-                        bg-honey/85
-                        px-[clamp(.75rem,1vw,1.5rem)]
-                        h-[clamp(2rem,2.2vw,2.5rem)]
-                        text-[clamp(.75rem,.75vw,1.25rem)]
-                        font-semibold
-                        tracking-wide
-                        text-white
-                        whitespace-nowrap
-                        sm:mb-3
-                      "
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-end
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      bg-honey/90
+      px-3 py-2
+
+      text-xs
+      font-semibold
+      tracking-wide
+      text-white
+      text-center
+      break-words
+
+      shadow-md
+      backdrop-blur-md
+    "
                     >
                       {item.time}
                     </span>
 
+                    {/* BADGE 2 - EVENT CATEGORY */}
+                    <span
+                      className="
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-start
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      border border-white/15
+      bg-white/10
+      px-3 py-2
+
+      text-xs
+      font-medium
+      tracking-wide
+      text-white/90
+      text-center
+      break-words
+
+      backdrop-blur-md
+    "
+                    >
+                      {item.category}
+                    </span>
+                  </div>
+
+                  {/* BOTTOM CONTENT */}
+                  <div
+                    className="
+      absolute inset-x-0 bottom-0 z-10
+
+      grid
+      grid-rows-[4rem_4.5rem]
+      gap-y-2
+
+      p-4
+      text-white
+
+      sm:p-5
+      lg:p-6
+    "
+                  >
                     {/* TITLE */}
                     <h2
                       className="
-                        my-2
-                        text-white
-                        text-[clamp(1.35rem,1.75vw,2.5rem)]
-                        font-bold
-                        leading-tight
-                        line-clamp-2
-                        sm:my-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-white
+        text-[clamp(1.15rem,1.35vw,1.6rem)]
+        font-bold
+        leading-[1.75rem]
+
+        line-clamp-2
+      "
                     >
                       {item.title}
                     </h2>
 
-                    {/* DESCRIPTION & TIME */}
+                    {/* DESCRIPTION */}
                     <p
                       className="
-                        mt-1
-                        text-[clamp(.85rem,.7vw,1.125rem)]
-                        leading-relaxed
-                        text-white/60
-                        line-clamp-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-[clamp(.8rem,.7vw,1rem)]
+        leading-6
+        text-white/60
+
+        line-clamp-3
+      "
                     >
                       {item.description}
                     </p>
@@ -388,16 +533,17 @@ function Home() {
         </div>
       </div>
 
+      {/* ========================================== */}
       {/* NUSANTARA LEGACY */}
+      {/* ========================================== */}
+
       <div
         className="
-          relative z-10 mx-auto
-          mb-16 w-full max-w-[2000px]
-          px-4
-          sm:mb-20 sm:px-6
-          lg:mb-28 lg:px-8
-          2xl:px-10
-        "
+        relative z-10 mx-auto
+        my-[clamp(4.5rem,7.5vw,15rem)]
+        w-full max-w-500
+        px-5 sm:px-8
+      "
       >
         <div className="mx-auto my-8 w-full sm:my-10 lg:my-12">
           <h3
@@ -435,109 +581,172 @@ function Home() {
                   onMouseMove={handleMove}
                   onMouseLeave={handleLeave}
                   className="
-                    glow-card isolate shrink-0
-                    snap-start
+    glow-card
+    relative isolate shrink-0
+    snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+    w-[clamp(15rem,30vw,30rem)]
+    aspect-[4/5]
 
-                    overflow-hidden
-                    rounded-3xl
-                    border border-white/10
-                    bg-choco
+    overflow-hidden
+    rounded-3xl
+    border border-white/10
+    bg-choco
 
-                    transition-all duration-300
+    transition-all duration-300
 
-                    hover:z-10
-                    hover:-translate-y-2
-                    hover:shadow-2xl
-                    sm:hover:-translate-y-4
-                  "
+    hover:z-10
+    hover:-translate-y-2
+    hover:shadow-2xl
+    sm:hover:-translate-y-4
+  "
                 >
                   {/* IMAGE */}
                   <div className="absolute inset-0 h-[70%] w-full">
                     <img
                       src={hero}
                       alt={item.title}
-                      className="block h-full w-full select-none object-cover"
+                      className="
+        block h-full w-full
+        select-none object-cover object-center
+      "
                     />
 
                     <div
                       className="
-                        absolute inset-0
-                        h-full w-full translate-y-px
-                        bg-linear-to-t from-choco to-choco/25
-                      "
+        absolute inset-0
+        h-full w-full
+        translate-y-px
+        bg-linear-to-t
+        from-choco
+        to-choco/25
+      "
                     />
                   </div>
 
                   {/* OVERLAY */}
                   <div
                     className="
-                      absolute inset-0
-                      bg-linear-to-t
-                      from-choco
-                      via-choco/35
-                      to-transparent
-                    "
+      absolute inset-0
+      bg-linear-to-t
+      from-choco
+      via-choco/35
+      to-transparent
+    "
                   />
 
-                  {/* CONTENT */}
+                  {/* BADGES - FLEX COLUMN */}
                   <div
                     className="
-                      absolute inset-0 z-10
-                      flex flex-col justify-end
-                      p-4
-                      text-white
-                      sm:p-5
-                      lg:p-6
-                    "
+    absolute inset-x-4 bottom-[10.5rem] z-20
+    flex flex-col gap-2
+
+    sm:inset-x-5 sm:bottom-[10.75rem]
+    lg:inset-x-6 lg:bottom-[11rem]
+  "
                   >
-                    {/* TIME */}
+                    {/* BADGE 1 - EVENT TIME */}
                     <span
                       className="
-                        mb-2
-                        inline-flex w-fit
-                        items-center justify-center
-                        rounded-xl
-                        bg-honey/85
-                        px-[clamp(.75rem,1vw,1.5rem)]
-                        h-[clamp(2rem,2.2vw,2.5rem)]
-                        text-[clamp(.75rem,.75vw,1.25rem)]
-                        font-semibold
-                        tracking-wide
-                        text-white
-                        whitespace-nowrap
-                        sm:mb-3
-                      "
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-end
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      bg-honey/90
+      px-3 py-2
+
+      text-xs
+      font-semibold
+      tracking-wide
+      text-white
+      text-center
+      break-words
+
+      shadow-md
+      backdrop-blur-md
+    "
                     >
                       {item.time}
                     </span>
 
+                    {/* BADGE 2 - EVENT CATEGORY */}
+                    <span
+                      className="
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-start
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      border border-white/15
+      bg-white/10
+      px-3 py-2
+
+      text-xs
+      font-medium
+      tracking-wide
+      text-white/90
+      text-center
+      break-words
+
+      backdrop-blur-md
+    "
+                    >
+                      {item.category}
+                    </span>
+                  </div>
+
+                  {/* BOTTOM CONTENT */}
+                  <div
+                    className="
+      absolute inset-x-0 bottom-0 z-10
+
+      grid
+      grid-rows-[4rem_4.5rem]
+      gap-y-2
+
+      p-4
+      text-white
+
+      sm:p-5
+      lg:p-6
+    "
+                  >
                     {/* TITLE */}
                     <h2
                       className="
-                        my-2
-                        text-white
-                        text-[clamp(1.35rem,1.75vw,2.5rem)]
-                        font-bold
-                        leading-tight
-                        line-clamp-2
-                        sm:my-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-white
+        text-[clamp(1.15rem,1.35vw,1.6rem)]
+        font-bold
+        leading-[1.75rem]
+
+        line-clamp-2
+      "
                     >
                       {item.title}
                     </h2>
 
-                    {/* DESCRIPTION & TIME */}
+                    {/* DESCRIPTION */}
                     <p
                       className="
-                        mt-1
-                        text-[clamp(.85rem,.7vw,1.125rem)]
-                        leading-relaxed
-                        text-white/60
-                        line-clamp-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-[clamp(.8rem,.7vw,1rem)]
+        leading-6
+        text-white/60
+
+        line-clamp-3
+      "
                     >
                       {item.description}
                     </p>
@@ -549,20 +758,23 @@ function Home() {
         </div>
       </div>
 
+      {/* ========================================== */}
       {/* ROOT SLIDER */}
+      {/* ========================================== */}
+
       <div
         className="
-          relative z-10 mx-auto
-          mb-16 w-full max-w-[2000px]
-          px-4
-          sm:mb-20 sm:px-6
-          lg:mb-28 lg:px-8
-          2xl:px-10
-        "
+        relative z-10 mx-auto
+        my-[clamp(4.5rem,7.5vw,15rem)]
+        w-full max-w-500
+        px-5 sm:px-8
+      "
       >
         <section
           className="
-            relative w-full
+            relative
+            aspect-video
+            w-full
             overflow-hidden
             rounded-3xl
             border
@@ -571,23 +783,35 @@ function Home() {
         >
           {/* HERO SLIDES */}
           <div
-            className="flex w-full transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            onTransitionEnd={rootCarousel.handleTransitionEnd}
+            className={`flex h-full w-full ${
+              rootCarousel.transitionEnabled
+                ? "transition-transform duration-700 ease-in-out"
+                : ""
+            }`}
+            style={{
+              transform: `translateX(-${rootCarousel.currentIndex * 100}%)`,
+            }}
           >
-            {rootSlides.map((slide, index) => (
+            {rootCarousel.renderedSlides.map((slide, index) => (
               <div
                 key={index}
                 className="
                   relative
-                  h-[clamp(22rem,55vh,46rem)]
+                  h-full
                   min-w-full
+                  shrink-0
                   overflow-hidden
                 "
               >
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="absolute inset-0 h-full w-full object-cover object-center"
+                  className="
+                    absolute inset-0
+                    h-full w-full
+                    object-cover object-center
+                  "
                 />
 
                 <div className="absolute inset-0 bg-black/60" />
@@ -607,19 +831,20 @@ function Home() {
                     absolute inset-0 z-10
                     flex h-full w-full
                     items-center justify-center
-                    px-4 py-12
-                    sm:px-8 sm:py-14
+                    px-4 py-4
+                    sm:px-8 sm:py-6
                     lg:px-12
                   "
                 >
                   <div className="w-full max-w-4xl text-center text-white">
                     <p
                       className="
-                        mb-3
-                        text-[clamp(.75rem,1vw,.875rem)]
-                        tracking-[0.2em]
+                        mb-2
+                        text-[clamp(.65rem,1vw,.875rem)]
+                        tracking-[0.15em]
                         text-white/70
-                        sm:mb-4 sm:tracking-[0.35em]
+                        sm:mb-4
+                        sm:tracking-[0.35em]
                         lg:tracking-[0.5em]
                       "
                     >
@@ -629,7 +854,7 @@ function Home() {
                     <h1
                       className="
                         wrap-break-word
-                        text-[clamp(2rem,7vw,6rem)]
+                        text-[clamp(1.5rem,7vw,6rem)]
                         font-bold
                         leading-tight
                       "
@@ -640,9 +865,9 @@ function Home() {
                     <p
                       className="
                         mx-auto
-                        mt-4
+                        mt-2
                         max-w-2xl
-                        text-[clamp(1rem,1.2vw,1.25rem)]
+                        text-[clamp(.75rem,1.2vw,1.25rem)]
                         leading-relaxed
                         text-white/75
                         sm:mt-5
@@ -653,7 +878,7 @@ function Home() {
 
                     <div
                       className="
-                        mt-6
+                        mt-3
                         flex flex-wrap justify-center
                         gap-3
                         sm:mt-8 sm:gap-4
@@ -662,11 +887,13 @@ function Home() {
                       <Link
                         to={slide.buttonPrimary.href}
                         className="
+                          inline-flex
+                          items-center justify-center
                           rounded-full
                           bg-white
-                          px-[clamp(1.25rem,3vw,2.5rem)]
-                          py-[clamp(.75rem,1vw,1rem)]
-                          text-[clamp(.875rem,1vw,1rem)]
+                          px-[clamp(1rem,3vw,2.5rem)]
+                          py-[clamp(.5rem,1vw,1rem)]
+                          text-[clamp(.75rem,1vw,1rem)]
                           font-semibold
                           text-center
                           text-black
@@ -686,14 +913,16 @@ function Home() {
 
           {/* PREV BUTTON */}
           <button
-            onClick={prevSlide}
+            onClick={rootCarousel.prevSlide}
             className="
               absolute left-2 top-1/2 z-20
-              flex size-10 -translate-y-1/2
+              flex size-9 -translate-y-1/2
               items-center justify-center
               rounded-full bg-black/40
-              text-white backdrop-blur-md
-              transition hover:bg-black/60
+              text-white
+              backdrop-blur-md
+              transition
+              hover:bg-black/60
               sm:left-4 sm:size-12
             "
             aria-label="Previous slide"
@@ -703,14 +932,16 @@ function Home() {
 
           {/* NEXT BUTTON */}
           <button
-            onClick={nextSlide}
+            onClick={rootCarousel.nextSlide}
             className="
               absolute right-2 top-1/2 z-20
-              flex size-10 -translate-y-1/2
+              flex size-9 -translate-y-1/2
               items-center justify-center
               rounded-full bg-black/40
-              text-white backdrop-blur-md
-              transition hover:bg-black/60
+              text-white
+              backdrop-blur-md
+              transition
+              hover:bg-black/60
               sm:right-4 sm:size-12
             "
             aria-label="Next slide"
@@ -721,7 +952,7 @@ function Home() {
           {/* DOT INDICATOR */}
           <div
             className="
-              absolute bottom-3 left-1/2 z-20
+              absolute bottom-2 left-1/2 z-20
               flex -translate-x-1/2
               items-center gap-2
               sm:bottom-4
@@ -731,10 +962,10 @@ function Home() {
             {rootSlides.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
+                onClick={() => rootCarousel.goToSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
-                  currentIndex === index
+                  rootCarousel.activeIndex === index
                     ? "w-8 bg-white"
                     : "w-2.5 bg-white/40 hover:bg-white/70"
                 }`}
@@ -744,16 +975,17 @@ function Home() {
         </section>
       </div>
 
+      {/* ========================================== */}
       {/* IMPERIAL ASCENDANCY */}
+      {/* ========================================== */}
+
       <div
         className="
-          relative z-10 mx-auto
-          mb-16 w-full max-w-[2000px]
-          px-4
-          sm:mb-20 sm:px-6
-          lg:mb-28 lg:px-8
-          2xl:px-10
-        "
+        relative z-10 mx-auto
+        my-[clamp(4.5rem,7.5vw,15rem)]
+        w-full max-w-500
+        px-5 sm:px-8
+      "
       >
         <div className="mx-auto my-8 w-full sm:my-10 lg:my-12">
           <h3
@@ -791,109 +1023,172 @@ function Home() {
                   onMouseMove={handleMove}
                   onMouseLeave={handleLeave}
                   className="
-                    glow-card isolate shrink-0
-                    snap-start
+    glow-card
+    relative isolate shrink-0
+    snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+    w-[clamp(15rem,30vw,30rem)]
+    aspect-[4/5]
 
-                    overflow-hidden
-                    rounded-3xl
-                    border border-white/10
-                    bg-choco
+    overflow-hidden
+    rounded-3xl
+    border border-white/10
+    bg-choco
 
-                    transition-all duration-300
+    transition-all duration-300
 
-                    hover:z-10
-                    hover:-translate-y-2
-                    hover:shadow-2xl
-                    sm:hover:-translate-y-4
-                  "
+    hover:z-10
+    hover:-translate-y-2
+    hover:shadow-2xl
+    sm:hover:-translate-y-4
+  "
                 >
                   {/* IMAGE */}
                   <div className="absolute inset-0 h-[70%] w-full">
                     <img
                       src={hero}
                       alt={item.title}
-                      className="block h-full w-full select-none object-cover"
+                      className="
+        block h-full w-full
+        select-none object-cover object-center
+      "
                     />
 
                     <div
                       className="
-                        absolute inset-0
-                        h-full w-full translate-y-px
-                        bg-linear-to-t from-choco to-choco/25
-                      "
+        absolute inset-0
+        h-full w-full
+        translate-y-px
+        bg-linear-to-t
+        from-choco
+        to-choco/25
+      "
                     />
                   </div>
 
                   {/* OVERLAY */}
                   <div
                     className="
-                      absolute inset-0
-                      bg-linear-to-t
-                      from-choco
-                      via-choco/35
-                      to-transparent
-                    "
+      absolute inset-0
+      bg-linear-to-t
+      from-choco
+      via-choco/35
+      to-transparent
+    "
                   />
 
-                  {/* CONTENT */}
+                  {/* BADGES - FLEX COLUMN */}
                   <div
                     className="
-                      absolute inset-0 z-10
-                      flex flex-col justify-end
-                      p-4
-                      text-white
-                      sm:p-5
-                      lg:p-6
-                    "
+    absolute inset-x-4 bottom-[10.5rem] z-20
+    flex flex-col gap-2
+
+    sm:inset-x-5 sm:bottom-[10.75rem]
+    lg:inset-x-6 lg:bottom-[11rem]
+  "
                   >
-                    {/* TIME */}
+                    {/* BADGE 1 - EVENT TIME */}
                     <span
                       className="
-                        mb-2
-                        inline-flex w-fit
-                        items-center justify-center
-                        rounded-xl
-                        bg-honey/85
-                        px-[clamp(.75rem,1vw,1.5rem)]
-                        h-[clamp(2rem,2.2vw,2.5rem)]
-                        text-[clamp(.75rem,.75vw,1.25rem)]
-                        font-semibold
-                        tracking-wide
-                        text-white
-                        whitespace-nowrap
-                        sm:mb-3
-                      "
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-end
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      bg-honey/90
+      px-3 py-2
+
+      text-xs
+      font-semibold
+      tracking-wide
+      text-white
+      text-center
+      break-words
+
+      shadow-md
+      backdrop-blur-md
+    "
                     >
                       {item.time}
                     </span>
 
+                    {/* BADGE 2 - EVENT CATEGORY */}
+                    <span
+                      className="
+      inline-flex
+      w-fit max-w-[85%]
+      min-h-8
+      self-start
+      items-center justify-center
+
+      overflow-hidden
+      rounded-lg
+      border border-white/15
+      bg-white/10
+      px-3 py-2
+
+      text-xs
+      font-medium
+      tracking-wide
+      text-white/90
+      text-center
+      break-words
+
+      backdrop-blur-md
+    "
+                    >
+                      {item.category}
+                    </span>
+                  </div>
+
+                  {/* BOTTOM CONTENT */}
+                  <div
+                    className="
+      absolute inset-x-0 bottom-0 z-10
+
+      grid
+      grid-rows-[4rem_4.5rem]
+      gap-y-2
+
+      p-4
+      text-white
+
+      sm:p-5
+      lg:p-6
+    "
+                  >
                     {/* TITLE */}
                     <h2
                       className="
-                        my-2
-                        text-white
-                        text-[clamp(1.35rem,1.75vw,2.5rem)]
-                        font-bold
-                        leading-tight
-                        line-clamp-2
-                        sm:my-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-white
+        text-[clamp(1.15rem,1.35vw,1.6rem)]
+        font-bold
+        leading-[1.75rem]
+
+        line-clamp-2
+      "
                     >
                       {item.title}
                     </h2>
 
-                    {/* DESCRIPTION & TIME */}
+                    {/* DESCRIPTION */}
                     <p
                       className="
-                        mt-1
-                        text-[clamp(.85rem,.7vw,1.125rem)]
-                        leading-relaxed
-                        text-white/60
-                        line-clamp-3
-                      "
+        h-full min-w-0
+        overflow-hidden
+
+        text-[clamp(.8rem,.7vw,1rem)]
+        leading-6
+        text-white/60
+
+        line-clamp-3
+      "
                     >
                       {item.description}
                     </p>

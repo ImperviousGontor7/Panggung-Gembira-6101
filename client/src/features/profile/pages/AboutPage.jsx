@@ -56,11 +56,8 @@ function OurGeneration() {
             </div>
           </div>
         </Card>
-        <div className="w-full max-w-500 mx-auto px-5 sm:px-8 relative z-10">
-
+        <div className="w-full max-w-500 mx-auto my-[clamp(4.5rem,7.5vw,15rem)] px-5 sm:px-8 relative z-10">
           <main className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
-
-
             <Card className="p-4 sm:p-6 lg:p-8" id="about">
               <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.4fr] gap-5 lg:gap-8 items-center">
                 <div className="space-y-5">
@@ -73,17 +70,17 @@ function OurGeneration() {
 
                   <p className="text-sm sm:text-base lg:text-lg leading-8 text-white/80 text-justify">
                     Generation 6101 adalah angkatan yang dibentuk dari semangat,
-                    dedikasi, dan perjalanan panjang penuh makna. Kami hadir bukan
-                    hanya untuk belajar, tetapi untuk tumbuh, berproses, dan
-                    menjadi pribadi yang berkarakter serta bermanfaat bagi
+                    dedikasi, dan perjalanan panjang penuh makna. Kami hadir
+                    bukan hanya untuk belajar, tetapi untuk tumbuh, berproses,
+                    dan menjadi pribadi yang berkarakter serta bermanfaat bagi
                     lingkungan sekitar.
                   </p>
 
                   <p className="text-sm sm:text-base lg:text-lg leading-8 text-white/80 text-justify">
                     Kami percaya bahwa disiplin adalah fondasi, loyalitas adalah
                     kekuatan, dan kepemimpinan adalah arah. Dengan nilai-nilai
-                    tersebut, kami melangkah bersama menuju masa depan yang lebih
-                    baik.
+                    tersebut, kami melangkah bersama menuju masa depan yang
+                    lebih baik.
                   </p>
                 </div>
 
@@ -173,7 +170,9 @@ function OurGeneration() {
                       <Card className="h-full p-4 sm:p-5">
                         <div className="flex h-full items-center gap-4 sm:gap-5">
                           <div className="grid h-20 w-20 sm:h-24 sm:w-24 shrink-0 place-items-center rounded-full border border-violet-300/60 bg-white/5 text-violet-200 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
-                            <span className="text-3xl sm:text-4xl">{item.icon}</span>
+                            <span className="text-3xl sm:text-4xl">
+                              {item.icon}
+                            </span>
                           </div>
                           <div className="min-w-0">
                             <h3 className="text-lg sm:text-xl font-bold uppercase tracking-[0.08em] text-violet-200">
@@ -222,7 +221,9 @@ function OurGeneration() {
                     >
                       <div className="flex items-center gap-3 text-white/85">
                         <span className="text-lg">{item.icon}</span>
-                        <span className="text-sm sm:text-base">{item.label}</span>
+                        <span className="text-sm sm:text-base">
+                          {item.label}
+                        </span>
                       </div>
                       <ProgressBar value={item.value} />
                     </div>
@@ -249,7 +250,9 @@ function OurGeneration() {
                     >
                       <div className="flex items-center gap-3 text-white/85">
                         <span className="text-lg">{item.icon}</span>
-                        <span className="text-sm sm:text-base">{item.label}</span>
+                        <span className="text-sm sm:text-base">
+                          {item.label}
+                        </span>
                       </div>
                       <ProgressBar value={item.value} />
                     </div>
@@ -289,7 +292,9 @@ function OurGeneration() {
                   ))}
                 </div>
 
-                <div className="text-sm sm:text-base text-white/80">Contact Us</div>
+                <div className="text-sm sm:text-base text-white/80">
+                  Contact Us
+                </div>
               </div>
             </Card>
           </main>
