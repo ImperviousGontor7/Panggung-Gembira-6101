@@ -106,7 +106,7 @@ function MemoriesPage() {
 
   return (
     <div className="min-h-screen text-antiquewhite">
-      <div className="w-full max-w-500 mx-auto pb-16 pt-8 sm:px-6 sm:pt-10 lg:px-10 lg:pt-35 relative z-10">
+      <div className="w-full max-w-500 mx-auto px-5 sm:px-8 pb-16 pt-[clamp(5.5rem,12.5vw,10rem)] relative z-10">
         {isOverview ? (
           <>
             <Header
