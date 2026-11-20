@@ -70,7 +70,7 @@ function AppRouter() {
 
     const timeoutId = window.setTimeout(() => {
       setIsTransitioning(false);
-    }, 320);
+    }, 2000);
 
     return () => window.clearTimeout(timeoutId);
   }, [location.key]);
