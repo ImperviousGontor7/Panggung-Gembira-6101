@@ -39,9 +39,9 @@ function Footer() {
               <span className="truncate">Privacy</span>
             </a>
 
-            <a href="https://imperviousgeneration.my.id/" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="Impervious Main Campus" target="_blank" rel="noopener noreferrer">
+            <a href="https://imperviousgontor7.my.id/" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="Impervious Main Campus" target="_blank" rel="noopener noreferrer">
               <i className="fa-solid fa-globe w-4 text-center text-base" />
-              <span className="truncate">Website</span>
+              <span className="truncate">Impervious Campus 7</span>
             </a>
           </div>
 
@@ -98,7 +98,7 @@ function Footer() {
                   <span>Privacy Policy</span>
                 </a>
 
-                <a href="https://imperviousgeneration.my.id/" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" target="_blank" rel="noopener noreferrer">
+                <a href="https://imperviousgontor7.my.id/" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" target="_blank" rel="noopener noreferrer">
                   <i className="fa-solid fa-globe w-5 text-center transition-transform duration-300 group-hover:scale-110" />
                   <span>Impervious Main Campus</span>
                 </a>
