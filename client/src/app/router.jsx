@@ -1,40 +1,40 @@
-import { Suspense, lazy } from "react";
+import {
+  Suspense,
+  lazy,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Navigate,
   Route,
   Routes,
+  useLocation,
 } from "react-router-dom";
+
+import PageLoader from "../components/PageLoader";
 
 // =========================
 // LAYOUTS
 // =========================
 
-const MainLayout = lazy(() =>
-  import("../layouts/MainLayout")
-);
-
-const AuthLayout = lazy(() =>
-  import("../layouts/AuthLayout")
-);
+const MainLayout = lazy(() => import("../layouts/MainLayout"));
+const AuthLayout = lazy(() => import("../layouts/AuthLayout"));
 
 // =========================
 // PUBLIC PAGES
 // =========================
 
 const HomePage = lazy(() =>
-  import("../features/news/pages/HomePage")
+  import("../features/news/pages/HomePage"),
 );
 
 const AboutPage = lazy(() =>
-  import(
-    "../features/profile/pages/AboutPage"
-  )
+  import("../features/profile/pages/AboutPage"),
 );
 
 const MemoriesPage = lazy(() =>
-  import(
-    "../features/profile/pages/MemoriesPage"
-  )
+  import("../features/profile/pages/MemoriesPage"),
 );
 
 // =========================
@@ -42,90 +42,74 @@ const MemoriesPage = lazy(() =>
 // =========================
 
 const LoginPage = lazy(() =>
-  import("../features/auth/pages/LoginPage")
+  import("../features/auth/pages/LoginPage"),
 );
 
 const RegisterPage = lazy(() =>
-  import("../features/auth/pages/RegisterPage")
+  import("../features/auth/pages/RegisterPage"),
 );
-
-// =========================
-// LOADING FALLBACK
-// =========================
-
-function LoadingFallback() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <p className="text-sm text-neutral-500">
-        Loading...
-      </p>
-    </div>
-  );
-}
 
 // =========================
 // ROUTER
 // =========================
 
 function AppRouter() {
+  const location = useLocation();
+  const previousLocationKey = useRef(location.key);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Show the overlay before the browser paints the newly selected route.
+  // This covers Link, NavLink, useNavigate, and browser Back/Forward navigation.
+  useLayoutEffect(() => {
+    if (previousLocationKey.current === location.key) {
+      return undefined;
+    }
+
+    previousLocationKey.current = location.key;
+    setIsTransitioning(true);
+
+    const timeoutId = window.setTimeout(() => {
+      setIsTransitioning(false);
+    }, 2000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [location.key]);
+
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <Routes>
-        {/* =========================
-            PUBLIC WEBSITE
-        ========================== */}
+    <>
+      <PageLoader visible={isTransitioning} />
 
-        <Route element={<MainLayout />}>
+      <Suspense
+        fallback={isTransitioning ? null : <PageLoader visible />}
+      >
+        <Routes location={location}>
+          {/* =========================
+              PUBLIC WEBSITE
+          ========================== */}
+          <Route element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="memories" element={<MemoriesPage />} />
+          </Route>
+
+          {/* =========================
+              AUTHENTICATION
+          ========================== */}
+          <Route element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
+
+          {/* =========================
+              FALLBACK
+          ========================== */}
           <Route
-            index
-            element={<HomePage />}
+            path="*"
+            element={<Navigate to="/" replace />}
           />
-
-          <Route
-            path="about"
-            element={<AboutPage />}
-          />
-
-          <Route
-            path="memories"
-            element={
-              <MemoriesPage />
-            }
-          />
-
-        </Route>
-
-        {/* =========================
-            AUTHENTICATION
-        ========================== */}
-
-        <Route element={<AuthLayout />}>
-          <Route
-            path="login"
-            element={<LoginPage />}
-          />
-
-          <Route
-            path="register"
-            element={<RegisterPage />}
-          />
-        </Route>
-
-        {/* =========================
-            FALLBACK
-        ========================== */}
-
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/"
-              replace
-            />
-          }
-        />
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 

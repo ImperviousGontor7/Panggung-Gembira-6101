@@ -1,66 +1,83 @@
-function formatDate(dateString) {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
+function formatMemoryDate(dateString) {
+  const date = new Date(`${dateString}T00:00:00`);
+
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "long",
     year: "numeric",
-  }).format(new Date(dateString));
+  }).format(date);
 }
 
 function MemoriesCard({ item, viewMode }) {
-  const imageBlock = (
-    <div className="relative overflow-hidden">
-      <img
-        src={item.image}
-        alt={item.title}
-        className={[
-          "h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]",
-          viewMode === "grid" ? "aspect-4/3" : "h-full min-h-52 w-full sm:w-56",
-        ].join(" ")}
-      />
-
-      <div className="absolute left-3 top-3 rounded-2xl bg-black/35 px-3 py-1.5 text-[11px] font-medium text-white/90 backdrop-blur-md">
-        {formatDate(item.date)}
-      </div>
-
-      <button
-        type="button"
-        className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-white/12 text-white/90 backdrop-blur-md transition hover:bg-white/20"
-      >
-        ▣
-      </button>
-    </div>
-  );
-
-  const contentBlock = (
-    <div className="flex flex-1 flex-col justify-between p-4">
-      <div>
-        <h3 className="text-base font-semibold text-white">
-          {item.title}
-        </h3>
-      </div>
-
-      <div className="mt-5 flex items-center justify-between gap-3">
-        <span className="rounded-xl border border-indigo-400/20 bg-indigo-400/15 px-3 py-1 text-xs font-medium text-indigo-200">
-          {item.categoryLabel}
-        </span>
-
-        <span className="flex items-center gap-1.5 text-sm text-white/70">
-          <span className="text-base leading-none">♡</span>
-          <span>{item.likes}</span>
-        </span>
-      </div>
-    </div>
-  );
+  const isList = viewMode === "list";
+  const mediaClass = isList
+    ? "aspect-[16/10] w-full sm:w-64 sm:shrink-0"
+    : "aspect-[4/3] w-full";
 
   return (
     <article
-      className={[
-        "group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.035] shadow-[0_16px_42px_rgba(0,0,0,.28)] transition duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/5",
-        viewMode === "grid" ? "flex flex-col" : "flex flex-col sm:flex-row",
-      ].join(" ")}
+      className={`group relative min-w-0 overflow-hidden border border-white/10 bg-[#211307] transition duration-300 hover:border-marigold/30 ${
+        isList
+          ? "flex flex-col rounded-2xl sm:flex-row sm:items-stretch"
+          : "rounded-xl sm:rounded-2xl"
+      }`}
     >
-      {imageBlock}
-      {contentBlock}
+      <div className={`relative min-w-0 overflow-hidden ${mediaClass}`}>
+        {item.video ? (
+          <video
+            src={item.video}
+            poster={item.image}
+            controls={isList}
+            muted
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <img
+            src={item.image}
+            alt={item.title}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        )}
+
+        {item.video && !isList && (
+          <span className="pointer-events-none absolute right-2 top-2 rounded-full border border-white/15 bg-black/65 px-2 py-1 font-root text-[9px] font-bold tracking-wider text-white">
+            VIDEO
+          </span>
+        )}
+
+        {!isList && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/35 to-transparent p-3 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+            <h2 className="line-clamp-1 font-root text-xs font-bold text-white sm:text-sm">
+              {item.title}
+            </h2>
+            <p className="mt-1 font-root text-[10px] text-white/65 sm:text-xs">
+              {item.categoryLabel} <span className="px-1 text-marigold/70">·</span>{" "}
+              {formatMemoryDate(item.date)}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {isList && (
+        <div className="flex min-w-0 flex-1 flex-col justify-center p-4 sm:p-5">
+          <p className="font-root text-[10px] font-semibold uppercase tracking-[0.18em] text-marigold/75">
+            {item.categoryLabel}
+          </p>
+          <h2 className="mt-1 font-root text-base font-bold text-antiquewhite sm:text-lg">
+            {item.title}
+          </h2>
+          <time
+            dateTime={item.date}
+            className="mt-2 font-root text-xs text-white/45"
+          >
+            {formatMemoryDate(item.date)}
+          </time>
+        </div>
+      )}
     </article>
   );
 }

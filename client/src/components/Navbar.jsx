@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import Impact from "../assets/images/Left Nav Logo Generation.webp";
+import MobileShield from "../assets/logos/impervious-shield.webp";
 import useAuth from "../features/realtime/hooks/useAuth";
 
 function Navbar() {
@@ -827,74 +828,56 @@ function Navbar() {
         <div
           className="
             absolute
-            left-3
-            right-3
-            top-3
-            z-[1115]
+            inset-x-0
+            top-0
+            z-1115
             flex
-            h-[54px]
+            h-25
+            w-full
             items-center
             justify-between
-            rounded-[17px]
-            border
-            border-white/15
-            bg-black/90
-            px-3
-            shadow-[0_8px_30px_rgba(0,0,0,0.4)]
-            backdrop-blur-2xl
+            px-4
             md:hidden
           "
         >
-
-          {/* BRAND / SHIELD */}
+          {/* ==================================================
+              MOBILE LOGO
+          ================================================== */}
 
           <Link
             to="/"
-            aria-label="Home"
+            aria-label="Impervious Generation Home"
             className="
               flex
-              h-9
-              w-9
+              h-15
+              w-15
               shrink-0
               items-center
               justify-center
+              overflow-hidden
               rounded-full
               border
-              border-marigold/20
-              bg-[#38280d]
-              text-marigold
+              border-[#d6a000]
+              bg-[#493300]
+              p-0.75
+              shadow-[0_0_12px_rgba(214,160,0,0.12)]
               transition-all
-              duration-300
-              hover:border-marigold/50
-              hover:bg-[#59431b]
+              duration-200
+              hover:bg-[#624700]
             "
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-[19px] w-[19px]"
-              fill="none"
-            >
-              <path
-                d="M12 2.8L19 5.7V11.1C19 15.5 16.1 19.2 12 21.2C7.9 19.2 5 15.5 5 11.1V5.7L12 2.8Z"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinejoin="round"
-              />
-
-              <path
-                d="M9 11.8L11 13.8L15.5 9"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img
+              src={MobileShield}
+              alt="Impervious Generation"
+              className="h-full w-full p-1 object-contain"
+            />
           </Link>
 
+          {/* ==================================================
+              MOBILE ACTIONS
+          ================================================== */}
 
-          {/* RIGHT ACTIONS */}
-
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.75">
 
             {/* SEARCH */}
 
@@ -903,47 +886,48 @@ function Navbar() {
               onClick={() => {
                 setOpenMobileSearch((previous) => !previous);
                 setOpenUserMenu(false);
+                setOpenDesktopSearch(false);
               }}
               aria-label="Open search"
               aria-expanded={openMobileSearch}
               className="
                 flex
-                h-9
-                w-8
+              h-15
+              w-15
                 items-center
                 justify-center
-                text-white/75
+                rounded-full
+                border
+                border-[#90764e]/80
+                bg-black/25
+                text-white/90
                 transition-all
                 duration-200
+                hover:border-marigold
+                hover:bg-white/5
                 hover:text-marigold
               "
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-[19px] w-[19px]"
-                fill="none"
-              >
-                <circle
-                  cx="10.5"
-                  cy="10.5"
-                  r="6.5"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                />
+                <svg viewBox="0 0 28 28" className="h-15 w-15" fill="none">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3.5"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                  />
 
-                <path
-                  d="M15.3 15.3L20.5 20.5"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                />
-              </svg>
+                  <path
+                    d="M15 15L 19 19"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                  />
+                </svg>
             </button>
-
 
             {!user ? (
               <>
-
                 {/* LOGIN */}
 
                 <Link
@@ -951,38 +935,36 @@ function Navbar() {
                   aria-label="Login"
                   className="
                     flex
-                    h-9
-                    w-8
+                    h-15
+                    w-15
                     items-center
                     justify-center
-                    text-white/75
+                    rounded-full
+                    border
+                    border-[#90764e]/80
+                    bg-black/25
+                    text-white/90
                     transition-all
                     duration-200
+                    hover:border-marigold
+                    hover:bg-white/5
                     hover:text-marigold
                   "
                 >
                   <svg
-                    viewBox="0 0 24 24"
-                    className="h-[19px] w-[19px]"
+                    viewBox="0 0 28 28"
+                    className="h-8.5 w-8.5"
                     fill="none"
                   >
                     <path
-                      d="M10 17L15 12L10 7"
+                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 25 20.1 20 19 20H13"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-
                     <path
-                      d="M15 12H3"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      strokeLinecap="round"
-                    />
-
-                    <path
-                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
+                      d="M1 12H15M11 8L15 12L11 16"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
@@ -990,7 +972,6 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
-
 
                 {/* REGISTER */}
 
@@ -999,49 +980,51 @@ function Navbar() {
                   aria-label="Register"
                   className="
                     flex
-                    h-9
-                    w-8
+                    h-15
+                    w-15
                     items-center
                     justify-center
-                    text-white/75
+                    rounded-full
+                    border
+                    border-[#90764e]/80
+                    bg-black/25
+                    text-white/90
                     transition-all
                     duration-200
+                    hover:border-marigold
+                    hover:bg-white/5
                     hover:text-marigold
                   "
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    className="h-[19px] w-[19px]"
+                    className="h-8.5 w-8.5"
                     fill="none"
                   >
                     <circle
                       cx="9"
-                      cy="8"
-                      r="3.5"
+                      cy="7.5"
+                      r="3"
                       stroke="currentColor"
                       strokeWidth="1.7"
                     />
-
                     <path
-                      d="M3 20C3 16.7 5.7 14 9 14C12.3 14 15 16.7 15 20"
+                      d="M3.5 19C3.5 15.9 5.9 13.5 9 13.5C10.8 13.5 12.3 14.3 13.3 15.6"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
                     />
-
                     <path
-                      d="M19 8V14M16 11H22"
+                      d="M18 9V15M15 12H21"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
                     />
                   </svg>
                 </Link>
-
               </>
             ) : (
               <>
-
                 {/* PROFILE */}
 
                 <Link
@@ -1049,38 +1032,42 @@ function Navbar() {
                   aria-label="Profile"
                   className="
                     flex
-                    h-9
+                    h-8
                     w-8
                     items-center
                     justify-center
-                    text-white/75
+                    rounded-full
+                    border
+                    border-[#90764e]/80
+                    bg-black/25
+                    text-white/90
                     transition-all
                     duration-200
+                    hover:border-marigold
+                    hover:bg-white/5
                     hover:text-marigold
                   "
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    className="h-[19px] w-[19px]"
+                    className="h-3.5 w-3.5"
                     fill="none"
                   >
                     <circle
                       cx="12"
                       cy="8"
-                      r="3.5"
+                      r="3.2"
                       stroke="currentColor"
                       strokeWidth="1.7"
                     />
-
                     <path
-                      d="M4 21C4 16.6 7.6 13 12 13C16.4 13 20 16.6 20 21"
+                      d="M4 20C4 16.4 7.6 13.5 12 13.5C16.4 13.5 20 16.4 20 20"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
                     />
                   </svg>
                 </Link>
-
 
                 {/* LOGOUT */}
 
@@ -1090,45 +1077,43 @@ function Navbar() {
                   aria-label="Logout"
                   className="
                     flex
-                    h-9
+                    h-8
                     w-8
                     items-center
                     justify-center
-                    text-white/75
+                    rounded-full
+                    border
+                    border-[#90764e]/80
+                    bg-black/25
+                    text-white/90
                     transition-all
                     duration-200
+                    hover:border-red-400
+                    hover:bg-white/5
                     hover:text-red-400
                   "
                 >
                   <svg
                     viewBox="0 0 24 24"
-                    className="h-[19px] w-[19px]"
+                    className="h-3.5 w-3.5"
                     fill="none"
                   >
-                    <path
-                      d="M10 17L15 12L10 7"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-
-                    <path
-                      d="M15 12H3"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      strokeLinecap="round"
-                    />
-
                     <path
                       d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M3 12H15M11 8L15 12L11 16"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </button>
-
               </>
             )}
 
@@ -1147,24 +1132,24 @@ function Navbar() {
               fixed
               left-3
               right-3
-              top-[4.75rem]
-              z-[1120]
+              top-22.5
+              z-1120
               flex
               h-12
               items-center
               rounded-[15px]
               border
               border-white/15
-              bg-black/95
+              bg-black/25
               px-3
               shadow-[0_10px_35px_rgba(0,0,0,0.45)]
-              backdrop-blur-2xl
+              backdrop-blur-xl
               md:hidden
             "
           >
             <svg
-              viewBox="0 0 24 24"
-              className="h-[18px] w-[18px] shrink-0 text-marigold"
+              viewBox="0 0 28 28"
+              className="h-5 w-5 shrink-0 text-marigold"
               fill="none"
             >
               <circle
@@ -1193,7 +1178,6 @@ function Navbar() {
               className="
                 min-w-0
                 flex-1
-                bg-transparent
                 px-3
                 text-sm
                 text-white
@@ -1251,16 +1235,16 @@ function Navbar() {
             bottom-3
             left-3
             right-3
-            z-[1115]
+            z-1115
             flex
-            h-[68px]
+            h-17
             items-center
             justify-around
             gap-2
             rounded-full
             border
-            border-white/20
-            bg-[#171512]/90
+            border-white/25
+            bg-[#171512]/50
             px-2
             shadow-[0_8px_35px_rgba(0,0,0,0.5)]
             backdrop-blur-2xl
@@ -1276,7 +1260,7 @@ function Navbar() {
             className={({ isActive }) =>
               `
                 flex
-                h-[52px]
+                h-13
                 flex-1
                 flex-col
                 items-center
@@ -1342,7 +1326,7 @@ function Navbar() {
             className={({ isActive }) =>
               `
                 flex
-                h-[52px]
+                h-13
                 flex-1
                 flex-col
                 items-center
@@ -1404,11 +1388,11 @@ function Navbar() {
           {/* GALLERY */}
 
           <NavLink
-            to="/gallery"
+            to="/memories"
             className={({ isActive }) =>
               `
                 flex
-                h-[52px]
+                h-13
                 flex-1
                 flex-col
                 items-center

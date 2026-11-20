@@ -919,3 +919,121 @@ body.hovering .cursor-ring {
     text-align: left;
   }
 }
+
+
+/* =========================================================
+   IMPERVIOUS PAGE TRANSITION LOADER
+   ========================================================= */
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #391b00;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    visibility 0s linear 120ms;
+}
+
+.page-loader--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 1ms ease,
+    visibility 0s ;
+}
+
+.page-loader__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.page-loader__visual {
+  position: relative;
+  display: grid;
+  width: 9rem;
+  height: 9rem;
+  place-items: center;
+}
+
+.page-loader__spinner {
+  position: absolute;
+  inset: 0;
+  border: 3px solid rgb(227 164 25 / 17%);
+  border-top-color: #e3a419;
+  border-right-color: rgb(227 164 25 / 68%);
+  border-radius: 50%;
+  animation: impervious-page-spin 350ms linear infinite;
+  will-change: transform;
+}
+
+.page-loader__logo {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 35px;
+  height: 48px;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  animation: impervious-page-bounce 650ms ease-in-out infinite;
+  will-change: transform;
+}
+
+.page-loader__label {
+  margin: 0;
+  color: #f2e3d0;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  text-indent: 0.28em;
+}
+
+@keyframes impervious-page-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  35% {
+    transform: translateY(-9px) scale(1.04);
+  }
+
+  55% {
+    transform: translateY(0) scale(0.96);
+  }
+
+  72% {
+    transform: translateY(-3px) scale(1);
+  }
+}
+
+@keyframes impervious-page-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader,
+  .page-loader--visible {
+    transition-duration: 1ms;
+  }
+
+  .page-loader__spinner,
+  .page-loader__logo {
+    animation: none;
+  }
+}

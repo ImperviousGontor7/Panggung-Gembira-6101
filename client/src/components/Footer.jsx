@@ -39,21 +39,6 @@ function Footer() {
               <span className="truncate">Privacy</span>
             </a>
 
-            <a href="https://www.instagram.com/impervious_generation.g7/?__d=1%2F" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="Instagram Official" rel="noopener noreferrer" target="_blank">
-              <i className="fab fa-instagram w-4 text-center text-base" />
-              <span className="truncate">Instagram</span>
-            </a>
-
-            <a href="https://www.youtube.com/@gontortv" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="Gontortv Official" rel="noopener noreferrer" target="_blank">
-              <i className="fab fa-youtube w-4 text-center text-base" />
-              <span className="truncate">YouTube</span>
-            </a>
-
-            <a href="https://wa.me/6281547212932?text=Halo%20saya%20mau%20tanya" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="WhatsApp Official" rel="noopener noreferrer" target="_blank">
-              <i className="fab fa-whatsapp w-4 text-center text-base" />
-              <span className="truncate">WhatsApp</span>
-            </a>
-
             <a href="https://imperviousgeneration.my.id/" className="flex items-center gap-2 text-[0.9rem] text-(--text-main) transition-all duration-300 hover:translate-x-0.5 hover:text-(--text-main)" aria-label="Impervious Main Campus" target="_blank" rel="noopener noreferrer">
               <i className="fa-solid fa-globe w-4 text-center text-base" />
               <span className="truncate">Website</span>
@@ -112,29 +97,6 @@ function Footer() {
                   <i className="fas fa-shield-halved w-5 text-center transition-transform duration-300 group-hover:scale-110" />
                   <span>Privacy Policy</span>
                 </a>
-              </div>
-            </div>
-
-            <div className="f-col">
-              <h5 className="mb-4 py-1 font-(--font-lato) text-[clamp(1rem,1.4vw,1.35rem)] uppercase tracking-[0.18em] text-(--text-main)">
-                Social Links
-              </h5>
-
-              <div className="space-y-3">
-                <a href="https://www.instagram.com/impervious_generation.g7/?__d=1%2F" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" rel="noopener noreferrer" target="_blank">
-                  <i className="fab fa-instagram w-5 text-center transition-transform duration-300 group-hover:scale-110" />
-                  <span>Instagram Official</span>
-                </a>
-
-                <a href="https://www.youtube.com/@gontortv" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" rel="noopener noreferrer" target="_blank">
-                  <i className="fab fa-youtube w-5 text-center transition-transform duration-300 group-hover:scale-110" />
-                  <span>Gontortv Official</span>
-                </a>
-
-                <a href="https://wa.me/6281547212932?text=Halo%20saya%20mau%20tanya" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" rel="noopener noreferrer" target="_blank">
-                  <i className="fab fa-whatsapp w-5 text-center transition-transform duration-300 group-hover:scale-110" />
-                  <span>WhatsApp Official</span>
-                </a>
 
                 <a href="https://imperviousgeneration.my.id/" className="group flex items-center gap-3 text-[clamp(0.95rem,1.2vw,1.15rem)] text-(--text-muted) transition-all duration-300 hover:translate-x-1 hover:text-(--text-main) focus-visible:translate-x-1 focus-visible:text-(--text-main) focus-visible:outline-none" target="_blank" rel="noopener noreferrer">
                   <i className="fa-solid fa-globe w-5 text-center transition-transform duration-300 group-hover:scale-110" />
@@ -142,6 +104,8 @@ function Footer() {
                 </a>
               </div>
             </div>
+
+            
 
             <div className="f-col">
               <h5 className="mb-4 py-1 font-(--font-lato) text-[clamp(1rem,1.4vw,1.35rem)] uppercase tracking-[0.18em] text-(--text-main)">

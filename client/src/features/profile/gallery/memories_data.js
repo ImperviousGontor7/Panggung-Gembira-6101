@@ -24,7 +24,7 @@ export const memoriesData = [
     date: "2025-01-12",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: "",
+    likes: 32,
     image: Hero,
   },
   {
@@ -33,7 +33,7 @@ export const memoriesData = [
     date: "2025-01-28",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: "",
+    likes: 41,
     image: Hero,
   },
   {
@@ -42,7 +42,7 @@ export const memoriesData = [
     date: "2025-02-14",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: "",
+    likes: 27,
     image: Hero,
   },
   {
@@ -51,7 +51,7 @@ export const memoriesData = [
     date: "2025-03-03",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: "",
+    likes: 36,
     image: Hero,
   },
   {
@@ -60,7 +60,7 @@ export const memoriesData = [
     date: "2025-03-21",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: "",
+    likes: 29,
     image: Hero,
   },
   {
@@ -69,7 +69,7 @@ export const memoriesData = [
     date: "2025-04-05",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: "",
+    likes: 23,
     image: Hero,
   },
   {
@@ -78,7 +78,7 @@ export const memoriesData = [
     date: "2025-04-17",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: "",
+    likes: 31,
     image: Hero,
   },
   {
@@ -87,7 +87,7 @@ export const memoriesData = [
     date: "2025-05-01",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: "",
+    likes: 26,
     image: Hero,
   },
   {
@@ -96,7 +96,7 @@ export const memoriesData = [
     date: "2025-05-20",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: "",
+    likes: 34,
     image: Hero,
   },
   {
@@ -105,7 +105,7 @@ export const memoriesData = [
     date: "2025-05-31",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: "",
+    likes: 19,
     image: Hero,
   },
   {
@@ -114,7 +114,7 @@ export const memoriesData = [
     date: "2024-07-18",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: "",
+    likes: 28,
     image: Hero,
   },
   {
@@ -123,7 +123,7 @@ export const memoriesData = [
     date: "2024-09-02",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: "",
+    likes: 22,
     image: Hero,
   },
 ];

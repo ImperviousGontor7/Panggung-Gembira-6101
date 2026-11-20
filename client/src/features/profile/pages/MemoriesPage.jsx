@@ -1,26 +1,26 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import Sidebar from "../gallery/sidebar";
-import Header from "../gallery/header";
-import Archive from "../gallery/archive";
-import Pagination from "../gallery/pagination";
+import Header from "../gallery/Header.jsx";
+import GalleryControls from "../gallery/GalleryControls.jsx";
+import Sidebar from "../gallery/Sidebar.jsx";
+import Archive from "../gallery/Archive.jsx";
 
-import {
-  memoriesData,
-  memoryFilters,
-} from "../gallery/memories_data";
+import { memoriesData, memoryFilters } from "../gallery/memories_data";
 
-const ITEMS_PER_PAGE = 8;
+// Infinite scroll loads no more than 50 memories in each batch.
+const MAX_ITEMS_PER_LOAD = 50;
 
 function formatYear(dateString) {
-  return new Date(dateString).getFullYear().toString();
+  return new Date(`${dateString}T00:00:00`).getFullYear().toString();
 }
 
 function Memories() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState("grid");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(MAX_ITEMS_PER_LOAD);
+  const [supportsObserver, setSupportsObserver] = useState(true);
+  const sentinelRef = useRef(null);
 
   const filters = useMemo(() => {
     return memoryFilters.map((filter) => {
@@ -28,8 +28,12 @@ function Memories() {
         filter.value === "all"
           ? memoriesData.length
           : filter.value === "2025" || filter.value === "2024"
-            ? memoriesData.filter((item) => formatYear(item.date) === filter.value).length
-            : memoriesData.filter((item) => item.categoryKey === filter.value).length;
+            ? memoriesData.filter(
+                (item) => formatYear(item.date) === filter.value,
+              ).length
+            : memoriesData.filter(
+                (item) => item.categoryKey === filter.value,
+              ).length;
 
       return { ...filter, count };
     });
@@ -55,63 +59,115 @@ function Memories() {
     });
   }, [activeFilter, sortBy]);
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredMemories.length / ITEMS_PER_PAGE)
+  const visibleMemories = useMemo(
+    () => filteredMemories.slice(0, visibleCount),
+    [filteredMemories, visibleCount],
   );
 
-  const safeCurrentPage = Math.min(currentPage, totalPages);
-
-  const paginatedMemories = useMemo(() => {
-    const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
-    return filteredMemories.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [safeCurrentPage, filteredMemories]);
+  const hasMore = visibleMemories.length < filteredMemories.length;
 
   const handleFilterChange = useCallback((filterValue) => {
     setActiveFilter(filterValue);
-    setCurrentPage(1);
+    setVisibleCount(MAX_ITEMS_PER_LOAD);
   }, []);
 
   const handleSortChange = useCallback((value) => {
     setSortBy(value);
-    setCurrentPage(1);
+    setVisibleCount(MAX_ITEMS_PER_LOAD);
   }, []);
 
-  const handlePageChange = useCallback((page) => {
-    setCurrentPage(page);
-  }, []);
+  const loadNextBatch = useCallback(() => {
+    setVisibleCount((currentCount) =>
+      Math.min(currentCount + MAX_ITEMS_PER_LOAD, filteredMemories.length),
+    );
+  }, [filteredMemories.length]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      setSupportsObserver(false);
+      return undefined;
+    }
+
+    setSupportsObserver(true);
+
+    if (!hasMore || !sentinelRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          loadNextBatch();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "600px 0px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(sentinelRef.current);
+
+    return () => observer.disconnect();
+  }, [hasMore, loadNextBatch, visibleMemories.length]);
 
   return (
-    <main className="min-h-screen text-white">
-      <div className="mx-auto max-w-[1680px] px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
-        <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+    <div className="min-h-screen overflow-x-clip text-white">
+      <div className="mx-auto w-full max-w-[1680px] px-4 pb-16 pt-[clamp(9rem,11vw,14rem)] sm:px-6 lg:px-8">
+        <div className="space-y-6 sm:space-y-8">
+          {/* 1. Title and subtitle */}
+          <Header />
+
+          {/* 2. Filter A: sort, grid, and list controls */}
+          <GalleryControls
+            sortBy={sortBy}
+            onSortChange={handleSortChange}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+          />
+        </div>
+
+        {/* 3. Filter B: year and category filters */}
+        <div className="mt-5 sm:mt-7">
           <Sidebar
             filters={filters}
             activeFilter={activeFilter}
             onSelectFilter={handleFilterChange}
           />
-
-          <section className="rounded-4xl border border-white/10 bg-white/2 p-4 sm:p-6 lg:p-10">
-            <Header
-              sortBy={sortBy}
-              onSortChange={handleSortChange}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-            />
-
-            <div className="mt-8">
-              <Archive items={paginatedMemories} viewMode={viewMode} />
-            </div>
-
-            <Pagination
-              currentPage={safeCurrentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </section>
         </div>
+
+        {/* 4. Gallery images */}
+        <section aria-label="Our memories gallery" className="mt-5 sm:mt-7">
+          <Archive items={visibleMemories} viewMode={viewMode} />
+
+          {/* 5. Infinite pagination: load the next batch when this enters view */}
+          {hasMore && supportsObserver && (
+            <div
+              ref={sentinelRef}
+              aria-live="polite"
+              className="flex min-h-20 items-center justify-center gap-3 py-6"
+            >
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-marigold/25 border-t-marigold" />
+              <span className="font-root text-xs text-white/45">
+                Loading more memories...
+              </span>
+            </div>
+          )}
+
+          {/* Fallback for browsers without IntersectionObserver */}
+          {hasMore && !supportsObserver && (
+            <div className="flex justify-center py-7">
+              <button
+                type="button"
+                onClick={loadNextBatch}
+                className="rounded-full border border-marigold/35 bg-marigold/10 px-5 py-3 font-root text-xs font-semibold text-marigold transition hover:bg-marigold/20"
+              >
+                Load more memories
+              </button>
+            </div>
+          )}
+        </section>
       </div>
-    </main>
+    </div>
   );
 }
 
