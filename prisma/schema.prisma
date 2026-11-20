@@ -75,11 +75,7 @@ model Media {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  uploader User? @relation(
-    fields: [uploaderId],
-    references: [id],
-    onDelete: SetNull
-  )
+  uploader User? @relation(fields: [uploaderId], references: [id], onDelete: SetNull)
 
   @@unique([provider, path])
   @@index([folder])
@@ -141,17 +137,9 @@ model News {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  category Category? @relation(
-    fields: [categoryId],
-    references: [id],
-    onDelete: SetNull
-  )
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   homePlacements HomePlacement[]
 
@@ -181,11 +169,7 @@ model HomePlacement {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  news News @relation(
-    fields: [newsId],
-    references: [id],
-    onDelete: Cascade
-  )
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
 
   @@unique([newsId, placement])
   @@index([placement])
@@ -220,11 +204,7 @@ model Agenda {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([slug])
   @@index([status])
@@ -253,11 +233,7 @@ model Forum {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   comments Comment[]
 
@@ -283,17 +259,9 @@ model Comment {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  forum Forum @relation(
-    fields: [forumId],
-    references: [id],
-    onDelete: Cascade
-  )
+  forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
 
   @@index([forumId])
   @@index([authorId])
@@ -320,11 +288,7 @@ model Gallery {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  uploader User @relation(
-    fields: [uploaderId],
-    references: [id],
-    onDelete: Cascade
-  )
+  uploader User @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
 
   @@index([uploaderId])
   @@index([status])
@@ -358,11 +322,7 @@ model Committee {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   members CommitteeMember[]
 
@@ -393,11 +353,7 @@ model CommitteeMember {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  committee Committee @relation(
-    fields: [committeeId],
-    references: [id],
-    onDelete: Cascade
-  )
+  committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
 
   @@index([committeeId])
   @@index([order])
@@ -424,11 +380,7 @@ model ContactMessage {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user User? @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: SetNull
-  )
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([email])
   @@index([status])
@@ -459,11 +411,7 @@ model About {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User? @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: SetNull
-  )
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([key])
   @@index([order])
@@ -513,11 +461,7 @@ model Home {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  author User? @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: SetNull
-  )
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([sectionType])
   @@index([placement])
