@@ -1,0 +1,4 @@
+Extract this ZIP into the root of your existing GitHub repository and allow files to be overwritten.
+Then commit and push the changes to the main branch.
+The original client/.env was removed from the repaired working copy because it pointed at localhost:5001; delete any existing local client/.env file before testing locally. It should not be committed.
+Follow DEPLOYMENT.md for GitHub Pages, DNS, and backend setup.

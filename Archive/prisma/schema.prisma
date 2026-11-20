@@ -1,0 +1,561 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ======================================================
+// USER
+// ======================================================
+
+model User {
+  id String @id @default(cuid())
+
+  username String @unique
+  email    String @unique
+  password String
+
+  fullName String?
+  avatar   String?
+  bio      String?
+
+  role     Role       @default(USER)
+  status   UserStatus @default(ACTIVE)
+  isActive Boolean    @default(true)
+
+  refreshToken String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  uploadedMedia   Media[]
+  news            News[]
+  agendas         Agenda[]
+  forums          Forum[]
+  comments        Comment[]
+  galleries       Gallery[]
+  committees      Committee[]
+  contactMessages ContactMessage[]
+  aboutSections   About[]
+  homeSections    Home[]
+
+  @@index([role])
+  @@index([status])
+  @@index([isActive])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// MEDIA
+// ======================================================
+
+model Media {
+  id String @id @default(cuid())
+
+  originalName String
+  filename     String
+
+  mimeType String
+  size     Int
+
+  path String
+  url  String
+
+  folder   String
+  provider String @default("local")
+
+  uploaderId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  uploader User? @relation(fields: [uploaderId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, path])
+  @@index([folder])
+  @@index([mimeType])
+  @@index([provider])
+  @@index([uploaderId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// CATEGORY
+// ======================================================
+
+model Category {
+  id String @id @default(cuid())
+
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  news News[]
+
+  @@index([slug])
+}
+
+// ======================================================
+// NEWS
+// ======================================================
+
+model News {
+  id String @id @default(cuid())
+
+  title String
+  slug  String @unique
+
+  excerpt String?
+  content String
+
+  thumbnail String?
+  banner    String?
+
+  metaTitle       String?
+  metaDescription String?
+
+  views Int @default(0)
+
+  status NewsStatus @default(DRAFT)
+
+  authorId   String
+  categoryId String?
+
+  publishedAt DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  homePlacements HomePlacement[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([publishedAt])
+  @@index([views])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// HOME PLACEMENT
+// ======================================================
+
+model HomePlacement {
+  id String @id @default(cuid())
+
+  newsId    String
+  placement HomePlacementType
+
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, placement])
+  @@index([placement])
+  @@index([placement, order])
+  @@index([newsId])
+  @@index([isActive])
+}
+
+// ======================================================
+// AGENDA
+// ======================================================
+
+model Agenda {
+  id String @id @default(cuid())
+
+  title String
+  slug  String @unique
+
+  description String?
+
+  banner   String?
+  location String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  status AgendaStatus @default(UPCOMING)
+
+  authorId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([status])
+  @@index([startDate])
+  @@index([endDate])
+  @@index([authorId])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// FORUM
+// ======================================================
+
+model Forum {
+  id String @id @default(cuid())
+
+  title   String
+  content String
+
+  views Int @default(0)
+  likes Int @default(0)
+
+  authorId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  comments Comment[]
+
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([views])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// COMMENT
+// ======================================================
+
+model Comment {
+  id String @id @default(cuid())
+
+  content String
+
+  forumId  String
+  authorId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  forum Forum @relation(fields: [forumId], references: [id], onDelete: Cascade)
+
+  @@index([forumId])
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// GALLERY
+// ======================================================
+
+model Gallery {
+  id String @id @default(cuid())
+
+  title   String?
+  image   String
+  caption String?
+
+  status GalleryStatus @default(PUBLISHED)
+
+  uploaderId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  uploader User @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+
+  @@index([uploaderId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// COMMITTEE
+// ======================================================
+
+model Committee {
+  id String @id @default(cuid())
+
+  title String
+  slug  String @unique
+
+  description String?
+
+  banner String?
+  logo   String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  status CommitteeStatus @default(DRAFT)
+
+  authorId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  members CommitteeMember[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@index([startDate])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// COMMITTEE MEMBER
+// ======================================================
+
+model CommitteeMember {
+  id String @id @default(cuid())
+
+  committeeId String
+
+  name     String
+  position String?
+  photo    String?
+  bio      String?
+
+  order Int @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  committee Committee @relation(fields: [committeeId], references: [id], onDelete: Cascade)
+
+  @@index([committeeId])
+  @@index([order])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// CONTACT MESSAGE
+// ======================================================
+
+model ContactMessage {
+  id String @id @default(cuid())
+
+  name    String
+  email   String
+  subject String?
+  message String
+
+  status ContactMessageStatus @default(UNREAD)
+
+  userId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([email])
+  @@index([status])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// ABOUT
+// ======================================================
+
+model About {
+  id String @id @default(cuid())
+
+  key String @unique
+
+  title   String
+  content String
+  image   String?
+
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+
+  authorId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([key])
+  @@index([order])
+  @@index([isActive])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// HOME
+// ======================================================
+
+model Home {
+  id String @id @default(cuid())
+
+  key String @unique
+
+  sectionType HomeSectionType
+  placement   HomePlacementType @default(HOME_HERO)
+  status      HomeSectionStatus @default(ACTIVE)
+
+  title       String
+  subtitle    String?
+  description String?
+
+  image       String?
+  mobileImage String?
+
+  badge String?
+
+  ctaLabel String?
+  ctaUrl   String?
+
+  secondaryLabel String?
+  secondaryUrl   String?
+
+  metaTitle       String?
+  metaDescription String?
+
+  payload Json?
+
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+
+  authorId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([sectionType])
+  @@index([placement])
+  @@index([placement, order])
+  @@index([status])
+  @@index([order])
+  @@index([isActive])
+  @@index([deletedAt])
+}
+
+// ======================================================
+// ENUMS
+// ======================================================
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  SUSPENDED
+  BANNED
+}
+
+enum NewsStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AgendaStatus {
+  UPCOMING
+  ONGOING
+  FINISHED
+  CANCELLED
+}
+
+enum CommitteeStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum ContactMessageStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+enum HomeSectionType {
+  HERO
+  SLIDER
+  FEATURED
+  TRENDING
+  CATEGORY
+  BANNER
+  STATISTIC
+  CTA
+  ABOUT
+  GALLERY
+  AGENDA
+  NEWS
+}
+
+enum HomeSectionStatus {
+  ACTIVE
+  HIDDEN
+  ARCHIVED
+}
+
+enum GalleryStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ======================================================
+// HOME PLACEMENT TYPES
+// ======================================================
+
+enum HomePlacementType {
+  HOME_HERO
+  HOME_THIS_MONTH
+  HOME_MONTH_AGO
+  HOME_ROOT_SLIDER
+  HOME_BEHIND_EVENTS
+  HOME_FEATURED
+  HOME_FIRST_MID_YEAR
+  HOME_SECOND_MID_YEAR
+  HOME_TRENDING
+  HOME_CATEGORY
+}

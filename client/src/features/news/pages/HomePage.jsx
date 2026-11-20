@@ -369,7 +369,6 @@ function Home() {
     bg-choco
 
     transition-all duration-300
-
     hover:z-10
     hover:-translate-y-2
     hover:shadow-2xl
@@ -381,20 +380,13 @@ function Home() {
                     <img
                       src={hero}
                       alt={item.title}
-                      className="
-        block h-full w-full
-        select-none object-cover object-center
-      "
+                      className="block h-full w-full select-none object-cover object-center"
                     />
 
                     <div
                       className="
-        absolute inset-0
-        h-full w-full
-        translate-y-px
-        bg-linear-to-t
-        from-choco
-        to-choco/25
+        absolute inset-0 h-full w-full
+        bg-linear-to-t from-choco to-choco/25
       "
                     />
                   </div>
@@ -488,7 +480,6 @@ function Home() {
 
       p-4
       text-white
-
       sm:p-5
       lg:p-6
     "
@@ -496,14 +487,11 @@ function Home() {
                     {/* TITLE */}
                     <h2
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-white
         text-[clamp(1.15rem,1.35vw,1.6rem)]
         font-bold
         leading-[1.75rem]
-
         line-clamp-2
       "
                     >
@@ -513,13 +501,10 @@ function Home() {
                     {/* DESCRIPTION */}
                     <p
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-[clamp(.8rem,.7vw,1rem)]
         leading-6
         text-white/60
-
         line-clamp-3
       "
                     >
@@ -594,7 +579,6 @@ function Home() {
     bg-choco
 
     transition-all duration-300
-
     hover:z-10
     hover:-translate-y-2
     hover:shadow-2xl
@@ -606,20 +590,13 @@ function Home() {
                     <img
                       src={hero}
                       alt={item.title}
-                      className="
-        block h-full w-full
-        select-none object-cover object-center
-      "
+                      className="block h-full w-full select-none object-cover object-center"
                     />
 
                     <div
                       className="
-        absolute inset-0
-        h-full w-full
-        translate-y-px
-        bg-linear-to-t
-        from-choco
-        to-choco/25
+        absolute inset-0 h-full w-full
+        bg-linear-to-t from-choco to-choco/25
       "
                     />
                   </div>
@@ -713,7 +690,6 @@ function Home() {
 
       p-4
       text-white
-
       sm:p-5
       lg:p-6
     "
@@ -721,14 +697,11 @@ function Home() {
                     {/* TITLE */}
                     <h2
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-white
         text-[clamp(1.15rem,1.35vw,1.6rem)]
         font-bold
         leading-[1.75rem]
-
         line-clamp-2
       "
                     >
@@ -738,13 +711,10 @@ function Home() {
                     {/* DESCRIPTION */}
                     <p
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-[clamp(.8rem,.7vw,1rem)]
         leading-6
         text-white/60
-
         line-clamp-3
       "
                     >
@@ -1036,7 +1006,6 @@ function Home() {
     bg-choco
 
     transition-all duration-300
-
     hover:z-10
     hover:-translate-y-2
     hover:shadow-2xl
@@ -1048,20 +1017,13 @@ function Home() {
                     <img
                       src={hero}
                       alt={item.title}
-                      className="
-        block h-full w-full
-        select-none object-cover object-center
-      "
+                      className="block h-full w-full select-none object-cover object-center"
                     />
 
                     <div
                       className="
-        absolute inset-0
-        h-full w-full
-        translate-y-px
-        bg-linear-to-t
-        from-choco
-        to-choco/25
+        absolute inset-0 h-full w-full
+        bg-linear-to-t from-choco to-choco/25
       "
                     />
                   </div>
@@ -1155,7 +1117,6 @@ function Home() {
 
       p-4
       text-white
-
       sm:p-5
       lg:p-6
     "
@@ -1163,14 +1124,11 @@ function Home() {
                     {/* TITLE */}
                     <h2
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-white
         text-[clamp(1.15rem,1.35vw,1.6rem)]
         font-bold
         leading-[1.75rem]
-
         line-clamp-2
       "
                     >
@@ -1180,13 +1138,10 @@ function Home() {
                     {/* DESCRIPTION */}
                     <p
                       className="
-        h-full min-w-0
-        overflow-hidden
-
+        h-full min-w-0 overflow-hidden
         text-[clamp(.8rem,.7vw,1rem)]
         leading-6
         text-white/60
-
         line-clamp-3
       "
                     >
