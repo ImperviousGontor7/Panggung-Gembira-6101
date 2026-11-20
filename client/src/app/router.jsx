@@ -70,7 +70,7 @@ function AppRouter() {
 
     const timeoutId = window.setTimeout(() => {
       setIsTransitioning(false);
-    }, 2000);
+    }, 320);
 
     return () => window.clearTimeout(timeoutId);
   }, [location.key]);
@@ -90,6 +90,7 @@ function AppRouter() {
             <Route index element={<HomePage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="memories" element={<MemoriesPage />} />
+            <Route path="memories/:collection" element={<MemoriesPage />} />
           </Route>
 
           {/* =========================

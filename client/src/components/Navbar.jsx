@@ -214,7 +214,7 @@ function Navbar() {
 
               {/* GALLERY */}
 
-              <NavLink to="/gallery" className={linkClass}>
+              <NavLink to="/memories" className={linkClass}>
                 gallery
               </NavLink>
 

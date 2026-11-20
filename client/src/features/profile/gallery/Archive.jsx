@@ -3,12 +3,10 @@ import MemoriesCard from "./MemoriesCard";
 function Archive({ items, viewMode }) {
   if (!items.length) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-14 text-center">
-        <p className="font-root text-sm font-semibold text-antiquewhite">
-          No memories found
-        </p>
-        <p className="mt-2 font-root text-xs text-white/45">
-          Try choosing another category.
+      <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.025] px-6 py-16 text-center">
+        <p className="text-[1.8rem] font-semibold text-antiquewhite">No memories found</p>
+        <p className="mt-2 text-[1.3rem] text-antiquewhite/50">
+          There are no photos in this collection yet.
         </p>
       </div>
     );
@@ -18,7 +16,7 @@ function Archive({ items, viewMode }) {
     <div
       className={
         viewMode === "grid"
-          ? "grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-4"
+          ? "grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
           : "grid grid-cols-1 gap-3"
       }
     >

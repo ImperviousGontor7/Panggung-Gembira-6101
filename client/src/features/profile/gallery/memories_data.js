@@ -1,5 +1,52 @@
-import Hero from "../../../assets/images/Jami Emas.webp"
+import Hero from "../../../assets/images/Jami Emas.webp";
 
+// The six primary folders shown on the Gallery landing page.
+export const memoryCollections = [
+  {
+    value: "2025",
+    label: "2025",
+    type: "year",
+    eyebrow: "YEAR ARCHIVE",
+    description: "Moments collected throughout 2025.",
+  },
+  {
+    value: "2024",
+    label: "2024",
+    type: "year",
+    eyebrow: "YEAR ARCHIVE",
+    description: "A look back at 2024.",
+  },
+  {
+    value: "friends",
+    label: "Friends",
+    type: "category",
+    eyebrow: "COLLECTION",
+    description: "The people who made the moments memorable.",
+  },
+  {
+    value: "school-life",
+    label: "School Life",
+    type: "category",
+    eyebrow: "COLLECTION",
+    description: "Everyday moments from school life.",
+  },
+  {
+    value: "events",
+    label: "Events",
+    type: "category",
+    eyebrow: "COLLECTION",
+    description: "Gatherings, celebrations, and shared occasions.",
+  },
+  {
+    value: "trips",
+    label: "Trips",
+    type: "category",
+    eyebrow: "COLLECTION",
+    description: "Places visited and journeys remembered.",
+  },
+];
+
+// Filters displayed inside the collection view.
 export const memoryFilters = [
   { label: "All Memories", value: "all" },
   { label: "2025", value: "2025" },
@@ -13,10 +60,10 @@ export const memoryFilters = [
 export const sortOptions = [
   { label: "Newest First", value: "newest" },
   { label: "Oldest First", value: "oldest" },
-  { label: "Most Liked", value: "most-liked" },
-  { label: "Least Liked", value: "least-liked" },
 ];
 
+// Existing archive records are retained. Replace the image references with
+// the corresponding archive photographs when the final photo mapping exists.
 export const memoriesData = [
   {
     id: 1,
@@ -24,7 +71,7 @@ export const memoriesData = [
     date: "2025-01-12",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: 32,
+    likes: "",
     image: Hero,
   },
   {
@@ -33,7 +80,7 @@ export const memoriesData = [
     date: "2025-01-28",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: 41,
+    likes: "",
     image: Hero,
   },
   {
@@ -42,7 +89,7 @@ export const memoriesData = [
     date: "2025-02-14",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: 27,
+    likes: "",
     image: Hero,
   },
   {
@@ -51,7 +98,7 @@ export const memoriesData = [
     date: "2025-03-03",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: 36,
+    likes: "",
     image: Hero,
   },
   {
@@ -60,7 +107,7 @@ export const memoriesData = [
     date: "2025-03-21",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: 29,
+    likes: "",
     image: Hero,
   },
   {
@@ -69,7 +116,7 @@ export const memoriesData = [
     date: "2025-04-05",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: 23,
+    likes: "",
     image: Hero,
   },
   {
@@ -78,7 +125,7 @@ export const memoriesData = [
     date: "2025-04-17",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: 31,
+    likes: "",
     image: Hero,
   },
   {
@@ -87,7 +134,7 @@ export const memoriesData = [
     date: "2025-05-01",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: 26,
+    likes: "",
     image: Hero,
   },
   {
@@ -96,7 +143,7 @@ export const memoriesData = [
     date: "2025-05-20",
     categoryKey: "friends",
     categoryLabel: "Friends",
-    likes: 34,
+    likes: "",
     image: Hero,
   },
   {
@@ -105,7 +152,7 @@ export const memoriesData = [
     date: "2025-05-31",
     categoryKey: "school-life",
     categoryLabel: "School Life",
-    likes: 19,
+    likes: "",
     image: Hero,
   },
   {
@@ -114,7 +161,7 @@ export const memoriesData = [
     date: "2024-07-18",
     categoryKey: "events",
     categoryLabel: "Events",
-    likes: 28,
+    likes: "",
     image: Hero,
   },
   {
@@ -123,7 +170,7 @@ export const memoriesData = [
     date: "2024-09-02",
     categoryKey: "trips",
     categoryLabel: "Trips",
-    likes: 22,
+    likes: "",
     image: Hero,
   },
 ];
