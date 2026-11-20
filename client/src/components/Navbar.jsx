@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
@@ -112,25 +113,26 @@ function Navbar() {
           w-full
         "
       >
+
         {/* ======================================================
             DESKTOP NAVBAR
+            LANDSCAPE: HP, TABLET, LAPTOP, PC
         ====================================================== */}
 
-        {/* MAIN NAVBAR WRAPPER */}
-
         <div
-  className="
-    mx-auto
-    mt-[clamp(6px,0.8vw,10px)] xl:mt-3
-    hidden
-    h-30
-    w-[calc(100%-clamp(1.5rem,4vw,3.5rem))] xl:w-[calc(100%-3.5rem)]
-    max-w-500
-    items-center
-    gap-[clamp(8px,1.2vw,16px)] xl:gap-10
-    md:flex
-  "
->
+          className="
+            mx-auto
+            mt-[clamp(6px,0.8vw,10px)] xl:mt-3
+            hidden
+            h-30
+            w-[calc(100%-clamp(1.5rem,4vw,3.5rem))] xl:w-[calc(100%-3.5rem)]
+            max-w-500
+            items-center
+            gap-[clamp(8px,1.2vw,16px)] xl:gap-10
+            landscape:flex
+          "
+        >
+
           {/* ====================================================
               LOGO
           ==================================================== */}
@@ -139,23 +141,24 @@ function Navbar() {
 
           <div
             className="
-    flex
-    h-[clamp(3.5rem,6vw,5rem)] xl:h-22.5
-    w-[clamp(5rem,12vw,10rem)] xl:w-70
-    items-center
-    justify-center
-    rounded-full
-    border
-    border-white/10
-    bg-black/25
-    backdrop-blur-sm
-    transition-all
-    duration-300
-    hover:-translate-y-0.5
-    hover:border-marigold/30
-    hover:bg-white/10
-    xl:flex
-  "
+              flex
+              h-[clamp(3.5rem,6vw,5rem)] xl:h-22.5
+              w-[clamp(5rem,12vw,10rem)] xl:w-70
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-white/10
+              bg-black/25
+              backdrop-blur-sm
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-marigold/30
+              hover:bg-white/10
+              xl:flex
+            "
           >
             <NavLink
               to="/"
@@ -175,26 +178,28 @@ function Navbar() {
           ==================================================== */}
 
           <div className="min-w-0 flex-1">
+
             {/* MAIN NAVBAR PILL */}
 
             <div
-  className="
-    flex
-    h-[clamp(3.5rem,6vw,5rem)] xl:h-22.5
-    w-full
-    min-w-0
-    items-center
-    justify-center
-    gap-[clamp(8px,1.6vw,20px)] xl:gap-35
-    rounded-full
-    border
-    border-white/20
-    bg-black/25
-    px-[clamp(8px,1.2vw,18px)] xl:px-6
-    shadow-[0_8px_35px_rgba(0,0,0,0.3)]
-    backdrop-blur-sm
-  "
->
+              className="
+                flex
+                h-[clamp(3.5rem,6vw,5rem)] xl:h-22.5
+                w-full
+                min-w-0
+                items-center
+                justify-center
+                gap-[clamp(8px,1.6vw,20px)] xl:gap-35
+                rounded-full
+                border
+                border-white/20
+                bg-black/25
+                px-[clamp(8px,1.2vw,18px)] xl:px-6
+                shadow-[0_8px_35px_rgba(0,0,0,0.3)]
+                backdrop-blur-sm
+              "
+            >
+
               {/* HOME */}
 
               <NavLink to="/" className={linkClass}>
@@ -212,6 +217,7 @@ function Navbar() {
               <NavLink to="/memories" className={linkClass}>
                 gallery
               </NavLink>
+
             </div>
           </div>
 
@@ -220,20 +226,22 @@ function Navbar() {
           ==================================================== */}
 
           <div
-  className="
-    ml-[clamp(4px,0.6vw,8px)] xl:ml-3
-    flex
-    shrink-0
-    items-center
-    justify-end
-    gap-[clamp(6px,0.8vw,12px)] xl:gap-10
-  "
->
+            className="
+              ml-[clamp(4px,0.6vw,8px)] xl:ml-3
+              flex
+              shrink-0
+              items-center
+              justify-end
+              gap-[clamp(6px,0.8vw,12px)] xl:gap-10
+            "
+          >
+
             {/* ==================================================
                 SEARCH
             ================================================== */}
 
             <div className="relative">
+
               {/* SEARCH ICON */}
 
               <button
@@ -245,27 +253,36 @@ function Navbar() {
                 aria-label="Open search"
                 aria-expanded={openDesktopSearch}
                 className="
-  flex
-  h-[clamp(2.75rem,5.2vw,4rem)] xl:h-22.5
-  w-[clamp(2.75rem,5.2vw,4rem)] xl:w-22.5
-  items-center
-  justify-center
-  rounded-full
-  border
-  border-white/20
-  bg-black/25
-  text-white/75
-  shadow-[0_5px_20px_rgba(0,0,0,0.2)]
-  backdrop-blur-sm
-  transition-all
-  duration-300
-  hover:border-marigold/50
-  hover:bg-white/10
-  hover:text-marigold
-  hover:shadow-[0_0_20px_rgba(227,164,25,0.12)]
-"
+                  flex
+                  h-[clamp(2.75rem,5.2vw,4rem)] xl:h-22.5
+                  w-[clamp(2.75rem,5.2vw,4rem)] xl:w-22.5
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-white/20
+                  bg-black/25
+                  text-white/75
+                  shadow-[0_5px_20px_rgba(0,0,0,0.2)]
+                  backdrop-blur-sm
+                  transition-all
+                  duration-300
+                  hover:border-marigold/50
+                  hover:bg-white/10
+                  hover:text-marigold
+                  hover:shadow-[0_0_20px_rgba(227,164,25,0.12)]
+                "
               >
-                <svg viewBox="0 0 28 28" className="h-15 w-15" fill="none">
+                <svg
+                  viewBox="0 0 28 28"
+                  className="
+                    h-[clamp(1rem,2.5vw,2.5rem)] 
+                    w-[clamp(1rem,2.5vw,2.5rem)]
+                    xl:h-15
+                    xl:w-15
+                  "
+                  fill="none"
+                >
                   <circle
                     cx="12"
                     cy="12"
@@ -311,6 +328,7 @@ function Navbar() {
                     focus-within:border-marigold/50
                   "
                 >
+
                   {/* SEARCH BUTTON */}
 
                   <button
@@ -394,7 +412,11 @@ function Navbar() {
                         hover:text-white
                       "
                     >
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-4 w-4"
+                        fill="none"
+                      >
                         <path
                           d="M6 6L18 18"
                           stroke="currentColor"
@@ -411,6 +433,7 @@ function Navbar() {
                       </svg>
                     </button>
                   )}
+
                 </form>
               )}
             </div>
@@ -420,22 +443,30 @@ function Navbar() {
             ================================================== */}
 
             {!user ? (
-              <div className="flex items-center gap-10">
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-[clamp(4px,0.6vw,10px)] xl:gap-10
+                "
+              >
+
                 {/* REGISTER */}
 
                 <Link
                   to="/register"
                   className="
-                    hidden
-                    h-22.5
-                    w-42.5
+                    flex
+                    h-[clamp(2.75rem,5.2vw,4rem)] xl:h-22.5
+                    w-[clamp(4.5rem,8vw,10.625rem)] xl:w-42.5
                     items-center
                     justify-center
                     rounded-full
                     border
                     border-white/10
                     bg-black/25
-                    px-[clamp(12px,1vw,20px)]
+                    px-[clamp(6px,1vw,20px)] xl:px-5
                     text-[clamp(0.5rem,0.6vw,1.15rem)]
                     font-black
                     font-visby
@@ -449,7 +480,6 @@ function Navbar() {
                     hover:border-marigold/30
                     hover:bg-white/10
                     hover:text-marigold
-                    xl:flex
                   "
                 >
                   Register
@@ -461,15 +491,17 @@ function Navbar() {
                   to="/login"
                   className="
                     group
-                    h-22.5
-                    w-42.5
+                    flex
+                    h-[clamp(2.75rem,5.2vw,4rem)] xl:h-22.5
+                    w-[clamp(4.5rem,8vw,10.625rem)] xl:w-42.5
                     items-center
                     justify-center
+                    gap-2
                     rounded-full
                     border
                     border-white/10
                     bg-black/25
-                    px-[clamp(12px,1vw,20px)]
+                    px-[clamp(6px,1vw,20px)] xl:px-5
                     text-[clamp(0.5rem,0.6vw,1.15rem)]
                     font-black
                     font-visby
@@ -483,7 +515,6 @@ function Navbar() {
                     hover:border-marigold/30
                     hover:bg-white/10
                     hover:text-marigold
-                    xl:flex
                   "
                 >
                   <span>Login</span>
@@ -493,6 +524,7 @@ function Navbar() {
                     className="
                       h-4
                       w-4
+                      shrink-0
                       transition-transform
                       duration-300
                       group-hover:translate-x-0.5
@@ -515,9 +547,13 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
+
               </div>
+
             ) : (
+
               <div className="relative">
+
                 {/* USER BUTTON */}
 
                 <button
@@ -544,6 +580,7 @@ function Navbar() {
                     hover:bg-white/10
                   "
                 >
+
                   {/* AVATAR */}
 
                   <div
@@ -618,6 +655,7 @@ function Navbar() {
                       strokeLinejoin="round"
                     />
                   </svg>
+
                 </button>
 
                 {/* USER DROPDOWN */}
@@ -640,6 +678,7 @@ function Navbar() {
                       backdrop-blur-xl
                     "
                   >
+
                     {/* ACCOUNT */}
 
                     <div
@@ -648,7 +687,9 @@ function Navbar() {
                         py-[clamp(12px,1vw,20px)]
                       "
                     >
+
                       <div className="mb-3 flex items-center gap-3">
+
                         <div
                           className="
                             flex
@@ -668,6 +709,7 @@ function Navbar() {
                         </div>
 
                         <div className="min-w-0">
+
                           <p
                             className="
                               truncate
@@ -688,6 +730,7 @@ function Navbar() {
                           >
                             {user?.email}
                           </p>
+
                         </div>
                       </div>
 
@@ -709,6 +752,7 @@ function Navbar() {
                           {user.role}
                         </span>
                       )}
+
                     </div>
 
                     <div
@@ -798,15 +842,20 @@ function Navbar() {
                     >
                       Logout
                     </button>
+
                   </div>
                 )}
+
               </div>
             )}
+
           </div>
         </div>
 
+
         {/* ======================================================
             MOBILE TOP NAVBAR
+            PORTRAIT: HP DAN TABLET
         ====================================================== */}
 
         <div
@@ -821,9 +870,10 @@ function Navbar() {
             items-center
             justify-between
             px-[clamp(12px,1.5vw,24px)]
-            md:hidden
+            landscape:hidden
           "
         >
+
           {/* ==================================================
               MOBILE LOGO
           ================================================== */}
@@ -857,11 +907,13 @@ function Navbar() {
             />
           </Link>
 
+
           {/* ==================================================
               MOBILE ACTIONS
           ================================================== */}
 
           <div className="flex items-center gap-1.75">
+
             {/* SEARCH */}
 
             <button
@@ -891,7 +943,11 @@ function Navbar() {
                 hover:text-marigold
               "
             >
-              <svg viewBox="0 0 28 28" className="h-15 w-15" fill="none">
+              <svg
+                viewBox="0 0 28 28"
+                className="h-15 w-15"
+                fill="none"
+              >
                 <circle
                   cx="12"
                   cy="12"
@@ -901,7 +957,7 @@ function Navbar() {
                 />
 
                 <path
-                  d="M15 15L 19 19"
+                  d="M15 15L19 19"
                   stroke="currentColor"
                   strokeWidth="1.7"
                   strokeLinecap="round"
@@ -909,8 +965,10 @@ function Navbar() {
               </svg>
             </button>
 
+
             {!user ? (
               <>
+
                 {/* LOGIN */}
 
                 <Link
@@ -934,9 +992,13 @@ function Navbar() {
                     hover:text-marigold
                   "
                 >
-                  <svg viewBox="0 0 28 28" className="h-8.5 w-8.5" fill="none">
+                  <svg
+                    viewBox="0 0 28 28"
+                    className="h-8.5 w-8.5"
+                    fill="none"
+                  >
                     <path
-                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 25 20.1 20 19 20H13"
+                      d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
                       stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
@@ -952,6 +1014,7 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
+
 
                 {/* REGISTER */}
 
@@ -976,7 +1039,11 @@ function Navbar() {
                     hover:text-marigold
                   "
                 >
-                  <svg viewBox="0 0 24 24" className="h-8.5 w-8.5" fill="none">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-8.5 w-8.5"
+                    fill="none"
+                  >
                     <circle
                       cx="9"
                       cy="7.5"
@@ -1000,9 +1067,11 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
+
               </>
             ) : (
               <>
+
                 {/* PROFILE */}
 
                 <Link
@@ -1026,7 +1095,11 @@ function Navbar() {
                     hover:text-marigold
                   "
                 >
-                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                  >
                     <circle
                       cx="12"
                       cy="8"
@@ -1043,6 +1116,7 @@ function Navbar() {
                     />
                   </svg>
                 </Link>
+
 
                 {/* LOGOUT */}
 
@@ -1068,7 +1142,11 @@ function Navbar() {
                     hover:text-red-400
                   "
                 >
-                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5"
+                    fill="none"
+                  >
                     <path
                       d="M13 4H19C20.1 4 21 4.9 21 6V18C21 19.1 20.1 20 19 20H13"
                       stroke="currentColor"
@@ -1086,10 +1164,13 @@ function Navbar() {
                     />
                   </svg>
                 </button>
+
               </>
             )}
+
           </div>
         </div>
+
 
         {/* ======================================================
             MOBILE FLOATING SEARCH
@@ -1114,7 +1195,8 @@ function Navbar() {
               px-[clamp(10px,1vw,18px)]
               shadow-[0_10px_35px_rgba(0,0,0,0.45)]
               backdrop-blur-xl
-              md:hidden
+              portrait:flex
+              landscape:hidden
             "
           >
             <svg
@@ -1148,6 +1230,7 @@ function Navbar() {
               className="
                 min-w-0
                 flex-1
+                bg-transparent
                 px-[clamp(10px,1vw,18px)]
                 text-sm
                 text-white
@@ -1194,6 +1277,7 @@ function Navbar() {
           </form>
         )}
 
+
         {/* ======================================================
             MOBILE BOTTOM NAVIGATION
         ====================================================== */}
@@ -1217,9 +1301,11 @@ function Navbar() {
             px-[clamp(8px,0.8vw,16px)]
             shadow-[0_8px_35px_rgba(0,0,0,0.5)]
             backdrop-blur-2xl
-            md:hidden
+            portrait:flex
+            landscape:hidden
           "
         >
+
           {/* HOME */}
 
           <NavLink
@@ -1246,7 +1332,11 @@ function Navbar() {
               `
             }
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+            >
               <path
                 d="M3.5 10.5L12 3.5L20.5 10.5"
                 stroke="currentColor"
@@ -1282,6 +1372,7 @@ function Navbar() {
             </span>
           </NavLink>
 
+
           {/* ABOUT */}
 
           <NavLink
@@ -1307,7 +1398,11 @@ function Navbar() {
               `
             }
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+            >
               <circle
                 cx="12"
                 cy="12"
@@ -1323,7 +1418,12 @@ function Navbar() {
                 strokeLinecap="round"
               />
 
-              <circle cx="12" cy="7.5" r="0.8" fill="currentColor" />
+              <circle
+                cx="12"
+                cy="7.5"
+                r="0.8"
+                fill="currentColor"
+              />
             </svg>
 
             <span
@@ -1337,6 +1437,7 @@ function Navbar() {
               About
             </span>
           </NavLink>
+
 
           {/* GALLERY */}
 
@@ -1363,7 +1464,11 @@ function Navbar() {
               `
             }
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+            >
               <rect
                 x="3.5"
                 y="3.5"
@@ -1402,7 +1507,9 @@ function Navbar() {
               Gallery
             </span>
           </NavLink>
+
         </div>
+
       </nav>
     </div>
   );
