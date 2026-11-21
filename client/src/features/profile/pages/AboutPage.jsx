@@ -201,6 +201,12 @@ function OurGeneration() {
                 </div>
               </Card>
 
+              <Card>
+
+                    {/* Tempat menaruh card yang saya minta */}
+
+              </Card>
+
               {/* ABOUT OUR LOGO */}
               <Card className="p-4 sm:p-6 lg:p-8" id="about-logo">
                 <h2 className="text-center text-[clamp(1.4rem,2vw,2rem)] font-extrabold uppercase tracking-[0.12em] text-violet-300">
