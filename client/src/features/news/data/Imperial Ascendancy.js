@@ -9,7 +9,7 @@ export const thirdScrollbar = [
         description:
             `Mematahkan ekspektasi melalui kejutan yang membuktikan bahwa batas hanyalah awal dari kemungkinan.`,
         image: hero,
-        link: "./read_more/news/august/tanggal_1",
+        link: "/performances/trick",
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ export const thirdScrollbar = [
         description:
             `Menghadirkan tawa dan karakter unik yang mengubah setiap momen menjadi pengalaman tak terlupakan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/mr-sugoi",
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ export const thirdScrollbar = [
         description:
             `Menggetarkan panggung dengan identitas, energi, dan karakter yang tak tergoyahkan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/impervibe",
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ export const thirdScrollbar = [
         description:
             `Melepaskan energi murni dalam dentuman ritme yang mengguncang panggung tanpa kompromi.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/beat-raw",
     },
     {
         id: 5,
@@ -49,7 +49,7 @@ export const thirdScrollbar = [
         description:
             `Memadukan drama, humor, dan kejutan dalam pertunjukan yang membawa panggung menuju puncak.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/kabaret-2",
     },
     {
         id: 6,
@@ -59,6 +59,6 @@ export const thirdScrollbar = [
         description:
             `Menyatukan seluruh perjalanan dalam satu klimaks megah, melangkah bersama menuju kejayaan yang melampaui batas.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/grand-closing-kita-kesana",
     },
 ];

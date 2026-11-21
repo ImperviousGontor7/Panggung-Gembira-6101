@@ -9,7 +9,7 @@ export const firstScrollbar = [
         description:
             `Mengawali perjalanan dengan lantunan suci sebagai fondasi bagi setiap langkah menuju keunggulan.`,
         image: hero,
-        link: "./read_more/news/august/tanggal_1",
+        link: "/performances/pg-6101-hadroh",
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ export const firstScrollbar = [
         description:
             `Merangkai setiap momen menjadi satu perjalanan yang menggerakkan semangat dan menyatukan tujuan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/master-of-ceremony",
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ export const firstScrollbar = [
         description:
             `Menghadirkan keindahan kalam Ilahi sebagai cahaya yang menuntun langkah menuju kemuliaan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/qori-101",
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ export const firstScrollbar = [
         description:
             `Meneguhkan visi, menyatukan tekad, dan menyalakan api perubahan untuk sebuah generasi.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/sambutan-ketua",
     },
     {
         id: 5,
@@ -49,7 +49,7 @@ export const firstScrollbar = [
         description:
             `Menjadi pemantik energi yang membuka gerbang menuju panggung penuh kejutan dan prestasi.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/grand-opening",
     },
     {
         id: 6,
@@ -59,7 +59,7 @@ export const firstScrollbar = [
         description:
             `Memadukan karakter dan kreativitas dalam ekspresi yang berani mendobrak batas.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/patende-style",
     },
     {
         id: 7,
@@ -69,7 +69,7 @@ export const firstScrollbar = [
         description:
             `Menghadirkan semangat kebebasan dan keberanian untuk melangkah melampaui batas.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/usa",
     },
     {
         id: 8,
@@ -79,6 +79,6 @@ export const firstScrollbar = [
         description:
             `Merangkai cerita, humor, dan kejutan menjadi awal perjalanan menuju panggung yang tak terlupakan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/kabaret-1",
     },
 ];

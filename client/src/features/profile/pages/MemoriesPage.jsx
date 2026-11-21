@@ -148,22 +148,6 @@ function MemoriesPage() {
               <CollectionsGrid collections={memoryCollections} memories={memoriesData} />
             </section>
 
-            <section className="mt-6 flex flex-col gap-4 rounded-[1.7rem] border border-white/9 bg-white/2.5 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-7 sm:py-6">
-              <div>
-                <p className="text-[1.6rem] font-semibold text-antiquewhite">
-                  Looking for a specific moment?
-                </p>
-                <p className="mt-1.5 text-[1.2rem] text-antiquewhite/50">
-                  Browse the complete collection in one place.
-                </p>
-              </div>
-              <Link
-                to="/memories/all"
-                className="inline-flex min-h-11 items-center justify-center gap-3 self-start rounded-full bg-marigold px-5 text-[1.2rem] font-semibold text-[#241306] transition hover:bg-[#f0b72e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-antiquewhite/70 sm:self-auto"
-              >
-                Browse All Memories <span aria-hidden="true">↗</span>
-              </Link>
-            </section>
           </>
         ) : (
           <>

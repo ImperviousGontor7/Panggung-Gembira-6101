@@ -126,181 +126,565 @@ function Home() {
   return (
     <div id="view-beranda" className="view-pane active">
       {/* MAIN SLIDER */}
-      <section className="relative w-full overflow-hidden">
-        <div
-          onTransitionEnd={mainCarousel.handleTransitionEnd}
-          className={`flex w-full will-change-transform ${
-            mainCarousel.transitionEnabled
-              ? "transition-transform duration-700 ease-in-out"
-              : ""
-          }`}
-          style={{
-            transform: `translateX(-${mainCarousel.currentIndex * 100}%)`,
-          }}
+
+      {/* ========================================== */}
+      {/* MAIN SLIDER - IMPERVIOUS CINEMATIC */}
+      {/* ========================================== */}
+
+      <div
+        className="
+    relative z-10 mx-auto
+    my-[clamp(4.5rem,7.5vw,15rem)]
+    w-full max-w-500
+    px-5 sm:px-8
+  "
+      >
+        <section
+          className="
+      relative
+      aspect-video
+      min-h-140
+      max-h-225
+      w-full
+      overflow-hidden
+      rounded-3xl
+      border border-white/10
+      bg-[#160d07]
+      sm:rounded-4xl
+    "
         >
-          {mainCarousel.renderedSlides.map((slide, index) => (
-            <article
-              key={index}
-              className="
-                relative
-                h-[clamp(24rem,65vh,48rem)]
-                min-w-full
-                overflow-hidden
+          {/* ========================================== */}
+          {/* HERO SLIDES */}
+          {/* ========================================== */}
+
+          <div
+            onTransitionEnd={mainCarousel.handleTransitionEnd}
+            className={`flex h-full w-full ${
+              mainCarousel.transitionEnabled
+                ? "transition-transform duration-700 ease-in-out"
+                : ""
+            }`}
+            style={{
+              transform: `translateX(-${mainCarousel.currentIndex * 100}%)`,
+            }}
+          >
+            {mainCarousel.renderedSlides.map((slide, index) => {
+              const duration = slide.duration ?? slide.time;
+
+              return (
+                <article
+                  key={index}
+                  className="
+              relative
+              h-full
+              min-h-140
+              min-w-full
+              shrink-0
+              overflow-hidden
+              bg-[#160d07]
+            "
+                >
+                  {/* ========================================== */}
+                  {/* BACKGROUND IMAGE */}
+                  {/* ========================================== */}
+
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="
+                absolute inset-0
+                h-full w-full
+                object-cover
+                object-[60%_center]
               "
-            >
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="absolute inset-0 h-full w-full object-cover object-center"
-              />
+                  />
 
-              <div className="absolute inset-0 bg-black/55" />
-              <div className="absolute inset-0 bg-linear-to-t from-bg-main via-transparent to-transparent" />
-
-              <div
-                className="
-                  relative z-10
-                  flex h-full items-center justify-center
-                  px-4 py-14
-                  sm:px-6 sm:py-16
-                  md:px-8
-                  lg:px-10 lg:py-20
-                "
-              >
-                <div className="w-full max-w-272 text-center text-white">
-                  <p
+                  {/* GENERAL DARK OVERLAY */}
+                  <div
                     className="
-                      mb-2
-                      text-[clamp(.7rem,.9vw,.95rem)]
-                      font-medium uppercase
-                      tracking-[0.18em]
-                      text-white/70
-                      sm:mb-3 sm:tracking-[0.25em]
-                      lg:tracking-[0.35em]
-                    "
-                  >
-                    {slide.subtitle}
-                  </p>
+                absolute inset-0
+                bg-black/15
+              "
+                  />
 
-                  <h1
+                  {/* LEFT GRADIENT */}
+                  <div
                     className="
-                      mx-auto max-w-232
-                      wrap-break-word
-                      text-[clamp(2rem,7vw,6rem)]
-                      font-bold
-                      leading-[1.05]
-                    "
-                  >
-                    {slide.title}
-                  </h1>
+                absolute inset-0
+                bg-linear-to-r
+                from-[#100b07]/95
+                via-[#160d07]/80
+                via-45%
+                to-transparent
+              "
+                  />
 
-                  <p
+                  {/* BOTTOM GRADIENT */}
+                  <div
                     className="
-                      mx-auto
-                      mt-[clamp(.9rem,1.5vw,1.4rem)]
-                      max-w-2xl
-                      text-[clamp(.95rem,1.2vw,1.25rem)]
-                      leading-relaxed
-                      text-white/75
-                    "
-                  >
-                    {slide.description}
-                  </p>
+                absolute inset-0
+                bg-linear-to-t
+                from-[#160d07]/75
+                via-[#160d07]/15
+                to-transparent
+              "
+                  />
+
+                  {/* WARM LIGHT EFFECT */}
+                  <div
+                    className="
+                pointer-events-none
+                absolute -left-40 top-1/4
+                size-120
+                rounded-full
+                bg-[#b87524]/10
+                blur-[120px]
+              "
+                  />
+
+                  {/* ========================================== */}
+                  {/* CONTENT CONTAINER */}
+                  {/* ========================================== */}
 
                   <div
                     className="
-                      mt-[clamp(1.25rem,2vw,2rem)]
-                      flex flex-wrap justify-center
-                      gap-3
-                      sm:gap-4
-                    "
+                absolute inset-0 z-10
+                flex h-full w-full
+                items-center
+                px-6 py-12
+                sm:px-10
+                lg:px-[clamp(3rem,7vw,7rem)]
+              "
                   >
-                    <Link
-                      to={slide.buttonPrimary.href}
+                    <div
                       className="
-                        inline-flex items-center justify-center
-                        rounded-full bg-white
-                        px-[clamp(1.25rem,3vw,2.5rem)]
-                        py-[clamp(.7rem,1vw,1rem)]
-                        text-[clamp(.875rem,1vw,1rem)]
-                        font-semibold text-black
-                        text-center
-                        transition duration-300
-                        hover:scale-105 hover:bg-white/90
-                        focus:outline-none focus-visible:ring-2
-                        focus-visible:ring-white/80
-                      "
+                  flex w-full
+                  max-w-180
+                  flex-col
+                  items-start
+                  text-white
+                "
                     >
-                      {slide.buttonPrimary.text}
-                    </Link>
+                      {/* ========================================== */}
+                      {/* 01. CATEGORY + DURATION */}
+                      {/* ========================================== */}
+
+                      <div
+                        className="
+                    mb-7
+                    flex w-full
+                    flex-wrap
+                    items-center
+                    gap-x-5
+                    gap-y-3
+                  "
+                      >
+                        {/* CATEGORY BADGE */}
+                        <span
+                          className="
+                      inline-flex
+                      min-h-10
+                      items-center
+                      gap-2.5
+                      rounded-full
+                      border border-marigold/65
+                      bg-marigold/6
+                      px-4 py-2
+                      text-[clamp(.65rem,.8vw,.8rem)]
+                      font-semibold
+                      uppercase
+                      tracking-[0.14em]
+                      text-[#f3bd54]
+                      backdrop-blur-md
+                    "
+                        >
+                          <span
+                            className="
+                        size-2
+                        rounded-full
+                        bg-marigold
+                        shadow-[0_0_10px_#e3a419]
+                      "
+                          />
+
+                          {slide.subtitle}
+                        </span>
+
+                        {/* DURATION */}
+                        {duration && (
+                          <>
+                            <span
+                              className="
+                          hidden sm:block
+                          h-7 w-px
+                          bg-white/30
+                        "
+                            />
+
+                            <div
+                              className="
+                          inline-flex
+                          items-center
+                          gap-3
+                          text-white/85
+                        "
+                            >
+                              {/* CLOCK ICON */}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="
+                            size-7
+                            shrink-0
+                            text-marigold
+                          "
+                                aria-hidden="true"
+                              >
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 2" />
+                              </svg>
+
+                              <div
+                                className="
+                            flex items-baseline
+                            gap-1.5
+                          "
+                              >
+                                <span
+                                  className="
+                              text-[clamp(.75rem,.9vw,.95rem)]
+                              text-white/60
+                            "
+                                >
+                                  Durasi:
+                                </span>
+
+                                <time
+                                  className="
+                              text-[clamp(.9rem,1.05vw,1.1rem)]
+                              font-semibold
+                              tracking-[0.08em]
+                              tabular-nums
+                              text-[#fff8ed]
+                            "
+                                >
+                                  {duration}
+                                </time>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {/* ========================================== */}
+                      {/* 02. DECORATIVE DIVIDER */}
+                      {/* ========================================== */}
+
+                      <div
+                        className="
+                    relative
+                    mb-7
+                    flex w-full
+                    max-w-107.5
+                    items-center
+                  "
+                      >
+                        <span
+                          className="
+                      h-0.5 w-full
+                      bg-linear-to-r
+                      from-marigold
+                      via-marigold/70
+                      to-marigold/5
+                    "
+                        />
+
+                        <span
+                          className="
+                      absolute left-[45%]
+                      size-3.5
+                      rotate-45
+                      border-2
+                      border-marigold
+                      bg-[#160d07]
+                    "
+                        />
+                      </div>
+
+                      {/* ========================================== */}
+                      {/* 03. TITLE */}
+                      {/* ========================================== */}
+
+                      <h1
+                        className="
+                    max-w-[12ch]
+                    wrap-break-word
+                    font-serif
+                    font-semibold
+                    text-[clamp(3rem,7.2vw,6.8rem)]
+                    leading-[0.95]
+                    tracking-[-0.055em]
+                    text-[#fff8ed]
+                    text-balance
+                    drop-shadow-[0_5px_25px_rgba(0,0,0,0.3)]
+                  "
+                      >
+                        {slide.title}
+                      </h1>
+
+                      {/* ========================================== */}
+                      {/* 04. DESCRIPTION */}
+                      {/* ========================================== */}
+
+                      <p
+                        className="
+                    mt-7
+                    max-w-135
+                    text-[clamp(.9rem,1.1vw,1.1rem)]
+                    font-normal
+                    leading-[1.8]
+                    tracking-[0.01em]
+                    text-antiquewhite/80
+                    text-pretty
+                  "
+                      >
+                        {slide.description}
+                      </p>
+
+                      {/* ========================================== */}
+                      {/* 05. READ MORE BUTTON */}
+                      {/* ========================================== */}
+
+                      <div className="mt-10">
+                        <Link
+                          to={slide.buttonPrimary?.href || slide.link || "/"}
+                          className="
+                      group
+                      relative
+                      inline-flex
+                      min-h-14.5
+                      items-center
+                      justify-center
+                      gap-8
+                      overflow-hidden
+                      rounded-md
+                      border border-marigold
+                      bg-linear-to-r
+                      from-[#d9942c]
+                      to-[#eeb047]
+                      px-6 py-4
+                      text-[clamp(.8rem,.95vw,1rem)]
+                      font-bold
+                      uppercase
+                      tracking-widest
+                      text-[#201306]
+                      shadow-lg
+                      shadow-black/20
+                      transition-all
+                      duration-300
+                      hover:border-[#f5cd7e]
+                      hover:brightness-110
+                      hover:shadow-[0_8px_35px_rgba(227,164,25,0.2)]
+                      focus:outline-none
+                      focus-visible:ring-2
+                      focus-visible:ring-marigold
+                      focus-visible:ring-offset-2
+                      focus-visible:ring-offset-[#160d07]
+                    "
+                        >
+                          <span className="relative z-10">
+                            {slide.buttonPrimary?.text || "Putar Sekarang"}
+                          </span>
+
+                          {/* ARROW */}
+                          <span
+                            className="
+                        relative z-10
+                        flex size-8
+                        items-center justify-center
+                        border border-[#201306]/25
+                        bg-[#201306]/5
+                        transition-all duration-300
+                        group-hover:translate-x-1
+                        group-hover:bg-[#201306]
+                        group-hover:text-[#f5cd7e]
+                      "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.8"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="size-4"
+                              aria-hidden="true"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="m13 6 6 6-6 6" />
+                            </svg>
+                          </span>
+
+                          {/* HOVER OVERLAY */}
+                          <span
+                            className="
+                        pointer-events-none
+                        absolute inset-0
+                        -translate-x-full
+                        bg-white/15
+                        transition-transform
+                        duration-500
+                        group-hover:translate-x-0
+                      "
+                          />
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+                </article>
+              );
+            })}
+          </div>
 
-        {/* PREVIOUS BUTTON */}
-        <button
-          onClick={mainCarousel.prevSlide}
-          aria-label="Previous slide"
-          className="
-            absolute left-2 top-1/2 z-20
-            flex size-11 -translate-y-1/2 items-center justify-center
-            rounded-full bg-black/40 text-white
-            backdrop-blur-md transition
-            hover:bg-black/60
-            focus:outline-none focus-visible:ring-2
-            focus-visible:ring-white/80
-            sm:left-3 sm:size-12
-            lg:left-4
-          "
-        >
-          <span className="block text-lg leading-none sm:text-xl">←</span>
-        </button>
+          {/* ========================================== */}
+          {/* PREV BUTTON */}
+          {/* ========================================== */}
 
-        {/* NEXT BUTTON */}
-        <button
-          onClick={mainCarousel.nextSlide}
-          aria-label="Next slide"
-          className="
-            absolute right-2 top-1/2 z-20
-            flex size-11 -translate-y-1/2 items-center justify-center
-            rounded-full bg-black/40 text-white
-            backdrop-blur-md transition
-            hover:bg-black/60
-            focus:outline-none focus-visible:ring-2
-            focus-visible:ring-white/80
-            sm:right-3 sm:size-12
-            lg:right-4
-          "
-        >
-          <span className="block text-lg leading-none sm:text-xl">→</span>
-        </button>
+          <button
+            type="button"
+            onClick={mainCarousel.prevSlide}
+            className="
+        absolute left-2 top-1/2 z-20
+        flex size-9
+        -translate-y-1/2
+        items-center justify-center
+        rounded-full
+        border border-white/10
+        bg-black/40
+        text-white
+        backdrop-blur-md
+        transition-all
+        hover:border-marigold/50
+        hover:bg-marigold
+        hover:text-[#160d07]
+        sm:left-4 sm:size-12
+      "
+            aria-label="Previous slide"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="size-5"
+              aria-hidden="true"
+            >
+              <path
+                d="M15 18l-6-6 6-6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
 
-        {/* DOT INDICATOR */}
-        <div
-          className="
-            absolute bottom-3 left-1/2 z-20
-            flex -translate-x-1/2 items-center gap-2
-            sm:bottom-4
-            md:bottom-5
+          {/* ========================================== */}
+          {/* NEXT BUTTON */}
+          {/* ========================================== */}
+
+          <button
+            type="button"
+            onClick={mainCarousel.nextSlide}
+            className="
+        absolute right-2 top-1/2 z-20
+        flex size-9
+        -translate-y-1/2
+        items-center justify-center
+        rounded-full
+        border border-white/10
+        bg-black/40
+        text-white
+        backdrop-blur-md
+        transition-all
+        hover:border-marigold/50
+        hover:bg-marigold
+        hover:text-[#160d07]
+        sm:right-4 sm:size-12
+      "
+            aria-label="Next slide"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              className="size-5"
+              aria-hidden="true"
+            >
+              <path
+                d="M9 18l6-6-6-6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          {/* ========================================== */}
+          {/* DOT INDICATOR */}
+          {/* ========================================== */}
+
+          <div
+            className="
+        absolute bottom-2 left-1/2 z-20
+        flex -translate-x-1/2
+        items-center gap-1.5
+        rounded-full
+        border border-white/8
+        bg-[#090807]/75
+        px-3 py-1.5
+        shadow-lg
+        backdrop-blur-xl
+        sm:bottom-4
+        sm:gap-2
+        sm:px-4 sm:py-2
+      "
+          >
+            {mainSlides.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => mainCarousel.goToSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={
+                  mainCarousel.activeIndex === index ? "true" : undefined
+                }
+                className="
+            flex h-5
+            items-center justify-center
+            focus:outline-none
           "
-        >
-          {mainSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => mainCarousel.goToSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
+              >
+                <span
+                  className={`
+              block rounded-full
+              transition-all duration-300
+              ${
                 mainCarousel.activeIndex === index
-                  ? "w-8 bg-white"
-                  : "w-2.5 bg-white/40 hover:bg-white/70"
-              }`}
-            />
-          ))}
-        </div>
-      </section>
+                  ? "h-2 w-8 bg-marigold shadow-[0_0_10px_rgba(227,164,25,0.4)]"
+                  : "size-2 bg-white/40 hover:bg-white/80"
+              }
+            `}
+                />
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* AURORA VANGUARD */}
       <div className="w-full max-w-500 mx-auto my-[clamp(4.5rem,7.5vw,15rem)] px-5 sm:px-8 relative z-10">
@@ -343,8 +727,9 @@ function Home() {
                     glow-card isolate shrink-0
                     snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+                    w-[clamp(18.5rem,30vw,31rem)]
+                        aspect-4/5
+    landscape:aspect-square
 
                     overflow-hidden
                     rounded-3xl
@@ -495,8 +880,9 @@ function Home() {
                     glow-card isolate shrink-0
                     snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+                    w-[clamp(18.5rem,30vw,31rem)]
+                        aspect-4/5
+    landscape:aspect-square
 
                     overflow-hidden
                     rounded-3xl
@@ -854,8 +1240,9 @@ function Home() {
                     glow-card isolate shrink-0
                     snap-start
 
-                    w-[clamp(15rem,30vw,30rem)]
-                    aspect-4/5
+                    w-[clamp(18.5rem,30vw,31rem)]
+                        aspect-4/5
+    landscape:aspect-square
 
                     overflow-hidden
                     rounded-3xl

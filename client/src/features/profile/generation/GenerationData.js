@@ -1,4 +1,4 @@
-import ShieldLogo from "../../../assets/images/Jami Emas.webp";
+import ShieldLogo from "../../../assets/images/10. Panggung Gembira/Main Hero.webp";
 import Chief1 from "../../../assets/images/Jami Emas.webp";
 import Chief2 from "../../../assets/images/Jami Emas.webp";
 import Chief3 from "../../../assets/images/Jami Emas.webp";

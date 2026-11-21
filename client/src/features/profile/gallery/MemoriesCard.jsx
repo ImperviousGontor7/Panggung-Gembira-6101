@@ -12,11 +12,11 @@ function MemoriesCard({ item, viewMode }) {
 
   return (
     <article
-      className={`group min-w-0 overflow-hidden rounded-[1.5rem] border border-white/[0.08] bg-white/[0.025] transition duration-300 hover:border-marigold/25 hover:bg-white/[0.04] ${
+      className={`group min-w-0 overflow-hidden rounded-3xl border border-white/8 bg-white/2.5 transition duration-300 hover:border-marigold/25 hover:bg-white/4 ${
         isList ? "flex flex-col sm:flex-row" : "flex flex-col"
       }`}
     >
-      <div className={`relative shrink-0 overflow-hidden bg-[#24170e] ${isList ? "aspect-[16/10] sm:aspect-auto sm:h-44 sm:w-64" : "aspect-[4/3] w-full"}`}>
+      <div className={`relative shrink-0 overflow-hidden bg-[#24170e] ${isList ? "aspect-16/10 sm:aspect-auto sm:h-44 sm:w-64" : "aspect-4/3 w-full"}`}>
         {item.video ? (
           <video
             src={item.video}
@@ -55,7 +55,7 @@ function MemoriesCard({ item, viewMode }) {
           </p>
         </div>
         <div className="flex items-center justify-between gap-3">
-          <span className="text-[1rem] font-medium tracking-[0.1em] text-marigold/75">
+          <span className="text-[1rem] font-medium tracking-widest text-marigold/75">
             IMPERVIOUS ARCHIVE
           </span>
           <span aria-hidden="true" className="text-[1.6rem] text-antiquewhite/35 transition group-hover:translate-x-1 group-hover:text-marigold">

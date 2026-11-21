@@ -9,7 +9,7 @@ export const secondScrollbar = [
         description:
             `Menghidupkan keberanian dan kehormatan dalam warisan budaya yang tetap teguh melintasi zaman.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/aceh-101",
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ export const secondScrollbar = [
         description:
             `Menyatukan suara menjadi harmoni yang membuktikan bahwa kebersamaan melahirkan kekuatan luar biasa.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/choir-6101",
     },
     {
         id: 3,
@@ -29,7 +29,7 @@ export const secondScrollbar = [
         description:
             `Mengobarkan energi kolektif dalam ritme yang menyatukan tradisi, keberanian, dan semangat tanpa batas.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/kecak-modern",
     },
     {
         id: 4,
@@ -39,7 +39,7 @@ export const secondScrollbar = [
         description:
             `Merajut tradisi dan inovasi dalam harmoni yang menjaga warisan sekaligus membuka kemungkinan baru.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/campursari-new-style",
     },
     {
         id: 5,
@@ -49,7 +49,7 @@ export const secondScrollbar = [
         description:
             `Menghidupkan denyut budaya melalui irama yang menyatukan semangat, identitas, dan kebersamaan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/salehoreg-fair",
     },
     {
         id: 6,
@@ -59,7 +59,7 @@ export const secondScrollbar = [
         description:
             `Mengepakkan sayap keberanian dan persatuan untuk terbang tinggi melampaui segala batas.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/garuda-tak-bersayap",
     },
     {
         id: 7,
@@ -69,7 +69,7 @@ export const secondScrollbar = [
         description:
             `Membawa jiwa kesatria yang pantang menyerah, teguh menghadapi tantangan, dan berani meraih kemenangan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/yoddha-ka-jogran",
     },
     {
         id: 8,
@@ -79,7 +79,7 @@ export const secondScrollbar = [
         description:
             `Menghadirkan pesona budaya Arab dalam ekspresi yang anggun, kuat, dan penuh karakter.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/arabic-side",
     },
     {
         id: 9,
@@ -89,6 +89,6 @@ export const secondScrollbar = [
         description:
             `Menyatukan semangat para pejuang Nusantara dalam tekad kokoh untuk berdiri sebagai satu kekuatan.`,
         image: hero,
-        link: "./read_more/news/july/culinary_challenge",
+        link: "/performances/nusantara-fighter",
     },
 ];

@@ -37,6 +37,10 @@ const MemoriesPage = lazy(() =>
   import("../features/profile/pages/MemoriesPage"),
 );
 
+const PerformanceDetailPage = lazy(() =>
+  import("../features/performances/pages/PerformanceDetailPage"),
+);
+
 // =========================
 // AUTH PAGES
 // =========================
@@ -91,6 +95,7 @@ function AppRouter() {
             <Route path="about" element={<AboutPage />} />
             <Route path="memories" element={<MemoriesPage />} />
             <Route path="memories/:collection" element={<MemoriesPage />} />
+            <Route path="performances/:slug" element={<PerformanceDetailPage />} />
           </Route>
 
           {/* =========================

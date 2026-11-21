@@ -3,7 +3,7 @@ import { sortOptions } from "./memories_data";
 function GalleryToolbar({ sortBy, onSortChange, viewMode, onViewModeChange }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <label className="relative inline-flex h-11 min-w-[15.5rem] items-center">
+      <label className="relative inline-flex h-11 min-w-62 items-center">
         <span className="sr-only">Sort memories</span>
         <select
           value={sortBy}
@@ -21,7 +21,7 @@ function GalleryToolbar({ sortBy, onSortChange, viewMode, onViewModeChange }) {
         </span>
       </label>
 
-      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.025] p-1">
+      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-white/2.5 p-1">
         <button
           type="button"
           onClick={() => onViewModeChange("grid")}
