@@ -2,17 +2,13 @@ import PerformanceIcon from "./PerformanceIcon";
 
 export default function PerformanceVideoSection({ performance }) {
   const videoSrc = performance.video?.src;
+  const embedUrl = performance.video?.embedUrl;
   const poster = performance.video?.poster || performance.image;
+  const videoTitle = `Video dokumentasi ${performance.displayTitle || performance.title}`;
 
   return (
     <section className="pd-video-section" aria-labelledby="pd-video-heading">
-      <div className="pd-video-heading-row">
-        <div>
-          <span className="pd-eyebrow">IMPERVIOUS GENERATION · PG 6101</span>
-          <h1 id="pd-video-heading" className="pd-video-heading">Video Documentation</h1>
-        </div>
-        <span className="pd-section-index">01 / DOCUMENTATION</span>
-      </div>
+      <h2 id="pd-video-heading" className="sr-only">{videoTitle}</h2>
 
       <div className="pd-video-frame">
         {videoSrc ? (
@@ -26,6 +22,16 @@ export default function PerformanceVideoSection({ performance }) {
             <source src={videoSrc} />
             Browser kamu tidak mendukung pemutaran video.
           </video>
+        ) : embedUrl ? (
+          <iframe
+            className="pd-video-embed"
+            src={embedUrl}
+            title={videoTitle}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            loading="eager"
+          />
         ) : (
           <div
             className="pd-video-placeholder"

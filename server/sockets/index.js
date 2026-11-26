@@ -1,51 +1,33 @@
-import {Server}
-from "socket.io";
+import { Server } from "socket.io";
+import notificationSocket from "./notification.socket.js";
 
+const DEFAULT_CLIENT_ORIGIN = "http://localhost:5174";
 
-import agendaSocket
-from "./agenda.socket.js";
+export function initSocket(httpServer) {
+  const allowedOrigins = String(
+    process.env.CORS_ORIGIN || process.env.CLIENT_URL || DEFAULT_CLIENT_ORIGIN,
+  )
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
+  const io = new Server(httpServer, {
+    cors: {
+      origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+          return;
+        }
 
-import forumSocket
-from "./forum.socket.js";
+        callback(new Error("Origin is not allowed by Socket.IO CORS."));
+      },
+      credentials: true,
+    },
+    transports: ["websocket", "polling"],
+  });
 
-
-
-export function initSocket(server){
-
-
-
-const io =
-new Server(
-server,
-{
-
-cors:{
-
-origin:
-process.env.CLIENT_URL ||
-"http://localhost:5173",
-
-credentials:true
-
+  notificationSocket(io);
+  return io;
 }
 
-}
-
-);
-
-
-
-
-
-agendaSocket(io);
-
-
-forumSocket(io);
-
-
-
-return io;
-
-
-}
+export default initSocket;

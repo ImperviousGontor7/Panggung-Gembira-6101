@@ -17,6 +17,7 @@ export const VIDEO_CATALOG = PERFORMANCES.map((performance) => ({
   tags: performance.tags,
   poster: performance.video.poster || performance.image,
   src: performance.video.src,
+  embedUrl: performance.video.embedUrl,
   duration: performance.video.duration,
 }));
 

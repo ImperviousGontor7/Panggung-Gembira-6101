@@ -65,7 +65,7 @@ Do not assume local disk uploads will persist on a host with an ephemeral filesy
 ## 4. Local development
 
 1. Copy `.env.example` to `.env` and fill in a local PostgreSQL connection string and development secrets.
-2. Leave `client/.env` absent, or copy `client/.env.example` to `client/.env` without setting the two URLs. The Vite dev server proxies `/api` and `/socket.io` to Express on port `5000`.
+2. Copy `client/.env.example` to `client/.env`. Its `/api` value uses the Vite same-origin proxy, which forwards `/api` and `/socket.io` to Express on port `5001`.
 3. Run `npm ci`, then `npm run dev`.
 
-The Vite dev server runs on port `5174`; the backend defaults to port `5000`.
+The Vite dev server runs on port `5174`; the backend defaults to port `5001`.

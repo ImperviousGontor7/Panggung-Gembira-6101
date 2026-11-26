@@ -8,7 +8,7 @@ function resolveSocketUrl(url) {
     return window.location.origin;
   }
 
-  return "http://localhost:5173";
+  return "http://localhost:5174";
 }
 
 export function useSocket({

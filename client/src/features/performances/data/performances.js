@@ -1,6 +1,7 @@
 import { firstScrollbar } from "../../news/data/Aurora Vanguard";
 import { secondScrollbar } from "../../news/data/Nusantara Legacy";
 import { thirdScrollbar } from "../../news/data/Imperial Ascendancy";
+import { IMPERVIOUS_VIDEO_EMBED_URL } from "../../../config/media";
 
 export const COLLECTIONS = [
   {
@@ -92,6 +93,7 @@ function makePerformance(item, collection) {
     image: item.image || null,
     video: {
       src: null,
+      embedUrl: IMPERVIOUS_VIDEO_EMBED_URL,
       poster: item.image || null,
       duration: isHadroh ? "15:19" : null,
     },

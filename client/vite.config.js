@@ -23,12 +23,12 @@ export default defineConfig({
 
     proxy: {
       "/api": {
-        target: "http://localhost:5000", // ganti jika backend memakai port lain
+        target: "http://localhost:5001", // backend local default: PORT=5001
         changeOrigin: true,
       },
 
       "/socket.io": {
-        target: "http://localhost:5000",
+        target: "http://localhost:5001",
         changeOrigin: true,
         ws: true,
       },

@@ -9,7 +9,7 @@ function parseOrigins(value) {
     .filter(Boolean);
 }
 
-const fallbackOrigin = "http://localhost:5173";
+const fallbackOrigin = "http://localhost:5174";
 
 const socketOrigins = [
   APP_ENV.CLIENT_URL || fallbackOrigin,

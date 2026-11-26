@@ -1,4 +1,15 @@
-Extract this ZIP into the root of your existing GitHub repository and allow files to be overwritten.
-Then commit and push the changes to the main branch.
-The original client/.env was removed from the repaired working copy because it pointed at localhost:5001; delete any existing local client/.env file before testing locally. It should not be committed.
-Follow DEPLOYMENT.md for GitHub Pages, DNS, and backend setup.
+REPLACE-ALL INSTRUCTIONS
+
+This ZIP is a complete project snapshot. Back up your existing .env files first, then replace the contents of your project folder with this archive. Do not merge individual source files.
+
+After replacing:
+1. Copy .env.example to .env and configure DATABASE_URL and secrets.
+2. Copy client/.env.example to client/.env.
+3. Run npm ci.
+4. Run npm run prisma:generate if Prisma Client was not generated automatically.
+5. Run npm run dev.
+
+Local frontend: http://localhost:5174
+Local backend: http://localhost:5001
+
+The actual .env files are intentionally not included to protect local database credentials and secrets.

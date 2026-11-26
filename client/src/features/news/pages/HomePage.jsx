@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+import {
+  IMPERVIOUS_VIDEO_EMBED_URL,
+  IMPERVIOUS_VIDEO_TITLE,
+} from "../../../config/media";
 
 import hero from "../../../assets/images/Jami Emas.webp";
 
@@ -143,12 +147,66 @@ function Home() {
         "
       >
         {/* ========================================== */}
+        {/* VIDEO BACKGROUND - SINGLE YOUTUBE PLAYER */}
+        {/* ========================================== */}
+
+        <div
+          className="
+            pointer-events-auto
+            absolute inset-0 z-0
+            overflow-hidden
+            bg-[#160d07]
+          "
+          style={{ containerType: "size" }}
+        >
+          <iframe
+            src={IMPERVIOUS_VIDEO_EMBED_URL}
+            title={`${IMPERVIOUS_VIDEO_TITLE} — Main Hero`}
+            aria-label="Video latar utama Impervious Generation"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            loading="eager"
+            className="
+              absolute left-1/2 top-1/2
+              max-w-none
+              -translate-x-1/2 -translate-y-1/2
+            "
+            style={{
+              width: "max(100cqw, 177.7778cqh)",
+              height: "max(100cqh, 56.25cqw)",
+            }}
+          />
+        </div>
+
+        {/* ========================================== */}
+        {/* STATIC CINEMATIC OVERLAYS */}
+        {/* ========================================== */}
+
+        {/* GENERAL DARK OVERLAY */}
+        <div className="pointer-events-none absolute inset-0 z-10 bg-black/30" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-linear-to-t from-[#170e07] via-[#0d0500]/50 to-transparent" />
+
+        {/* LEFT GRADIENT */}
+        <div
+          className="
+            pointer-events-none
+            absolute inset-0 z-10
+            bg-linear-to-r
+            from-[#100b07]
+            via-[#160d07]/50
+            via-45%
+            to-transparent
+          "
+        />
+
+        {/* ========================================== */}
         {/* HERO SLIDES */}
         {/* ========================================== */}
 
         <div
           onTransitionEnd={mainCarousel.handleTransitionEnd}
-          className={`flex h-full w-full ${
+          className={`relative z-20 pointer-events-none flex h-full w-full ${
             mainCarousel.transitionEnabled
               ? "transition-transform duration-700 ease-in-out"
               : ""
@@ -170,40 +228,9 @@ function Home() {
               min-w-full
               shrink-0
               overflow-hidden
-              bg-[#160d07]
+              bg-transparent
             "
               >
-                {/* ========================================== */}
-                {/* BACKGROUND IMAGE */}
-                {/* ========================================== */}
-
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className="
-                absolute inset-0
-                h-full w-full
-                object-cover
-                object-[60%_center]
-              "
-                />
-
-                {/* GENERAL DARK OVERLAY */}
-                <div className="absolute inset-0 bg-black/30" />
-                <div className="absolute inset-0 bg-linear-to-t from-[#170e07] via-[#0d0500]/50 to-transparent" />
-
-                {/* LEFT GRADIENT */}
-                <div
-                  className="
-                absolute inset-0
-                bg-linear-to-r
-                from-[#100b07]
-                via-[#160d07]/50
-                via-45%
-                to-transparent
-              "
-                />
-
                 {/* ========================================== */}
                 {/* CONTENT CONTAINER */}
                 {/* ========================================== */}
@@ -425,6 +452,7 @@ function Home() {
                       <Link
                         to={slide.buttonPrimary?.href || slide.link || "/"}
                         className="
+                      pointer-events-auto
                       group
                       relative
                       inline-flex

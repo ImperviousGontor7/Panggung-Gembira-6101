@@ -52,11 +52,14 @@ function Navbar() {
 
     const query = searchQuery.trim();
 
-    if (!query) return;
-
     setOpenUserMenu(false);
     setOpenDesktopSearch(false);
     setOpenMobileSearch(false);
+
+    if (!query) {
+      navigate("/explore");
+      return;
+    }
 
     navigate(`/search?q=${encodeURIComponent(query)}`);
   };

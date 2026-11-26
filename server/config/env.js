@@ -96,13 +96,13 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 export const APP_ENV = Object.freeze({
   NODE_ENV,
 
-  PORT: number("PORT", 5000),
+  PORT: number("PORT", 5001),
   HOST: process.env.HOST || "0.0.0.0",
 
   DATABASE_URL: required("DATABASE_URL"),
 
-  API_URL: process.env.API_URL || "http://localhost:5000/api",
-  CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5173",
+  API_URL: process.env.API_URL || "http://localhost:5001/api",
+  CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5174",
 
   JWT_ACCESS_SECRET: required(
     "JWT_ACCESS_SECRET",
@@ -135,7 +135,7 @@ export const APP_ENV = Object.freeze({
   ),
 
   CORS_ORIGIN:
-    process.env.CORS_ORIGIN || "http://localhost:5173",
+    process.env.CORS_ORIGIN || "http://localhost:5174,http://127.0.0.1:5174,http://localhost:5173,http://127.0.0.1:5173",
 
   STORAGE_PROVIDER:
     process.env.STORAGE_PROVIDER || "local",

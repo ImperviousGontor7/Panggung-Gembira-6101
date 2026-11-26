@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import {
-  Navigate,
   Route,
   Routes,
   useLocation,
@@ -39,6 +38,18 @@ const MemoriesPage = lazy(() =>
 
 const PerformanceDetailPage = lazy(() =>
   import("../features/performances/pages/PerformanceDetailPage"),
+);
+
+const ExplorePage = lazy(() =>
+  import("../features/performances/pages/ExplorePage"),
+);
+
+const NotFoundPage = lazy(() =>
+  import("../ErrorPages/error/NotFoundPage"),
+);
+
+const LicenseRequiredPage = lazy(() =>
+  import("../ErrorPages/access/LicenseRequiredPage"),
 );
 
 // =========================
@@ -96,7 +107,14 @@ function AppRouter() {
             <Route path="memories" element={<MemoriesPage />} />
             <Route path="memories/:collection" element={<MemoriesPage />} />
             <Route path="performances/:slug" element={<PerformanceDetailPage />} />
+            <Route path="search" element={<ExplorePage />} />
+            <Route path="explore" element={<ExplorePage />} />
           </Route>
+
+          {/* =========================
+              SYSTEM PAGES
+          ========================== */}
+          <Route path="license-required" element={<LicenseRequiredPage />} />
 
           {/* =========================
               AUTHENTICATION
@@ -109,10 +127,7 @@ function AppRouter() {
           {/* =========================
               FALLBACK
           ========================== */}
-          <Route
-            path="*"
-            element={<Navigate to="/" replace />}
-          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </>

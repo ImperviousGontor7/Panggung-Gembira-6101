@@ -2,8 +2,7 @@ import { io } from "socket.io-client";
 
 const SOCKET_BASE_URL =
   import.meta.env.VITE_SOCKET_URL ||
-  import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, "") ||
-  "http://localhost:5001";
+  (typeof window !== "undefined" ? window.location.origin : "http://localhost:5174");
 
 function getStoredToken() {
   return localStorage.getItem("token");

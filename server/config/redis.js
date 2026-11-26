@@ -1,104 +1,66 @@
-import { createClient } from "redis";
+import Redis from "ioredis";
 
 let redisClient = null;
-let connectionPromise = null;
 
 function getRedisUrl() {
-  return (
-    process.env.REDIS_URL ||
-    "redis://127.0.0.1:6379"
-  );
+  return process.env.REDIS_URL || "redis://127.0.0.1:6379";
 }
 
 export function getRedisClient() {
   if (!redisClient) {
-    redisClient =
-      createClient({
-        url: getRedisUrl(),
-      });
+    redisClient = new Redis(getRedisUrl(), {
+      lazyConnect: true,
+      maxRetriesPerRequest: 2,
+      enableReadyCheck: true,
+    });
 
-    redisClient.on(
-      "error",
-      (error) => {
-        console.error(
-          "[Redis]",
-          error
-        );
-      }
-    );
+    redisClient.on("error", (error) => {
+      console.error("[Redis]", error);
+    });
 
-    redisClient.on(
-      "connect",
-      () => {
-        console.info(
-          "[Redis] connecting..."
-        );
-      }
-    );
+    redisClient.on("connect", () => {
+      console.info("[Redis] connecting...");
+    });
 
-    redisClient.on(
-      "ready",
-      () => {
-        console.info(
-          "[Redis] ready"
-        );
-      }
-    );
+    redisClient.on("ready", () => {
+      console.info("[Redis] ready");
+    });
 
-    redisClient.on(
-      "end",
-      () => {
-        console.info(
-          "[Redis] connection closed"
-        );
-      }
-    );
+    redisClient.on("close", () => {
+      console.info("[Redis] connection closed");
+    });
   }
 
   return redisClient;
 }
 
 export async function connectRedis() {
-  const client =
-    getRedisClient();
+  let client = getRedisClient();
 
-  if (client.isOpen) {
-    return client;
+  // A client that was quit cannot be reconnected; create a fresh instance.
+  if (client.status === "end") {
+    redisClient = null;
+    client = getRedisClient();
   }
 
-  if (!connectionPromise) {
-    connectionPromise =
-      client
-        .connect()
-        .then(() => client)
-        .finally(() => {
-          connectionPromise =
-            null;
-        });
+  if (client.status === "wait") {
+    await client.connect();
   }
 
-  return connectionPromise;
+  return client;
 }
 
 export async function disconnectRedis() {
-  const client =
-    getRedisClient();
+  if (!redisClient || redisClient.status === "end") return;
 
-  if (!client.isOpen) {
-    return;
-  }
-
+  const client = redisClient;
+  redisClient = null;
   await client.quit();
 }
 
 export async function checkRedis() {
-  const client =
-    await connectRedis();
-
-  const result =
-    await client.ping();
-
-  return result === "PONG";
+  const client = await connectRedis();
+  return (await client.ping()) === "PONG";
 }
 
 export default getRedisClient;
