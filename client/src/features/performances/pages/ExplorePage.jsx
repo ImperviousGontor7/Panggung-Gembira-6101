@@ -21,9 +21,9 @@ function PerformanceCard({ performance }) {
   return (
     <Link
       to={`/performances/${performance.slug}`}
-      className="group min-w-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.025] transition duration-300 hover:-translate-y-1 hover:border-marigold/40 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-marigold/70"
+      className="group min-w-0 overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/2.5 transition duration-300 hover:-translate-y-1 hover:border-marigold/40 hover:bg-white/4.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-marigold/70"
     >
-      <div className="relative aspect-[16/9] overflow-hidden bg-[#24170e]">
+      <div className="relative aspect-video overflow-hidden bg-[#24170e]">
         {image ? (
           <img
             src={image}
@@ -33,10 +33,10 @@ function PerformanceCard({ performance }) {
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_center,rgba(227,164,25,.16),transparent_65%)]">
-            <span className="font-[var(--font-main)] text-4xl text-marigold/65">IG</span>
+            <span className="font-(--font-main) text-4xl text-marigold/65">IG</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#100802]/95 via-[#100802]/15 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#100802]/95 via-[#100802]/15 to-transparent" />
         <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-[.9rem] font-semibold tracking-[.16em] text-antiquewhite/90 backdrop-blur-md">
           {performance.collectionName}
         </span>
@@ -167,7 +167,7 @@ export default function ExplorePage() {
           <p className="text-[1rem] font-semibold uppercase tracking-[.32em] text-marigold">IMPERVIOUS ARCHIVE · PG 6101</p>
           <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="font-[var(--font-main)] text-4xl font-semibold leading-tight text-antiquewhite sm:text-5xl lg:text-6xl">
+              <h1 className="font-(--font-main) text-4xl leading-tight text-antiquewhite sm:text-5xl lg:text-6xl">
                 Jelajahi Penampilan
               </h1>
               <p className="mt-3 max-w-2xl text-[1.25rem] leading-7 text-antiquewhite/55 sm:text-[1.4rem]">
@@ -209,7 +209,7 @@ export default function ExplorePage() {
                 type="button"
                 onClick={() => updateParams({ collection: "all" })}
                 aria-pressed={collectionFilter === "all"}
-                className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-[1.1rem] font-medium transition ${collectionFilter === "all" ? "border-marigold/55 bg-marigold/15 text-marigold" : "border-white/10 bg-white/[.025] text-antiquewhite/65 hover:border-white/25 hover:text-white"}`}
+                className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-[1.1rem] font-medium transition ${collectionFilter === "all" ? "border-marigold/55 bg-marigold/15 text-marigold" : "border-white/10 bg-white/2.5 text-antiquewhite/65 hover:border-white/25 hover:text-white"}`}
               >
                 Semua koleksi <span className="text-[.95rem] opacity-65">{collectionCounts.all}</span>
               </button>
@@ -219,7 +219,7 @@ export default function ExplorePage() {
                   type="button"
                   onClick={() => updateParams({ collection: collection.id })}
                   aria-pressed={collectionFilter === collection.id}
-                  className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-[1.1rem] font-medium transition ${collectionFilter === collection.id ? "border-marigold/55 bg-marigold/15 text-marigold" : "border-white/10 bg-white/[.025] text-antiquewhite/65 hover:border-white/25 hover:text-white"}`}
+                  className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-[1.1rem] font-medium transition ${collectionFilter === collection.id ? "border-marigold/55 bg-marigold/15 text-marigold" : "border-white/10 bg-white/2.5 text-antiquewhite/65 hover:border-white/25 hover:text-white"}`}
                 >
                   {collection.name} <span className="text-[.95rem] opacity-65">{collectionCounts[collection.id]}</span>
                 </button>
@@ -269,7 +269,7 @@ export default function ExplorePage() {
               <ExplorePagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
             </>
           ) : (
-            <div className="rounded-[1.6rem] border border-white/10 bg-white/[.025] px-5 py-14 text-center sm:py-20">
+            <div className="rounded-[1.6rem] border border-white/10 bg-white/2.5 px-5 py-14 text-center sm:py-20">
               <span className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-marigold/20 bg-marigold/10 text-2xl text-marigold"><FiSearch /></span>
               <h3 className="mt-5 text-2xl font-semibold text-antiquewhite">Penampilan tidak ditemukan</h3>
               <p className="mx-auto mt-2 max-w-md text-[1.2rem] leading-7 text-antiquewhite/50">Coba kata kunci lain atau ubah filter koleksi untuk menemukan dokumentasi yang dicari.</p>

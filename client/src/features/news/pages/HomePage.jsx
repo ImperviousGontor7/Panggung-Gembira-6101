@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
-import {
-  IMPERVIOUS_VIDEO_EMBED_URL,
-  IMPERVIOUS_VIDEO_TITLE,
-} from "../../../config/media";
 
 import hero from "../../../assets/images/Jami Emas.webp";
 
@@ -147,60 +143,6 @@ function Home() {
         "
       >
         {/* ========================================== */}
-        {/* VIDEO BACKGROUND - SINGLE YOUTUBE PLAYER */}
-        {/* ========================================== */}
-
-        <div
-          className="
-            pointer-events-auto
-            absolute inset-0 z-0
-            overflow-hidden
-            bg-[#160d07]
-          "
-          style={{ containerType: "size" }}
-        >
-          <iframe
-            src={IMPERVIOUS_VIDEO_EMBED_URL}
-            title={`${IMPERVIOUS_VIDEO_TITLE} — Main Hero`}
-            aria-label="Video latar utama Impervious Generation"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-            loading="eager"
-            className="
-              absolute left-1/2 top-1/2
-              max-w-none
-              -translate-x-1/2 -translate-y-1/2
-            "
-            style={{
-              width: "max(100cqw, 177.7778cqh)",
-              height: "max(100cqh, 56.25cqw)",
-            }}
-          />
-        </div>
-
-        {/* ========================================== */}
-        {/* STATIC CINEMATIC OVERLAYS */}
-        {/* ========================================== */}
-
-        {/* GENERAL DARK OVERLAY */}
-        <div className="pointer-events-none absolute inset-0 z-10 bg-black/30" />
-        <div className="pointer-events-none absolute inset-0 z-10 bg-linear-to-t from-[#170e07] via-[#0d0500]/50 to-transparent" />
-
-        {/* LEFT GRADIENT */}
-        <div
-          className="
-            pointer-events-none
-            absolute inset-0 z-10
-            bg-linear-to-r
-            from-[#100b07]
-            via-[#160d07]/50
-            via-45%
-            to-transparent
-          "
-        />
-
-        {/* ========================================== */}
         {/* HERO SLIDES */}
         {/* ========================================== */}
 
@@ -232,6 +174,36 @@ function Home() {
             "
               >
                 {/* ========================================== */}
+                {/* SLIDE IMAGE — SAME PATTERN AS ROOT SLIDER */}
+                {/* ========================================== */}
+
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="
+                    pointer-events-none
+                    absolute inset-0 z-0
+                    h-full w-full
+                    object-cover object-center
+                  "
+                />
+
+                {/* CINEMATIC OVERLAYS — TRAVEL WITH EACH SLIDE */}
+                <div className="pointer-events-none absolute inset-0 z-1 bg-black/30" />
+                <div className="pointer-events-none absolute inset-0 z-1 bg-linear-to-t from-[#170e07] via-[#0d0500]/50 to-transparent" />
+                <div
+                  className="
+                    pointer-events-none
+                    absolute inset-0 z-1
+                    bg-linear-to-r
+                    from-[#100b07]
+                    via-[#160d07]/50
+                    via-45%
+                    to-transparent
+                  "
+                />
+
+                {/* ========================================== */}
                 {/* CONTENT CONTAINER */}
                 {/* ========================================== */}
 
@@ -244,13 +216,22 @@ function Home() {
                 px-[clamp(4rem,7.5vw,25rem)]
               "
                 >
-                  <div
+                  <Link
+                    to={slide.link || slide.buttonPrimary?.href || "/performances"}
+                    aria-label={`Buka detail ${slide.title}`}
                     className="
+                  pointer-events-auto
+                  group
                   flex w-full
                   max-w-180
                   flex-col
                   items-start
                   text-white
+                  focus:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-marigold
+                  focus-visible:ring-offset-4
+                  focus-visible:ring-offset-[#160d07]
                 "
                   >
                     {/* ========================================== */}
@@ -449,8 +430,7 @@ function Home() {
                     {/* ========================================== */}
 
                     <div className="mt-10">
-                      <Link
-                        to={slide.buttonPrimary?.href || slide.link || "/"}
+                      <span
                         className="
                       pointer-events-auto
                       group
@@ -532,9 +512,9 @@ function Home() {
                         group-hover:translate-x-0
                       "
                         />
-                      </Link>
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </article>
             );
@@ -1126,14 +1106,21 @@ function Home() {
             }}
           >
             {rootCarousel.renderedSlides.map((slide, index) => (
-              <div
+              <Link
                 key={index}
+                to={slide.link || slide.buttonPrimary?.href || "/performances"}
+                aria-label={`Buka detail ${slide.title}`}
                 className="
+                  group
                   relative
                   h-full
                   min-w-full
                   shrink-0
                   overflow-hidden
+                  focus:outline-none
+                  focus-visible:ring-2
+                  focus-visible:ring-inset
+                  focus-visible:ring-marigold
                 "
               >
                 <img
@@ -1216,8 +1203,7 @@ function Home() {
                         sm:mt-8 sm:gap-4
                       "
                     >
-                      <Link
-                        to={slide.buttonPrimary.href}
+                      <span
                         className="
                           inline-flex
                           items-center justify-center
@@ -1235,11 +1221,11 @@ function Home() {
                         "
                       >
                         {slide.buttonPrimary.text}
-                      </Link>
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

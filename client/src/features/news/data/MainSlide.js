@@ -21,10 +21,10 @@ export const mainSlides = [
     // BUTTON
     buttonPrimary: {
       text: "Read More",
-      href: "/article/gontor-campus-7",
+      href: "/performances/gontor-campus-7",
     },
 
-    link: "/article/gontor-campus-7",
+    link: "/performances/gontor-campus-7",
   },
 
   {
@@ -41,10 +41,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/century-night-festival",
+      href: "/performances/century-night-festival",
     },
 
-    link: "/article/century-night-festival",
+    link: "/performances/century-night-festival",
   },
 
   {
@@ -61,10 +61,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/photography-team",
+      href: "/performances/photography-team",
     },
 
-    link: "/article/photography-team",
+    link: "/performances/photography-team",
   },
 
   {
@@ -81,10 +81,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/the-spirit-of-gontor",
+      href: "/performances/the-spirit-of-gontor",
     },
 
-    link: "/article/the-spirit-of-gontor",
+    link: "/performances/the-spirit-of-gontor",
   },
 
   {
@@ -101,10 +101,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/panggung-gembira-6101",
+      href: "/performances/panggung-gembira-6101",
     },
 
-    link: "/article/panggung-gembira-6101",
+    link: "/performances/panggung-gembira-6101",
   },
 
   {
@@ -121,10 +121,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/behind-the-lens",
+      href: "/performances/behind-the-lens",
     },
 
-    link: "/article/behind-the-lens",
+    link: "/performances/behind-the-lens",
   },
 
   {
@@ -141,10 +141,10 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/the-absolute-cinema",
+      href: "/performances/the-absolute-cinema",
     },
 
-    link: "/article/the-absolute-cinema",
+    link: "/performances/the-absolute-cinema",
   },
 
   {
@@ -161,9 +161,9 @@ export const mainSlides = [
 
     buttonPrimary: {
       text: "Read More",
-      href: "/article/impervious-archive",
+      href: "/performances/impervious-archive",
     },
 
-    link: "/article/impervious-archive",
+    link: "/performances/impervious-archive",
   },
 ];

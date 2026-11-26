@@ -1,6 +1,8 @@
 import { firstScrollbar } from "../../news/data/Aurora Vanguard";
 import { secondScrollbar } from "../../news/data/Nusantara Legacy";
 import { thirdScrollbar } from "../../news/data/Imperial Ascendancy";
+import { mainSlides } from "../../news/data/MainSlide";
+import { rootSlides } from "../../news/data/RootSlide";
 import { IMPERVIOUS_VIDEO_EMBED_URL } from "../../../config/media";
 
 export const COLLECTIONS = [
@@ -120,8 +122,66 @@ export const PERFORMANCES = collectionSources.flatMap(({ collection, items }) =>
 
 export const PERFORMANCE_COUNT = PERFORMANCES.length;
 
+function makeSliderDetail(slide, collection) {
+  const slug = slide.link?.split("/").filter(Boolean).at(-1);
+  if (!slug) throw new Error(`Slug detail belum ditentukan untuk slide: ${slide.title}`);
+
+  const description = slide.description?.trim() ||
+    `${slide.title} merupakan bagian dari dokumentasi Impervious Generation.`;
+
+  return {
+    id: `${collection.id}-${slide.id}`,
+    slug,
+    title: slide.title,
+    displayTitle: slide.title.toUpperCase(),
+    collectionId: collection.id,
+    collectionName: collection.name,
+    collectionOrder: collection.order,
+    category: slide.subtitle || collection.name,
+    time: slide.time || slide.duration || "",
+    shortDescription: description,
+    aboutParagraphs: [
+      description,
+      `${slide.title} merupakan salah satu cerita yang diangkat dalam dokumentasi Impervious Generation. Halaman ini menyatukan informasi dan materi visual terkait dalam satu halaman detail.`,
+      `Arsip ini menjadi bagian dari perjalanan Impervious Generation dan dapat dilengkapi dengan dokumentasi foto, informasi penanggung jawab, serta materi resmi lainnya ketika tersedia.`,
+    ],
+    image: slide.image || null,
+    video: {
+      src: null,
+      embedUrl: IMPERVIOUS_VIDEO_EMBED_URL,
+      poster: slide.image || null,
+      duration: null,
+    },
+    responsiblePeople: [],
+    documentationPhotos: [],
+    tags: [slide.subtitle, collection.name].filter(Boolean),
+    likes: 0,
+    dislikes: 0,
+    source: {
+      type: collection.id,
+      originalId: slide.id,
+    },
+  };
+}
+
+export const SLIDER_DETAIL_COLLECTIONS = [
+  { id: "home-highlights", name: "Home Highlights", order: 0, slides: mainSlides },
+  { id: "impervious-band", name: "Impervious Band", order: 4, slides: rootSlides },
+];
+
+export const SLIDER_PERFORMANCE_DETAILS = SLIDER_DETAIL_COLLECTIONS.flatMap(
+  (collection) => collection.slides.map((slide) => makeSliderDetail(slide, collection)),
+);
+
+// Seluruh tujuan slider mempunyai halaman detail sendiri. Daftar 23 penampilan
+// utama tetap berada di PERFORMANCES agar Explore Page dan hitungan koleksi tidak berubah.
+export const ALL_PERFORMANCE_DETAILS = [
+  ...PERFORMANCES,
+  ...SLIDER_PERFORMANCE_DETAILS,
+];
+
 export function getPerformanceBySlug(slug) {
-  return PERFORMANCES.find((performance) => performance.slug === slug) || null;
+  return ALL_PERFORMANCE_DETAILS.find((performance) => performance.slug === slug) || null;
 }
 
 export function getCollectionById(collectionId) {

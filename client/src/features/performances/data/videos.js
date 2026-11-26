@@ -1,10 +1,10 @@
-import { PERFORMANCES } from "./performances";
+import { ALL_PERFORMANCE_DETAILS } from "./performances";
 
 /**
- * Katalog video dibentuk dari seluruh 23 data penampilan.
+ * Katalog video dibentuk dari seluruh halaman detail penampilan dan slider.
  * Isi src dan poster per item ketika file video/poster resmi sudah tersedia.
  */
-export const VIDEO_CATALOG = PERFORMANCES.map((performance) => ({
+export const VIDEO_CATALOG = ALL_PERFORMANCE_DETAILS.map((performance) => ({
   id: `video-${performance.id}`,
   performanceId: performance.id,
   slug: performance.slug,
