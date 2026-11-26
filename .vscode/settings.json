@@ -1,3 +1,6 @@
 {
-  "workbench.iconTheme": "vscode-icons"
+  "workbench.iconTheme": "vscode-icons",
+  "json.schemaDownload.trustedDomains": {
+    "https://supabase.com/schemas/": true
+  }
 }
