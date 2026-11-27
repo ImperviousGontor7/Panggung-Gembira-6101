@@ -141,9 +141,7 @@ export async function restoreHome(id) {
 
     data: {
       deletedAt: null,
-
       isActive: true,
-
       status: "ACTIVE",
     },
   });
@@ -153,21 +151,18 @@ export async function restoreHome(id) {
 // MAX ORDER
 // ======================================================
 
-export async function getMaxHomeOrder(
-  placement,
-) {
-  const result =
-    await prisma.home.aggregate({
-      where: {
-        placement,
+export async function getMaxHomeOrder(placement) {
+  const result = await prisma.home.aggregate({
+    where: {
+      placement,
 
-        deletedAt: null,
-      },
+      deletedAt: null,
+    },
 
-      _max: {
-        order: true,
-      },
-    });
+    _max: {
+      order: true,
+    },
+  });
 
   return result._max.order ?? 0;
 }
@@ -176,10 +171,7 @@ export async function getMaxHomeOrder(
 // COUNT
 // ======================================================
 
-export async function countHomeSections({
-  placement,
-  sectionType,
-} = {}) {
+export async function countHomeSections({ placement, sectionType } = {}) {
   const where = {
     deletedAt: null,
   };

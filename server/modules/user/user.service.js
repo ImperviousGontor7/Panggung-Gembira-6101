@@ -1,129 +1,68 @@
-import * as userRepository
-  from "./user.repository.js";
+import * as userRepository from "./user.repository.js";
 
-import {
-  hashPassword,
-} from "../../utils/password.js";
+import { hashPassword } from "../../utils/password.js";
 
 // ======================================================
 // CONSTANTS
 // ======================================================
 
-const ROLES = new Set([
-  "SUPER_ADMIN",
-  "ADMIN",
-  "EDITOR",
-  "USER",
-]);
+const ROLES = new Set(["SUPER_ADMIN", "ADMIN", "EDITOR", "USER"]);
 
-const USER_STATUSES = new Set([
-  "ACTIVE",
-  "PENDING",
-  "SUSPENDED",
-  "BANNED",
-]);
+const USER_STATUSES = new Set(["ACTIVE", "PENDING", "SUSPENDED", "BANNED"]);
 
 // ======================================================
 // HELPERS
 // ======================================================
 
-function normalizeString(
-  value
-) {
-  if (
-    typeof value !==
-    "string"
-  ) {
+function normalizeString(value) {
+  if (typeof value !== "string") {
     return value;
   }
 
-  const normalized =
-    value.trim();
+  const normalized = value.trim();
 
   return normalized || null;
 }
 
-function normalizeEmail(
-  value
-) {
-  const normalized =
-    normalizeString(
-      value
-    );
+function normalizeEmail(value) {
+  const normalized = normalizeString(value);
 
-  return normalized
-    ? normalized.toLowerCase()
-    : null;
+  return normalized ? normalized.toLowerCase() : null;
 }
 
-function normalizeRole(
-  role
-) {
-  if (
-    role === undefined ||
-    role === null ||
-    role === ""
-  ) {
+function normalizeRole(role) {
+  if (role === undefined || role === null || role === "") {
     return undefined;
   }
 
-  const normalized =
-    String(role)
-      .trim()
-      .toUpperCase();
+  const normalized = String(role).trim().toUpperCase();
 
-  if (
-    !ROLES.has(
-      normalized
-    )
-  ) {
-    throw new Error(
-      "Invalid user role."
-    );
+  if (!ROLES.has(normalized)) {
+    throw new Error("Invalid user role.");
   }
 
   return normalized;
 }
 
-function normalizeStatus(
-  status
-) {
-  if (
-    status === undefined ||
-    status === null ||
-    status === ""
-  ) {
+function normalizeStatus(status) {
+  if (status === undefined || status === null || status === "") {
     return undefined;
   }
 
-  const normalized =
-    String(status)
-      .trim()
-      .toUpperCase();
+  const normalized = String(status).trim().toUpperCase();
 
-  if (
-    !USER_STATUSES.has(
-      normalized
-    )
-  ) {
-    throw new Error(
-      "Invalid user status."
-    );
+  if (!USER_STATUSES.has(normalized)) {
+    throw new Error("Invalid user status.");
   }
 
   return normalized;
 }
 
-function normalizeId(
-  id
-) {
-  const normalized =
-    normalizeString(id);
+function normalizeId(id) {
+  const normalized = normalizeString(id);
 
   if (!normalized) {
-    throw new Error(
-      "User ID is required."
-    );
+    throw new Error("User ID is required.");
   }
 
   return normalized;
@@ -133,130 +72,73 @@ function normalizeId(
 // CREATE
 // ======================================================
 
-export async function createUser(
-  data
-) {
-  const username =
-    normalizeString(
-      data?.username
-    );
+export async function createUser(data) {
+  const username = normalizeString(data?.username);
 
-  const email =
-    normalizeEmail(
-      data?.email
-    );
+  const email = normalizeEmail(data?.email);
 
-  const password =
-    normalizeString(
-      data?.password
-    );
+  const password = normalizeString(data?.password);
 
   if (!username) {
-    throw new Error(
-      "Username is required."
-    );
+    throw new Error("Username is required.");
   }
 
   if (!email) {
-    throw new Error(
-      "Email is required."
-    );
+    throw new Error("Email is required.");
   }
 
   if (!password) {
-    throw new Error(
-      "Password is required."
-    );
+    throw new Error("Password is required.");
   }
 
-  const hashedPassword =
-    await hashPassword(
-      password
-    );
+  const hashedPassword = await hashPassword(password);
 
-  return userRepository.createUser(
-    {
-      username,
+  return userRepository.createUser({
+    username,
 
-      email,
+    email,
 
-      password:
-        hashedPassword,
+    password: hashedPassword,
 
-      fullName:
-        normalizeString(
-          data?.fullName
-        ),
+    fullName: normalizeString(data?.fullName),
 
-      role:
-        normalizeRole(
-          data?.role
-        ) ?? "USER",
+    role: normalizeRole(data?.role) ?? "USER",
 
-      status:
-        normalizeStatus(
-          data?.status
-        ) ?? "ACTIVE",
-    }
-  );
+    status: normalizeStatus(data?.status) ?? "ACTIVE",
+  });
 }
 
 // ======================================================
 // FIND
 // ======================================================
 
-export async function getUserById(
-  id
-) {
-  return userRepository.findUserById(
-    normalizeId(id),
-    false
-  );
+export async function getUserById(id) {
+  return userRepository.findUserById(normalizeId(id), false);
 }
 
-export async function getUserByEmail(
-  email,
-  options = {}
-) {
-  const normalizedEmail =
-    normalizeEmail(
-      email
-    );
+export async function getUserByEmail(email, options = {}) {
+  const normalizedEmail = normalizeEmail(email);
 
   if (!normalizedEmail) {
-    throw new Error(
-      "Email is required."
-    );
+    throw new Error("Email is required.");
   }
 
   return userRepository.findUserByEmail(
     normalizedEmail,
-    Boolean(
-      options.includeSensitive
-    )
+    Boolean(options.includeSensitive),
   );
 }
 
-export async function getUserByUsername(
-  username,
-  options = {}
-) {
-  const normalizedUsername =
-    normalizeString(
-      username
-    );
+export async function getUserByUsername(username, options = {}) {
+  const normalizedUsername = normalizeString(username);
 
   if (!normalizedUsername) {
-    throw new Error(
-      "Username is required."
-    );
+    throw new Error("Username is required.");
   }
 
   return userRepository.findUserByUsername(
     normalizedUsername,
-    Boolean(
-      options.includeSensitive
-    )
+    Boolean(options.includeSensitive),
   );
 }
 
@@ -264,238 +146,120 @@ export async function getUserByUsername(
 // AUTH USER
 // ======================================================
 
-export async function getAuthUserByEmail(
-  email
-) {
-  return getUserByEmail(
-    email,
-    {
-      includeSensitive:
-        true,
-    }
-  );
+export async function getAuthUserByEmail(email) {
+  return getUserByEmail(email, {
+    includeSensitive: true,
+  });
 }
 
-export async function getAuthUserById(
-  id
-) {
-  return userRepository.findUserById(
-    normalizeId(id),
-    true
-  );
+export async function getAuthUserById(id) {
+  return userRepository.findUserById(normalizeId(id), true);
 }
 
 // ======================================================
 // LIST
 // ======================================================
 
-export async function getUsers(
-  options = {}
-) {
-  return userRepository.listUsers(
-    {
-      page:
-        options.page ??
-        1,
+export async function getUsers(options = {}) {
+  return userRepository.listUsers({
+    page: options.page ?? 1,
 
-      limit:
-        options.limit ??
-        20,
+    limit: options.limit ?? 20,
 
-      search:
-        normalizeString(
-          options.search
-        ) ?? "",
+    search: normalizeString(options.search) ?? "",
 
-      role:
-        normalizeRole(
-          options.role
-        ),
+    role: normalizeRole(options.role),
 
-      status:
-        normalizeStatus(
-          options.status
-        ),
-    }
-  );
+    status: normalizeStatus(options.status),
+  });
 }
 
 // ======================================================
 // UPDATE
 // ======================================================
 
-export async function updateUser(
-  id,
-  data = {}
-) {
-  const userId =
-    normalizeId(id);
+export async function updateUser(id, data = {}) {
+  const userId = normalizeId(id);
 
   const payload = {};
 
-  if (
-    data.username !==
-    undefined
-  ) {
-    const username =
-      normalizeString(
-        data.username
-      );
+  if (data.username !== undefined) {
+    const username = normalizeString(data.username);
 
     if (!username) {
-      throw new Error(
-        "Username cannot be empty."
-      );
+      throw new Error("Username cannot be empty.");
     }
 
-    payload.username =
-      username;
+    payload.username = username;
   }
 
-  if (
-    data.email !==
-    undefined
-  ) {
-    const email =
-      normalizeEmail(
-        data.email
-      );
+  if (data.email !== undefined) {
+    const email = normalizeEmail(data.email);
 
     if (!email) {
-      throw new Error(
-        "Email cannot be empty."
-      );
+      throw new Error("Email cannot be empty.");
     }
 
-    payload.email =
-      email;
+    payload.email = email;
   }
 
-  if (
-    data.fullName !==
-    undefined
-  ) {
-    payload.fullName =
-      normalizeString(
-        data.fullName
-      );
+  if (data.fullName !== undefined) {
+    payload.fullName = normalizeString(data.fullName);
   }
 
-  if (
-    data.avatar !==
-    undefined
-  ) {
-    payload.avatar =
-      normalizeString(
-        data.avatar
-      );
+  if (data.avatar !== undefined) {
+    payload.avatar = normalizeString(data.avatar);
   }
 
-  if (
-    data.bio !==
-    undefined
-  ) {
-    payload.bio =
-      normalizeString(
-        data.bio
-      );
+  if (data.bio !== undefined) {
+    payload.bio = normalizeString(data.bio);
   }
 
-  if (
-    data.role !==
-    undefined
-  ) {
-    payload.role =
-      normalizeRole(
-        data.role
-      );
+  if (data.role !== undefined) {
+    payload.role = normalizeRole(data.role);
   }
 
-  if (
-    data.status !==
-    undefined
-  ) {
-    payload.status =
-      normalizeStatus(
-        data.status
-      );
+  if (data.status !== undefined) {
+    payload.status = normalizeStatus(data.status);
   }
 
-  if (
-    data.isActive !==
-    undefined
-  ) {
-    payload.isActive =
-      Boolean(
-        data.isActive
-      );
+  if (data.isActive !== undefined) {
+    payload.isActive = Boolean(data.isActive);
   }
 
-  if (
-    data.password !==
-    undefined
-  ) {
-    const password =
-      normalizeString(
-        data.password
-      );
+  if (data.password !== undefined) {
+    const password = normalizeString(data.password);
 
     if (!password) {
-      throw new Error(
-        "Password cannot be empty."
-      );
+      throw new Error("Password cannot be empty.");
     }
 
-    payload.password =
-      await hashPassword(
-        password
-      );
+    payload.password = await hashPassword(password);
   }
 
-  if (
-    Object.keys(
-      payload
-    ).length === 0
-  ) {
-    throw new Error(
-      "No user fields to update."
-    );
+  if (Object.keys(payload).length === 0) {
+    throw new Error("No user fields to update.");
   }
 
-  return userRepository.updateUserById(
-    userId,
-    payload,
-    false
-  );
+  return userRepository.updateUserById(userId, payload, false);
 }
 
 // ======================================================
 // REFRESH TOKEN
 // ======================================================
 
-export async function storeRefreshTokenHash(
-  userId,
-  refreshTokenHash
-) {
+export async function storeRefreshTokenHash(userId, refreshTokenHash) {
   return userRepository.updateUserRefreshToken(
-    normalizeId(
-      userId
-    ),
-    refreshTokenHash
+    normalizeId(userId),
+    refreshTokenHash,
   );
 }
 
-export async function rotateRefreshToken(
-  userId,
-  currentHash,
-  nextHash
-) {
+export async function rotateRefreshToken(userId, currentHash, nextHash) {
   return userRepository.rotateRefreshToken(
-    normalizeId(
-      userId
-    ),
+    normalizeId(userId),
     currentHash,
-    nextHash
+    nextHash,
   );
 }
 
@@ -503,20 +267,12 @@ export async function rotateRefreshToken(
 // SANITIZE
 // ======================================================
 
-export function sanitizeUser(
-  user
-) {
-  return userRepository.sanitizeUser(
-    user
-  );
+export function sanitizeUser(user) {
+  return userRepository.sanitizeUser(user);
 }
 
-export async function countUsers(
-  where = {}
-) {
-  return userRepository.countUsers(
-    where
-  );
+export async function countUsers(where = {}) {
+  return userRepository.countUsers(where);
 }
 
 export default {

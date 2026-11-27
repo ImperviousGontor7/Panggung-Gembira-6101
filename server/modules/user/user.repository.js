@@ -4,38 +4,33 @@ import prisma from "../../config/prisma.js";
 // SELECTS
 // ======================================================
 
-export const userPublicSelect =
-  Object.freeze({
-    id: true,
-    username: true,
-    email: true,
-    fullName: true,
-    avatar: true,
-    bio: true,
-    role: true,
-    status: true,
-    isActive: true,
-    createdAt: true,
-    updatedAt: true,
-  });
+export const userPublicSelect = Object.freeze({
+  id: true,
+  username: true,
+  email: true,
+  fullName: true,
+  avatar: true,
+  bio: true,
+  role: true,
+  status: true,
+  isActive: true,
+  createdAt: true,
+  updatedAt: true,
+});
 
-export const userAuthSelect =
-  Object.freeze({
-    ...userPublicSelect,
+export const userAuthSelect = Object.freeze({
+  ...userPublicSelect,
 
-    password: true,
-    refreshToken: true,
-    deletedAt: true,
-  });
+  password: true,
+  refreshToken: true,
+  deletedAt: true,
+});
 
 // ======================================================
 // FIND
 // ======================================================
 
-export async function findUserById(
-  id,
-  includeSensitive = false,
-) {
+export async function findUserById(id, includeSensitive = false) {
   if (!id) {
     return null;
   }
@@ -45,54 +40,35 @@ export async function findUserById(
       id,
     },
 
-    select:
-      includeSensitive
-        ? userAuthSelect
-        : userPublicSelect,
+    select: includeSensitive ? userAuthSelect : userPublicSelect,
   });
 }
 
-export async function findUserByEmail(
-  email,
-  includeSensitive = false,
-) {
+export async function findUserByEmail(email, includeSensitive = false) {
   if (!email) {
     return null;
   }
 
   return prisma.user.findUnique({
     where: {
-      email:
-        String(email)
-          .trim()
-          .toLowerCase(),
+      email: String(email).trim().toLowerCase(),
     },
 
-    select:
-      includeSensitive
-        ? userAuthSelect
-        : userPublicSelect,
+    select: includeSensitive ? userAuthSelect : userPublicSelect,
   });
 }
 
-export async function findUserByUsername(
-  username,
-  includeSensitive = false,
-) {
+export async function findUserByUsername(username, includeSensitive = false) {
   if (!username) {
     return null;
   }
 
   return prisma.user.findUnique({
     where: {
-      username:
-        String(username).trim(),
+      username: String(username).trim(),
     },
 
-    select:
-      includeSensitive
-        ? userAuthSelect
-        : userPublicSelect,
+    select: includeSensitive ? userAuthSelect : userPublicSelect,
   });
 }
 
@@ -108,58 +84,37 @@ export async function listUsers({
   status,
   isActive,
 } = {}) {
-  const safePage =
-    Math.max(
-      Number.parseInt(
-        page,
-        10,
-      ) || 1,
-      1,
-    );
+  const safePage = Math.max(Number.parseInt(page, 10) || 1, 1);
 
-  const safeLimit =
-    Math.min(
-      Math.max(
-        Number.parseInt(
-          limit,
-          10,
-        ) || 20,
-        1,
-      ),
-      100,
-    );
+  const safeLimit = Math.min(
+    Math.max(Number.parseInt(limit, 10) || 20, 1),
+    100,
+  );
 
   const where = {
     deletedAt: null,
   };
 
-  const normalizedSearch =
-    String(search || "").trim();
+  const normalizedSearch = String(search || "").trim();
 
   if (normalizedSearch) {
     where.OR = [
       {
         username: {
-          contains:
-            normalizedSearch,
-          mode:
-            "insensitive",
+          contains: normalizedSearch,
+          mode: "insensitive",
         },
       },
       {
         email: {
-          contains:
-            normalizedSearch,
-          mode:
-            "insensitive",
+          contains: normalizedSearch,
+          mode: "insensitive",
         },
       },
       {
         fullName: {
-          contains:
-            normalizedSearch,
-          mode:
-            "insensitive",
+          contains: normalizedSearch,
+          mode: "insensitive",
         },
       },
     ];
@@ -173,36 +128,24 @@ export async function listUsers({
     where.status = status;
   }
 
-  if (
-    typeof isActive ===
-    "boolean"
-  ) {
-    where.isActive =
-      isActive;
+  if (typeof isActive === "boolean") {
+    where.isActive = isActive;
   }
 
-  const skip =
-    (safePage - 1) *
-    safeLimit;
+  const skip = (safePage - 1) * safeLimit;
 
-  const [
-    items,
-    total,
-  ] = await Promise.all([
+  const [items, total] = await Promise.all([
     prisma.user.findMany({
       where,
 
-      select:
-        userPublicSelect,
+      select: userPublicSelect,
 
       orderBy: {
-        createdAt:
-          "desc",
+        createdAt: "desc",
       },
 
       skip,
-      take:
-        safeLimit,
+      take: safeLimit,
     }),
 
     prisma.user.count({
@@ -214,19 +157,13 @@ export async function listUsers({
     items,
 
     pagination: {
-      page:
-        safePage,
+      page: safePage,
 
-      limit:
-        safeLimit,
+      limit: safeLimit,
 
       total,
 
-      totalPages:
-        Math.ceil(
-          total /
-            safeLimit,
-        ),
+      totalPages: Math.ceil(total / safeLimit),
     },
   };
 }
@@ -235,14 +172,11 @@ export async function listUsers({
 // CREATE
 // ======================================================
 
-export async function createUser(
-  data,
-) {
+export async function createUser(data) {
   return prisma.user.create({
     data,
 
-    select:
-      userPublicSelect,
+    select: userPublicSelect,
   });
 }
 
@@ -250,11 +184,7 @@ export async function createUser(
 // UPDATE
 // ======================================================
 
-export async function updateUserById(
-  id,
-  data,
-  includeSensitive = false,
-) {
+export async function updateUserById(id, data, includeSensitive = false) {
   return prisma.user.update({
     where: {
       id,
@@ -262,10 +192,7 @@ export async function updateUserById(
 
     data,
 
-    select:
-      includeSensitive
-        ? userAuthSelect
-        : userPublicSelect,
+    select: includeSensitive ? userAuthSelect : userPublicSelect,
   });
 }
 
@@ -273,27 +200,21 @@ export async function updateUserById(
 // SOFT DELETE
 // ======================================================
 
-export async function softDeleteUser(
-  id,
-) {
+export async function softDeleteUser(id) {
   return prisma.user.update({
     where: {
       id,
     },
 
     data: {
-      deletedAt:
-        new Date(),
+      deletedAt: new Date(),
 
-      isActive:
-        false,
+      isActive: false,
 
-      status:
-        "BANNED",
+      status: "BANNED",
     },
 
-    select:
-      userPublicSelect,
+    select: userPublicSelect,
   });
 }
 
@@ -301,27 +222,21 @@ export async function softDeleteUser(
 // RESTORE
 // ======================================================
 
-export async function restoreUser(
-  id,
-) {
+export async function restoreUser(id) {
   return prisma.user.update({
     where: {
       id,
     },
 
     data: {
-      deletedAt:
-        null,
+      deletedAt: null,
 
-      isActive:
-        true,
+      isActive: true,
 
-      status:
-        "ACTIVE",
+      status: "ACTIVE",
     },
 
-    select:
-      userPublicSelect,
+    select: userPublicSelect,
   });
 }
 
@@ -329,24 +244,19 @@ export async function restoreUser(
 // REFRESH TOKEN
 // ======================================================
 
-export async function updateUserRefreshToken(
-  userId,
-  refreshTokenHash,
-) {
+export async function updateUserRefreshToken(userId, refreshTokenHash) {
   return prisma.user.update({
     where: {
       id: userId,
     },
 
     data: {
-      refreshToken:
-        refreshTokenHash,
+      refreshToken: refreshTokenHash,
     },
 
     select: {
       id: true,
-      refreshToken:
-        true,
+      refreshToken: true,
     },
   });
 }
@@ -368,35 +278,47 @@ export async function rotateRefreshToken(
     await prisma.user.updateMany({
       where: {
         id: userId,
-
-        refreshToken:
-          currentHash,
-
-        deletedAt:
-          null,
-
-        isActive:
-          true,
+        refreshToken: currentHash,
+        deletedAt: null,
+        isActive: true,
+        status: "ACTIVE",
       },
 
       data: {
-        refreshToken:
-          nextHash,
+        refreshToken: nextHash,
       },
     });
 
-  return (
-    result.count === 1
-  );
+  return result.count === 1;
+}
+
+export async function revokeRefreshToken(
+  userId,
+  refreshTokenHash,
+) {
+  if (!userId || !refreshTokenHash) {
+    return false;
+  }
+
+  const result = await prisma.user.updateMany({
+    where: {
+      id: userId,
+      refreshToken: refreshTokenHash,
+    },
+
+    data: {
+      refreshToken: null,
+    },
+  });
+
+  return result.count === 1;
 }
 
 // ======================================================
 // COUNTS
 // ======================================================
 
-export async function countUsers(
-  where = {},
-) {
+export async function countUsers(where = {}) {
   return prisma.user.count({
     where,
   });
@@ -406,51 +328,33 @@ export async function countUsers(
 // SANITIZE
 // ======================================================
 
-export function sanitizeUser(
-  user,
-) {
+export function sanitizeUser(user) {
   if (!user) {
     return null;
   }
 
   return {
-    id:
-      user.id,
+    id: user.id,
 
-    username:
-      user.username,
+    username: user.username,
 
-    email:
-      user.email,
+    email: user.email,
 
-    fullName:
-      user.fullName ??
-      null,
+    fullName: user.fullName ?? null,
 
-    avatar:
-      user.avatar ??
-      null,
+    avatar: user.avatar ?? null,
 
-    bio:
-      user.bio ??
-      null,
+    bio: user.bio ?? null,
 
-    role:
-      user.role,
+    role: user.role,
 
-    status:
-      user.status,
+    status: user.status,
 
-    isActive:
-      user.isActive,
+    isActive: user.isActive,
 
-    createdAt:
-      user.createdAt ??
-      null,
+    createdAt: user.createdAt ?? null,
 
-    updatedAt:
-      user.updatedAt ??
-      null,
+    updatedAt: user.updatedAt ?? null,
   };
 }
 
@@ -469,6 +373,7 @@ export default {
 
   updateUserRefreshToken,
   rotateRefreshToken,
+  revokeRefreshToken,
 
   countUsers,
   sanitizeUser,

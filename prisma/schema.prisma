@@ -43,6 +43,10 @@ model User {
   aboutSections   About[]
   homeSections    Home[]
 
+  // PERMANENT LICENSE
+  license             License?
+  createdLicenseCodes LicenseCode[] @relation("LicenseCodeCreator")
+
   @@index([role])
   @@index([status])
   @@index([isActive])
@@ -53,6 +57,46 @@ model User {
 // ======================================================
 // MEDIA
 // ======================================================
+
+// ======================================================
+// LICENSE CODE
+// ======================================================
+
+model LicenseCode {
+  id String @id @default(cuid())
+
+  codeHash String @unique
+
+  createdById String
+
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+
+  createdBy User @relation("LicenseCodeCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  license License?
+
+  @@index([createdById, createdAt])
+  @@index([usedAt])
+}
+
+// ======================================================
+// PERMANENT LICENSE
+// ======================================================
+
+model License {
+  id String @id @default(cuid())
+
+  userId String @unique
+
+  licenseCodeId String @unique
+
+  activatedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  licenseCode LicenseCode @relation(fields: [licenseCodeId], references: [id], onDelete: Restrict)
+}
 
 model Media {
   id String @id @default(cuid())

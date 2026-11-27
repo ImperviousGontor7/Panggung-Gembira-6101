@@ -3,10 +3,7 @@ import crypto from "node:crypto";
 import { MESSAGE } from "../constants/message.js";
 import { ROLES } from "../constants/roles.js";
 
-import {
-  comparePassword,
-  hashPassword,
-} from "../utils/password.js";
+import { comparePassword, hashPassword } from "../utils/password.js";
 
 import {
   generateAccessToken,
@@ -21,14 +18,12 @@ import {
   findUserById,
   updateUserRefreshToken,
   rotateRefreshToken,
+  revokeRefreshToken,
 } from "../modules/user/user.repository.js";
 
 const AUTH_STATUS = "ACTIVE";
 
-function createAuthError(
-  message,
-  statusCode = 400,
-) {
+function createAuthError(message, statusCode = 400) {
   const err = new Error(message);
 
   err.statusCode = statusCode;
@@ -37,9 +32,7 @@ function createAuthError(
 }
 
 function normalizeText(value) {
-  return typeof value === "string"
-    ? value.trim()
-    : "";
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function normalizeEmail(value) {
@@ -47,17 +40,11 @@ function normalizeEmail(value) {
 }
 
 function sha256(value) {
-  return crypto
-    .createHash("sha256")
-    .update(value, "utf8")
-    .digest("hex");
+  return crypto.createHash("sha256").update(value, "utf8").digest("hex");
 }
 
 function safeCompareHash(first, second) {
-  if (
-    typeof first !== "string" ||
-    typeof second !== "string"
-  ) {
+  if (typeof first !== "string" || typeof second !== "string") {
     return false;
   }
 
@@ -71,30 +58,17 @@ function safeCompareHash(first, second) {
   return crypto.timingSafeEqual(a, b);
 }
 
-function validateRegisterInput({
-  username,
-  email,
-  password,
-}) {
+function validateRegisterInput({ username, email, password }) {
   if (!username) {
-    throw createAuthError(
-      "Username wajib diisi.",
-      400,
-    );
+    throw createAuthError("Username wajib diisi.", 400);
   }
 
   if (!email) {
-    throw createAuthError(
-      "Email wajib diisi.",
-      400,
-    );
+    throw createAuthError("Email wajib diisi.", 400);
   }
 
   if (!password) {
-    throw createAuthError(
-      "Password wajib diisi.",
-      400,
-    );
+    throw createAuthError("Password wajib diisi.", 400);
   }
 }
 
@@ -108,11 +82,12 @@ function buildTokenPair(user) {
   const payload = buildTokenPayload(user);
 
   return {
-    accessToken:
-      generateAccessToken(payload),
+    accessToken: generateAccessToken(payload),
 
-    refreshToken:
-      generateRefreshToken(payload),
+    refreshToken: generateRefreshToken({
+      ...payload,
+      jti: crypto.randomUUID(),
+    }),
   };
 }
 
@@ -136,16 +111,10 @@ function sanitizeUser(user) {
   return safeUser;
 }
 
-async function persistRefreshToken(
-  userId,
-  refreshToken,
-) {
+async function persistRefreshToken(userId, refreshToken) {
   const hash = sha256(refreshToken);
 
-  await updateUserRefreshToken(
-    userId,
-    hash,
-  );
+  await updateUserRefreshToken(userId, hash);
 
   return hash;
 }
@@ -153,28 +122,20 @@ async function persistRefreshToken(
 async function createSession(user) {
   const tokens = buildTokenPair(user);
 
-  await persistRefreshToken(
-    user.id,
-    tokens.refreshToken,
-  );
+  await persistRefreshToken(user.id, tokens.refreshToken);
 
   return {
     user: sanitizeUser(user),
 
-    accessToken:
-      tokens.accessToken,
+    accessToken: tokens.accessToken,
 
-    refreshToken:
-      tokens.refreshToken,
+    refreshToken: tokens.refreshToken,
   };
 }
 
 function assertActiveUser(user) {
   if (!user) {
-    throw createAuthError(
-      MESSAGE.AUTH.USER_NOT_FOUND,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.USER_NOT_FOUND, 401);
   }
 
   if (
@@ -182,10 +143,7 @@ function assertActiveUser(user) {
     user.isActive === false ||
     user.status !== AUTH_STATUS
   ) {
-    throw createAuthError(
-      MESSAGE.AUTH.USER_DISABLED,
-      403,
-    );
+    throw createAuthError(MESSAGE.AUTH.USER_DISABLED, 403);
   }
 }
 
@@ -199,96 +157,56 @@ export async function registerUser({
   password,
   fullName = "",
 }) {
-  const normalizedUsername =
-    normalizeText(username);
+  const normalizedUsername = normalizeText(username);
 
-  const normalizedEmail =
-    normalizeEmail(email);
+  const normalizedEmail = normalizeEmail(email);
 
-  const normalizedPassword =
-    typeof password === "string"
-      ? password
-      : "";
+  const normalizedPassword = typeof password === "string" ? password : "";
 
-  const normalizedFullName =
-    normalizeText(fullName) || null;
+  const normalizedFullName = normalizeText(fullName) || null;
 
   validateRegisterInput({
-    username:
-      normalizedUsername,
+    username: normalizedUsername,
 
-    email:
-      normalizedEmail,
+    email: normalizedEmail,
 
-    password:
-      normalizedPassword,
+    password: normalizedPassword,
   });
 
-  const existingEmail =
-    await findUserByEmail(
-      normalizedEmail,
-      true,
-    );
+  const existingEmail = await findUserByEmail(normalizedEmail, true);
 
   if (existingEmail) {
-    throw createAuthError(
-      MESSAGE.AUTH.EMAIL_ALREADY_USED,
-      409,
-    );
+    throw createAuthError(MESSAGE.AUTH.EMAIL_ALREADY_USED, 409);
   }
 
-  const existingUsername =
-    await findUserByUsername(
-      normalizedUsername,
-      true,
-    );
+  const existingUsername = await findUserByUsername(normalizedUsername, true);
 
   if (existingUsername) {
-    throw createAuthError(
-      MESSAGE.AUTH.USERNAME_ALREADY_USED,
-      409,
-    );
+    throw createAuthError(MESSAGE.AUTH.USERNAME_ALREADY_USED, 409);
   }
 
-  const passwordHash =
-    await hashPassword(
-      normalizedPassword,
-    );
+  const passwordHash = await hashPassword(normalizedPassword);
 
-  const createdUser =
-    await createUser({
-      username:
-        normalizedUsername,
+  const createdUser = await createUser({
+    username: normalizedUsername,
 
-      email:
-        normalizedEmail,
+    email: normalizedEmail,
 
-      password:
-        passwordHash,
+    password: passwordHash,
 
-      fullName:
-        normalizedFullName,
+    fullName: normalizedFullName,
 
-      role:
-        ROLES.USER,
+    role: ROLES.USER,
 
-      status:
-        AUTH_STATUS,
+    status: AUTH_STATUS,
 
-      isActive:
-        true,
-    });
+    isActive: true,
+  });
 
-  const user =
-    await findUserById(
-      createdUser.id,
-      false,
-    );
+  const user = await findUserById(createdUser.id, false);
 
   if (!user) {
-    throw new Error(
-      "User berhasil dibuat tetapi tidak dapat diambil kembali.",
-    );
+    throw new Error("User berhasil dibuat tetapi tidak dapat diambil kembali.");
   }
 
   return createSession(user);
@@ -298,195 +216,101 @@ export async function registerUser({
 // LOGIN
 // ======================================================
 
-export async function loginUser({
-  email,
-  password,
-}) {
-  const normalizedEmail =
-    normalizeEmail(email);
+export async function loginUser({ email, password }) {
+  const normalizedEmail = normalizeEmail(email);
 
-  const normalizedPassword =
-    typeof password === "string"
-      ? password
-      : "";
+  const normalizedPassword = typeof password === "string" ? password : "";
 
-  if (
-    !normalizedEmail ||
-    !normalizedPassword
-  ) {
-    throw createAuthError(
-      MESSAGE.AUTH.INVALID_CREDENTIALS,
-      401,
-    );
+  if (!normalizedEmail || !normalizedPassword) {
+    throw createAuthError(MESSAGE.AUTH.INVALID_CREDENTIALS, 401);
   }
 
-  const user =
-    await findUserByEmail(
-      normalizedEmail,
-      true,
-    );
+  const user = await findUserByEmail(normalizedEmail, true);
 
   if (!user) {
-    throw createAuthError(
-      MESSAGE.AUTH.INVALID_CREDENTIALS,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.INVALID_CREDENTIALS, 401);
   }
 
   assertActiveUser(user);
 
-  const passwordValid =
-    await comparePassword(
-      normalizedPassword,
-      user.password,
-    );
+  const passwordValid = await comparePassword(
+    normalizedPassword,
+    user.password,
+  );
 
   if (!passwordValid) {
-    throw createAuthError(
-      MESSAGE.AUTH.INVALID_CREDENTIALS,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.INVALID_CREDENTIALS, 401);
   }
 
-  const publicUser =
-    await findUserById(
-      user.id,
-      false,
-    );
+  const publicUser = await findUserById(user.id, false);
 
   if (!publicUser) {
-    throw createAuthError(
-      MESSAGE.AUTH.USER_NOT_FOUND,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.USER_NOT_FOUND, 401);
   }
 
-  return createSession(
-    publicUser,
-  );
+  return createSession(publicUser);
 }
 
 // ======================================================
 // REFRESH
 // ======================================================
 
-export async function refreshUserSession(
-  refreshToken,
-) {
-  if (
-    typeof refreshToken !== "string" ||
-    !refreshToken.trim()
-  ) {
-    throw createAuthError(
-      MESSAGE.AUTH.UNAUTHORIZED,
-      401,
-    );
+export async function refreshUserSession(refreshToken) {
+  if (typeof refreshToken !== "string" || !refreshToken.trim()) {
+    throw createAuthError(MESSAGE.AUTH.UNAUTHORIZED, 401);
   }
 
   let payload;
 
   try {
-    payload =
-      verifyRefreshToken(
-        refreshToken,
-      );
+    payload = verifyRefreshToken(refreshToken);
   } catch (err) {
     throw createAuthError(
-      err?.name ===
-        "TokenExpiredError"
+      err?.name === "TokenExpiredError"
         ? MESSAGE.AUTH.TOKEN_EXPIRED
         : MESSAGE.AUTH.TOKEN_INVALID,
       401,
     );
   }
 
-  const userId =
-    payload?.sub;
+  const userId = payload?.sub;
 
   if (!userId) {
-    throw createAuthError(
-      MESSAGE.AUTH.TOKEN_INVALID,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.TOKEN_INVALID, 401);
   }
 
-  const user =
-    await findUserById(
-      userId,
-      true,
-    );
+  const user = await findUserById(userId, true);
 
   assertActiveUser(user);
 
-  const incomingHash =
-    sha256(refreshToken);
+  const incomingHash = sha256(refreshToken);
 
-  if (
-    !user.refreshToken ||
-    !safeCompareHash(
-      user.refreshToken,
-      incomingHash,
-    )
-  ) {
-    await updateUserRefreshToken(
-      user.id,
-      null,
-    );
-
-    throw createAuthError(
-      MESSAGE.AUTH.TOKEN_INVALID,
-      401,
-    );
+  if (!user.refreshToken || !safeCompareHash(user.refreshToken, incomingHash)) {
+    throw createAuthError(MESSAGE.AUTH.TOKEN_INVALID, 401);
   }
 
-  const publicUser =
-    await findUserById(
-      user.id,
-      false,
-    );
+  const publicUser = await findUserById(user.id, false);
 
   if (!publicUser) {
-    throw createAuthError(
-      MESSAGE.AUTH.USER_NOT_FOUND,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.USER_NOT_FOUND, 401);
   }
 
-  const tokens =
-    buildTokenPair(
-      publicUser,
-    );
+  const tokens = buildTokenPair(publicUser);
 
-  const newHash =
-    sha256(
-      tokens.refreshToken,
-    );
+  const newHash = sha256(tokens.refreshToken);
 
-  const rotated =
-    await rotateRefreshToken(
-      user.id,
-      incomingHash,
-      newHash,
-    );
+  const rotated = await rotateRefreshToken(user.id, incomingHash, newHash);
 
   if (!rotated) {
-    throw createAuthError(
-      MESSAGE.AUTH.TOKEN_INVALID,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.TOKEN_INVALID, 401);
   }
 
   return {
-    user:
-      sanitizeUser(
-        publicUser,
-      ),
+    user: sanitizeUser(publicUser),
 
-    accessToken:
-      tokens.accessToken,
+    accessToken: tokens.accessToken,
 
-    refreshToken:
-      tokens.refreshToken,
+    refreshToken: tokens.refreshToken,
   };
 }
 
@@ -494,14 +318,9 @@ export async function refreshUserSession(
 // CURRENT USER
 // ======================================================
 
-export async function getCurrentUser(
-  user,
-) {
+export async function getCurrentUser(user) {
   if (!user) {
-    throw createAuthError(
-      MESSAGE.AUTH.UNAUTHORIZED,
-      401,
-    );
+    throw createAuthError(MESSAGE.AUTH.UNAUTHORIZED, 401);
   }
 
   return sanitizeUser(user);
@@ -511,36 +330,44 @@ export async function getCurrentUser(
 // LOGOUT
 // ======================================================
 
-export async function logoutUser({
-  userId = null,
-  refreshToken = null,
-}) {
-  let resolvedUserId =
-    userId;
-
-  if (
-    !resolvedUserId &&
-    refreshToken
-  ) {
-    try {
-      const payload =
-        verifyRefreshToken(
-          refreshToken,
-        );
-
-      resolvedUserId =
-        payload?.sub || null;
-    } catch {
-      // Logout tetap idempotent.
-    }
+export async function logoutUser({ userId = null, refreshToken = null }) {
+  if (typeof refreshToken !== "string" || !refreshToken.trim()) {
+    return {
+      loggedOut: true,
+    };
   }
 
-  if (resolvedUserId) {
-    await updateUserRefreshToken(
-      resolvedUserId,
-      null,
-    );
+  const normalizedToken = refreshToken.trim();
+
+  let payload;
+
+  try {
+    payload = verifyRefreshToken(normalizedToken);
+  } catch {
+    // Logout tetap idempotent.
+    return {
+      loggedOut: true,
+    };
   }
+
+  const tokenUserId = payload?.sub;
+
+  if (typeof tokenUserId !== "string" || !tokenUserId) {
+    return {
+      loggedOut: true,
+    };
+  }
+
+  // Pastikan identitas pengguna konsisten.
+  if (userId && userId !== tokenUserId) {
+    return {
+      loggedOut: true,
+    };
+  }
+
+  const tokenHash = sha256(normalizedToken);
+
+  await revokeRefreshToken(tokenUserId, tokenHash);
 
   return {
     loggedOut: true,
